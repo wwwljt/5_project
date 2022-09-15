@@ -1,5 +1,3 @@
-*.jar
-
 #忽略所有.svn目录
 .svn/
 #忽略所有target目录
@@ -8,3 +6,4 @@ target/
 .idea/
 #忽略所有.iml文件
 *.iml
+*.jar
