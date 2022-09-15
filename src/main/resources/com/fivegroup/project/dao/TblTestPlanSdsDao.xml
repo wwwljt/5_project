@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivegroup.project.dao.TblTestPlanSdsDao">
+    <sql id="likeTestPlan">
+        <where>
+            <if test="tblTestPlanSds.testName != null and tblTestPlanSds.testName != ''">
+                and test_name like '%' #{tblTestPlanSds.testName} '%'
+            </if>
+            <if test="tblTestPlanSds.createBy != null and tblTestPlanSds.createBy != ''">
+                and create_by like '%' #{tblTestPlanSds.createBy} '%'
+            </if>
+        </where>
+    </sql>
+    <insert id="save">
+        insert into w_gl.tbl_test_plan_sds (test_name,
+                                            test_code,
+                                            test_begin,
+                                            test_end,
+                                            create_time,
+                                            create_by,
+                                            update_time,
+                                            update_by,
+                                            remark)
+        values (#{tblTestPlanSds.testName},
+                #{tblTestPlanSds.testCode},
+                #{tblTestPlanSds.testBegin},
+                #{tblTestPlanSds.testEnd},
+                #{tblTestPlanSds.createTime},
+                #{tblTestPlanSds.createBy},
+                #{tblTestPlanSds.updateTime},
+                #{tblTestPlanSds.updateBy},
+                #{tblTestPlanSds.remark});
+    </insert>
+    <update id="update">
+        update w_gl.tbl_test_plan_sds
+        <set>
+            <if test="tblTestPlanSds.testName != null and tblTestPlanSds.testName != ''">
+                test_name=#{tblTestPlanSds.testName},
+            </if>
+            <if test="tblTestPlanSds.testBegin != null">
+                test_begin=#{tblTestPlanSds.testBegin},
+            </if>
+            <if test="tblTestPlanSds.testEnd != null">
+                test_end=#{tblTestPlanSds.testEnd},
+            </if>
+
+            <if test="tblTestPlanSds.updateTime != null">
+                update_time=#{tblTestPlanSds.updateTime},
+            </if>
+            <if test="tblTestPlanSds.updateBy != null and tblTestPlanSds.updateBy != ''">
+                update_by=#{tblTestPlanSds.updateBy},
+            </if>
+            <if test="tblTestPlanSds.remark != null">
+                remark = #{tblTestPlanSds.remark},
+            </if>
+        </set>
+        where id = #{tblTestPlanSds.id};
+    </update>
+    <delete id="deleteTblTestPlanSds">
+        delete
+        from w_gl.tbl_test_plan_sds where id in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+    <select id="getTbTestPlanSdsCount" resultType="java.lang.Integer">
+        select count(*)
+        from w_gl.tbl_test_plan_sds
+        <include refid="likeTestPlan"/>
+    </select>
+    <select id="getTbTestPlanSdsPageAll" resultType="com.fivegroup.project.entity.TblTestPlanSds">
+        select *
+        from w_gl.tbl_test_plan_sds
+        <include refid="likeTestPlan"/>
+        limit #{page},#{limit}
+        ;
+    </select>
+</mapper>

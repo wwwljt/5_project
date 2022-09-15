@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报表统计</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.1/dist/echarts.min.js"></script>
+    <script src="../layui/layui.js" charset="UTF-8"></script>
+</head>
+<body>
+<!-- 柱状图 折线图  饼状图 -->
+<div class="layui-card">
+    <div class="layui-card-header">Sds 抑郁测试</div>
+    <div id="testPersonCount" style="font-size: 12px; margin:10px 15px";>测试人数</div>
+    <div class="layui-card-body">
+        <div id="EchartBing" style="height: 300px;"></div>
+    </div>
+</div>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div id="EchartZhe" style="height: 400px;"></div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    layui.use(['jquery', 'form', 'layer', 'laydate', 'table', 'layedit', 'upload', 'element', 'carousel'], function () {
+        let $ = layui.jquery;
+        $.ajax({
+            url: '/sds/tbltestresult/getTblTestStatistics',
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+                $("#testPersonCount").html("测试人数: " + data.data.count)
+                var chartZhe = echarts.init(document.getElementById('EchartZhe'));
+                var chartBing = echarts.init(document.getElementById('EchartBing'));
+                //指定图表配置项和数据
+                var optionchartZhe = {
+                    tooltip: {},
+                    legend: { //顶部显示 与series中的数据类型的name一致
+                        data: ['正常', '轻度抑郁', '中度抑郁', '重度抑郁']
+                    },
+                    xAxis: {
+                        // type: 'category',
+                        // boundaryGap: false, //从起点开始
+                        data: ['正常', '轻度抑郁', '中度抑郁', '重度抑郁']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        name: '人数',
+                        type: 'line', //线性
+                        smooth: true,
+                        seriesLayoutBy: 'row',
+                        data: [data.data.normal, data.data.slight, data.data.moderate, data.data.severe],
+                    }]
+                };
+
+                var optionchartBing = {
+                    title: {
+                        text: 'Sds 抑郁测试',
+                        subtext: '', //副标题
+                        x: 'center' //标题居中
+                    },
+                    tooltip: {
+                        // trigger: 'item' //悬浮显示对比
+                    },
+                    legend: {
+                        orient: 'vertical', //类型垂直,默认水平
+                        left: 'left', //类型区分在左 默认居中
+                        data: [, '正常', '轻度抑郁', '中度抑郁', '重度抑郁']
+                    },
+                    series: [{
+                        type: 'pie', //饼状
+                        radius: '60%', //圆的大小
+                        center: ['50%', '50%'], //居中
+                        data: [{
+                            value: data.data.normal,
+                            name: '正常'
+                        },
+                            {
+                                value: data.data.slight,
+                                name: '轻度抑郁'
+                            },
+                            {
+                                value: data.data.moderate,
+                                name: '中度抑郁'
+                            },
+                            {
+                                value: data.data.severe,
+                                name: '重度抑郁'
+                            }
+                        ]
+                    }]
+                };
+                chartZhe.setOption(optionchartZhe, true);    // 折线图
+                chartBing.setOption(optionchartBing, true);      // 饼状图
+            }
+        });
+
+
+    });
+
+
+</script>
+
+</body>
+</html>

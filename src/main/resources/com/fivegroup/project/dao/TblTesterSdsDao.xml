@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivegroup.project.dao.TblTesterSdsDao">
+    <sql id="likeTester">
+        <where>
+            <if test="tblTestResultVo.name!=null and tblTestResultVo.name!=''">
+                and `name` like '%' #{tblTestResultVo.name} '%'
+            </if>
+            <if test="tblTestResultVo.testPlanId!=null and tblTestResultVo.testPlanId!=''">
+                and test_plan_id= #{tblTestResultVo.testPlanId}
+            </if>
+        </where>
+    </sql>
+    <delete id="deleteTblTestResulSds">
+        delete
+        from w_gl.tbl_tester_sds
+        where id in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+
+    </delete>
+    <select id="getTbTestResultSdsCount" resultType="java.lang.Integer">
+        select count(*)
+        from w_gl.tbl_tester_sds
+
+        <include refid="likeTester"/>
+        ;
+    </select>
+    <select id="getTbTestResultSdsPageAll" resultType="com.fivegroup.project.entity.vo.TblTestResultVo">
+        select tts.id,
+        `name`,
+        phone,
+        tts.create_time as 'create_time',
+        test_plan_id,
+        sum(IF(tqs.type = 1, if(ttrs.answer = 'A', 1,
+        if(ttrs.answer = 'B', 2,
+        if(ttrs.answer = 'C', 3,
+        if(ttrs.answer = 'D', 4, 0)))
+        ), 0)) as forward,
+        sum(IF(tqs.type = 2, if(ttrs.answer = 'A', 1,
+        if(ttrs.answer = 'B', 2,
+        if(ttrs.answer = 'C', 3,
+        if(ttrs.answer = 'D', 4, 0)))
+        ), 0)) as inversion
+        from w_gl.tbl_tester_sds tts
+        left join w_gl.tbl_test_result_sds ttrs on tts.id = ttrs.tester_id
+        left join w_gl.tbl_question_sds tqs on tqs.id = ttrs.question_id
+        <where>
+            <if test="tblTestResultVo.name!=null and tblTestResultVo.name!=''">
+                and tts.name like '%' #{tblTestResultVo.name} '%'
+            </if>
+            <if test="tblTestResultVo.testPlanId!=null and tblTestResultVo.testPlanId!=''">
+                and tts.test_plan_id= #{tblTestResultVo.testPlanId}
+            </if>
+        </where>
+        group by tts.id
+        limit #{page} ,#{limit}
+        ;
+    </select>
+    <select id="getTblTestCount" resultType="java.lang.Integer">
+        select count(*)
+        from w_gl.tbl_tester_sds;
+    </select>
+    <select id="getTbTestStatistics" resultType="com.fivegroup.project.entity.vo.StatisticsVo">
+        select sum((s.forward - s.inversion) > 3)  as normal
+             , sum((s.forward - s.inversion) > 6)  as slight
+             , sum((s.forward - s.inversion) > 9)  as moderate
+             , sum((s.forward - s.inversion) > 12) as severe
+        from (select sum(IF(tqs.type = 1, if(ttrs.answer = 'A', 1,
+                                             if(ttrs.answer = 'B', 2,
+                                                if(ttrs.answer = 'C', 3,
+                                                   if(ttrs.answer = 'D', 4, 0)))
+            ), 0))              forward,
+                     sum(IF(tqs.type = 2, if(ttrs.answer = 'A', 1,
+                                             if(ttrs.answer = 'B', 2,
+                                                if(ttrs.answer = 'C', 3,
+                                                   if(ttrs.answer = 'D', 4, 0)))
+                         ), 0)) inversion
+              from w_gl.tbl_tester_sds tts
+                       left join w_gl.tbl_test_result_sds ttrs on tts.id = ttrs.tester_id
+                       left join w_gl.tbl_question_sds tqs on tqs.id = ttrs.question_id
+              group by tts.id) as s;
+    </select>
+</mapper>

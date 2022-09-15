@@ -22,23 +22,23 @@
     </bean>
 
     <!--================== 配置和MyBatis的整合=============== -->
-   <!-- <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        &lt;!&ndash; 指定mybatis全局配置文件的位置 &ndash;&gt;
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 指定mybatis全局配置文件的位置 -->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <property name="dataSource" ref="pooledDataSource"/>
-        &lt;!&ndash; 指定mybatis，mapper文件的位置 &ndash;&gt;
-        <property name="mapperLocations" value="classpath:com/fivegroup/dao"/>
+        <!-- 指定mybatis，mapper文件的位置 -->
+        <property name="mapperLocations" value="classpath:com/fivegroup/project/dao/*.xml"/>
     </bean>
-    &lt;!&ndash; 配置扫描器，将mybatis接口的实现加入到ioc容器中 &ndash;&gt;
+    <!-- 配置扫描器，将mybatis接口的实现加入到ioc容器中 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        &lt;!&ndash;扫描所有dao接口的实现，加入到ioc容器中 &ndash;&gt;
+        <!--扫描所有dao接口的实现，加入到ioc容器中 -->
         <property name="basePackage" value="com.fivegroup.project.dao"/>
     </bean>
 
-    &lt;!&ndash; 配置一个可以执行批量的sqlSession &ndash;&gt;
+    <!-- 配置一个可以执行批量的sqlSession -->
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
         <constructor-arg name="executorType" value="BATCH"/>
-    </bean>-->
+    </bean>
 
 </beans>
