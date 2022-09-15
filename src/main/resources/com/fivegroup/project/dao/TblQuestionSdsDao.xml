@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivegroup.project.dao.TblQuestionSdsDao">
+    <sql id="sdsQueryAll">
+        select id,
+               question,
+               option_a,
+               option_b,
+               option_c,
+               option_d,
+               type,
+               `status`,
+               create_time,
+               create_by,
+               update_time,
+               update_by,
+               flag
+        from w_gl.tbl_question_sds
+    </sql>
+    <sql id="sdsLike">
+        <where>
+            <if test="tblQuestionSds.id!=null and tblQuestionSds.id!=''">
+                and id = #{tblQuestionSds.id}
+            </if>
+            <if test="tblQuestionSds.createBy!=null and tblQuestionSds.createBy!=''">
+                and create_by like '%' #{tblQuestionSds.createBy} '%'
+            </if>
+            and flag=0
+        </where>
+
+    </sql>
+    <insert id="save">
+        insert into w_gl.tbl_question_sds (question,
+                                           option_a,
+                                           option_b,
+                                           option_c,
+                                           option_d,
+                                           type,
+                                           create_time,
+                                           create_by,
+                                           update_time,
+                                           update_by)
+        values (#{tblQuestionSds.question},
+                #{tblQuestionSds.optionA},
+                #{tblQuestionSds.optionB},
+                #{tblQuestionSds.optionC},
+                #{tblQuestionSds.optionD},
+                #{tblQuestionSds.type},
+                #{tblQuestionSds.createTime},
+                #{tblQuestionSds.createBy},
+                #{tblQuestionSds.updateTime},
+                #{tblQuestionSds.updateBy});
+    </insert>
+    <update id="deleteTblQuestionSds">
+        update w_gl.tbl_question_sds
+        set flag=1
+        where id in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")" >
+            #{ids}
+        </foreach>
+    </update>
+    <update id="update">
+        update w_gl.tbl_question_sds
+        <set>
+            <if test="tblQuestionSds.question != null and tblQuestionSds.question != ''">
+                question=#{tblQuestionSds.question},
+            </if>
+            <if test="tblQuestionSds.optionA != null">
+                option_a=#{tblQuestionSds.optionA},
+            </if>
+            <if test="tblQuestionSds.optionB != null">
+                option_b=#{tblQuestionSds.optionB},
+            </if>
+            <if test="tblQuestionSds.optionC != null">
+                option_c=#{tblQuestionSds.optionC},
+            </if>
+            <if test="tblQuestionSds.optionD != null">
+                option_d=#{tblQuestionSds.optionD},
+            </if>
+            <if test="tblQuestionSds.type != null">
+                type=#{tblQuestionSds.type},
+            </if>
+            <if test="tblQuestionSds.updateTime != null">
+                update_time=#{tblQuestionSds.updateTime},
+            </if>
+            <if test="tblQuestionSds.updateBy != null and tblQuestionSds.updateBy != ''">
+                update_by=#{tblQuestionSds.updateBy},
+            </if>
+            <if test="tblQuestionSds.status != null">
+                `status` = #{tblQuestionSds.status},
+            </if>
+        </set>
+        where id = #{tblQuestionSds.id};
+    </update>
+    <select id="getTblQuestionSdsCount" resultType="java.lang.Integer">
+        select count(*)
+        from w_gl.tbl_question_sds
+        <include refid="sdsLike"/>
+    </select>
+    <select id="getTblQuestionSdsPageAll" resultType="com.fivegroup.project.entity.TblQuestionSds">
+        <include refid="sdsQueryAll"/>
+        <include refid="sdsLike"/>
+        limit #{pageNo},#{pageSize}
+    </select>
+    <select id="getTblQuestionSdType" resultType="java.lang.String">
+        select type_name
+        from w_gl.tbl_dictionary_type
+        where type_id = #{typeId}
+
+
+    </select>
+</mapper>

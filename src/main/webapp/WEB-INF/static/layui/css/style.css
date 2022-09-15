@@ -1,0 +1,800 @@
+@charset "UTF-8";
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+body {
+    margin: 0
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
+    display: block
+}
+
+audio, canvas, progress, video {
+    display: inline-block;
+    vertical-align: baseline
+}
+
+audio:not([controls]) {
+    display: none;
+    height: 0
+}
+
+[hidden], template {
+    display: none
+}
+
+a {
+    background: transparent
+}
+
+a:active, a:hover {
+    outline: 0
+}
+
+abbr[title] {
+    border-bottom: 1px dotted
+}
+
+b, strong {
+    font-weight: bold
+}
+
+dfn {
+    font-style: italic
+}
+
+h1, h2, h3, p, ul, ol, li, dl, dt, dd {
+    margin: 0;
+    padding: 0
+}
+
+h1 {
+    font-size: 2em
+}
+
+h2 {
+    font-size: 1.5em
+}
+
+h3 {
+    font-size: 1.17em
+}
+
+h4 {
+    margin: 0;
+    padding: 0
+}
+
+ul, ol {
+    list-style: none
+}
+
+mark {
+    background: #ff0;
+    color: #000
+}
+
+small {
+    font-size: 80%
+}
+
+sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}
+
+sup {
+    top: -0.5em
+}
+
+sub {
+    bottom: -0.25em
+}
+
+img {
+    border: 0;
+    vertical-align: top;
+    line-height: 1
+}
+
+svg:not(:root) {
+    overflow: hidden
+}
+
+figure {
+    margin: 0;
+    padding: 0
+}
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0
+}
+
+pre {
+    overflow: auto
+}
+
+code, kbd, pre, samp {
+    font-family: monospace, monospace;
+    font-size: 1em
+}
+
+button, input, optgroup, select, textarea {
+    color: inherit;
+    font: inherit;
+    margin: 0
+}
+
+input {
+    border: none
+}
+
+button {
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent
+}
+
+button, select {
+    text-transform: none
+}
+
+button, html input[type="button"], input[type="reset"], input[type="submit"] {
+    -webkit-appearance: button;
+    cursor: pointer
+}
+
+button[disabled], html input[disabled] {
+    cursor: default
+}
+
+button::-moz-focus-inner, input::-moz-focus-inner {
+    border: 0;
+    padding: 0
+}
+
+input {
+    line-height: normal
+}
+
+input[type="checkbox"], input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0
+}
+
+input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
+    height: auto
+}
+
+input[type="search"] {
+    -webkit-appearance: textfield;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box
+}
+
+input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none
+}
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em
+}
+
+legend {
+    border: 0;
+    padding: 0
+}
+
+textarea {
+    overflow: auto
+}
+
+optgroup {
+    font-weight: bold
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+td, th {
+    padding: 0
+}
+
+h1, h2, h3, h4, p, figure, section, article, ul, ol, li, dl, dt, dd {
+    margin: 0;
+    padding: 0
+}
+
+h1, h2, h3, h4 {
+    font-size: 18px;
+    line-height: 1.4
+}
+
+ul, ol {
+    list-style: none
+}
+
+img {
+    line-height: 1;
+    vertical-align: top
+}
+
+html, body {
+    width: 100%;
+    min-width: 1200px;
+    min-height: 100%;
+    height: 100%
+}
+
+body {
+    font-family: "Hiragino Kaku Gothic Pro", Meiryo, Osaka, "MS PGothic", sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    overflow: hidden
+}
+
+p {
+    margin: 1em 0
+}
+
+a {
+    text-decoration: none;
+    color: #000
+}
+
+.sun-serif {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+}
+
+.clear:after {
+    content: "";
+    display: block;
+    clear: both
+}
+
+.serif {
+    font-family: Times, "Times New Roman", "ヒラギノ明朝 Pro W3", "Hiragino Mincho Pro", "ＭＳ Ｐ明朝", "MS PMincho", "Takao P明朝", "TakaoPMincho", serif
+}
+
+.catch {
+    font-size: 20px;
+    margin-top: 4px
+}
+
+.smoothing {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.icon-outlink {
+    background: url(../img/icon-outlink.png) no-repeat left center;
+    padding-left: 20px;
+    color: #858585
+}
+
+.icon-outlink:hover {
+    color: #000
+}
+
+.icon-mail {
+    padding-left: 20px;
+    background: url(../img/icon-mail.png) no-repeat left center;
+    color: #1d3994
+}
+
+.icon-mail:hover {
+    text-decoration: underline
+}
+
+.t-bold {
+    font-weight: bold
+}
+
+.canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0
+}
+
+.wrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+    padding: 50px 0 30px 0;
+    box-sizing: border-box
+}
+
+.Container {
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+    overflow: auto
+}
+
+.Container__inner {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 100%;
+    height: 100%
+}
+
+.Header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    color: #000
+}
+
+.Footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    padding: 10px 0 10px 0
+}
+
+.Footer p, .Footer a {
+    color: #000
+}
+
+.Footer__copy {
+    margin: 0;
+    padding-left: 20px;
+    letter-spacing: 0.12em;
+    line-height: 1
+}
+
+.Footer__copy small {
+    font-size: 12px
+}
+
+.Footer__sites {
+    float: right;
+    padding: 0 20px 0 0
+}
+
+.Footer__sites li {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 0 0 20px
+}
+
+.Footer__sites a {
+    font-size: 12px;
+    letter-spacing: 0.12em
+}
+
+.Footer__sites a:hover {
+    color: #ccc
+}
+
+.Logo {
+    float: left;
+    padding-left: 20px
+}
+
+.Logo a {
+    color: #fff
+}
+
+.Nav {
+    float: right;
+    padding: 12px 20px 0 0
+}
+
+.Nav li {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 0 0 20px
+}
+
+.Nav a {
+    display: block;
+    color: #000;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-align: center
+}
+
+.Nav a:hover .Nav__line {
+    width: 100%
+}
+
+.Nav span {
+    display: block;
+    text-align: left
+}
+
+.Nav__line {
+    display: inline-block;
+    vertical-align: top;
+    height: 1px;
+    width: 0;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #999;
+    -webkit-transition: width .2s linear;
+    transition: width .2s linear
+}
+
+.FirstBlock {
+    display: table;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+    text-align: center
+}
+
+.FirstBlock__inner {
+    text-align: center;
+    width: 1000px;
+    display: table-cell;
+    vertical-align: middle
+}
+
+.FirstBlock__logo {
+    width: 545px;
+    height: 44px;
+    overflow: hidden;
+    margin: 0 auto;
+    margin-bottom: 60px
+}
+
+.FirstBlock__logo span {
+    position: relative;
+    left: -545px;
+    display: block;
+    width: 545px;
+    height: 44px
+}
+
+.FirstBlock__item {
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;
+    width: 310px
+}
+
+.FirstBlock__item-inner {
+    position: relative;
+    left: -310px;
+    width: 310px;
+    padding: 0 30px;
+    box-sizing: border-box
+}
+
+.FirstBlock__item-inner h3 {
+    margin-bottom: 20px
+}
+
+.FirstBlock__item-inner p {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 20px
+}
+
+.FirstBlock__item-inner a {
+    display: block;
+    box-sizing: border-box;
+    border: 1px solid #666;
+    text-align: center;
+    padding: 10px 0;
+    font-family: Helvetica Neue, Helvetica;
+    letter-spacing: 0.3em
+}
+
+.FirstBlock__item-inner a:hover {
+    background: #000;
+    color: #fff
+}
+
+.Box {
+    margin: 0 auto;
+    display: none;
+    width: 1200px;
+    min-height: 100%;
+    height: 100%
+}
+
+.Box__pagename {
+    margin: 0 0 30px 0
+}
+
+.Box__cell {
+    display: table-cell;
+    vertical-align: middle
+}
+
+.Box__cell.is-left {
+    text-align: left
+}
+
+.Box__cell.is-right {
+    text-align: right
+}
+
+.Box__cell.is-center {
+    text-align: center
+}
+
+.Box__inner {
+    display: inline-block;
+    text-align: left;
+    padding: 50px 0
+}
+
+.Box__headline {
+    margin-bottom: 40px
+}
+
+.Box__lead {
+    margin-bottom: 60px
+}
+
+.Box__title {
+    font-weight: normal;
+    font-size: 30px;
+    letter-spacing: 0.2em;
+    margin-bottom: 18px;
+    line-height: 1.2
+}
+
+.Box__subtitle {
+    font-size: 20px;
+    letter-spacing: 0.2em;
+    margin-bottom: 18px;
+    line-height: 1.2
+}
+
+.Box__section {
+    position: relative;
+    margin-bottom: 60px
+}
+
+.Mission .Box__inner {
+    width: 600px
+}
+
+.Mission__ceo {
+    margin: 30px 0 0 0
+}
+
+.Mission__sign {
+    margin-left: 58px
+}
+
+.Solution .Box__inner {
+    width: 700px;
+    text-align: center
+}
+
+.Solution .Box__section {
+    display: table;
+    word-spacing: -1em;
+    width: 700px
+}
+
+.Solution .Box__section dl:nth-child(2n) {
+    margin-left: 40px
+}
+
+.Solution dl {
+    word-spacing: normal;
+    margin: 22px 0;
+    width: 330px;
+    display: inline-block;
+    vertical-align: top
+}
+
+.Solution dt {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 7px;
+    letter-spacing: 0.1em;
+    text-align: center
+}
+
+.Solution dt img {
+    margin-bottom: 10px
+}
+
+.Solution dd {
+    text-align: justify
+}
+
+.Company .Box__inner {
+    width: 800px
+}
+
+.Company h4 {
+    font-weight: normal;
+    letter-spacing: 0.08em
+}
+
+.Company__link {
+    margin-top: 0;
+    padding-left: 16px;
+    background: url(../img/icon-outlink.png) no-repeat center left
+}
+
+.Company__link a {
+    color: #747474
+}
+
+.Company__link a:hover {
+    color: #c0c0c0
+}
+
+.Company__group-title {
+    margin-bottom: 38px
+}
+
+.Company__lead {
+    margin-bottom: 38px
+}
+
+.Company__officers {
+    overflow: hidden;
+    float: left;
+    padding-top: 54px
+}
+
+.Company__officers dt {
+    float: left;
+    clear: both
+}
+
+.Company__officers dd {
+    padding-left: 180px;
+    margin: 0 0 2px
+}
+
+.Company__figure {
+    float: left;
+    margin-left: 80px
+}
+
+.Company__item {
+    overflow: hidden;
+    margin-bottom: 30px
+}
+
+.Company__left {
+    float: left;
+    width: 360px
+}
+
+.Company__detail {
+    margin-bottom: 40px
+}
+
+.Company__detail dt {
+    float: left
+}
+
+.Company__detail dd {
+    padding-left: 100px
+}
+
+.Company__logo {
+    margin: 0
+}
+
+.Company__name {
+    font-size: 12px
+}
+
+.Company__officers h3 {
+    margin-bottom: 15px
+}
+
+.Company__works {
+    padding: 30px 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+    margin-bottom: 30px
+}
+
+.Company__works h3 {
+    margin-bottom: 15px
+}
+
+.Company__works dl {
+    float: left;
+    width: 360px
+}
+
+.Company__works dt {
+    font-weight: bold
+}
+
+.Company__map {
+    width: 700px;
+    height: 300px
+}
+
+.Company__related {
+    margin-bottom: 40px
+}
+
+.Company__related dt {
+    font-weight: bold
+}
+
+.Recruit .Box__inner {
+    width: 800px;
+    text-align: center
+}
+
+.Recruit h3 {
+    margin: 2em 0 1.3em 0
+}
+
+.Recruit .Box__headline {
+    margin-bottom: 60px
+}
+
+.Recruit__mails dt, .Recruit__mails dd {
+    width: 50%;
+    float: left;
+    box-sizing: border-box
+}
+
+.Recruit__mails dt {
+    text-align: right;
+    padding-right: 15px
+}
+
+.Recruit__mails dd {
+    text-align: left;
+    padding-left: 15px
+}
+
+.Action .Box__inner {
+    text-align: center
+}
+
+.Action .Box__section {
+    margin-bottom: 60px
+}
+
+.Action .Box__section ul {
+    margin-top: 42px;
+    overflow: hidden
+}
+
+.Action .Box__section li {
+    float: left;
+    margin: 0 5px
+}
+
+.Action .Action__seven {
+    margin-bottom: 72px
+}
+
+.Action__lead {
+    margin-bottom: 60px
+}
