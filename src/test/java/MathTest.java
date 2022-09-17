@@ -21,5 +21,9 @@ public class MathTest {
 		int num = random.nextInt(899999) + 100000;
 		System.out.println("Math.random() = " + Math.floor(Math.random()*100000+1));
 		System.out.println("Math.random() = " + num);
+		
 	}
+	
+
+	
 }

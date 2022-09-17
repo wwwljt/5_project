@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -66,10 +65,9 @@ public class UserController {
 		if (userInfo == null) {
 			throw new RuntimeException("用户不存在");
 		} else {
-			
 			return Result.ok(userInfo);
 		}
 	}
 	
-
+	
 }

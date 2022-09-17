@@ -155,12 +155,26 @@
                 });
             } else if (obj.event === 'edit') {
                 openSds(obj, data);
+                var forward = obj.data.forward
+                var inversion = obj.data.inversion
+                var score = forward + inversion;
+                var string = "";
+                if (score < 50) {
+                    string = "您的测试结果为无抑郁症状"
+                } else if (score <= 60) {
+                    string = "您的测试结果为轻度抑郁"
+                } else if (score <= 70) {
+                    string = "您的测试结果为中度抑郁"
+                } else if (score > 70) {
+                    string = "您的测试结果为重度抑郁"
+                }
+                $("#result").html(string)
                 var chartZhu = echarts.init(document.getElementById('EchartZhu'));
                 //指定图表配置项和数据
                 var optionchartBing = {
                     title: {
-                        text: 'SDS 测试结果',
-                        subtext: '纯属虚构', //副标题
+                        text: 'SDS 抑郁测试',
+                        subtext: '', //副标题
                         x: 'center' //标题居中
                     },
                     tooltip: {
@@ -176,10 +190,10 @@
                         radius: '60%', //圆的大小
                         center: ['50%', '50%'], //居中
                         data: [{
-                            value: obj.data.forward,
+                            value: forward,
                             name: '正向得分'
                         }, {
-                            value: obj.data.inversion,
+                            value: inversion,
                             name: '反向得分'
                         },
 
@@ -251,7 +265,6 @@
         })
 
 
-
     })
 
 </script>
@@ -259,11 +272,22 @@
 <!-- 隐藏的表格 -->
 <div class="layui-row" id="open_div" style="display:none; margin: 0 auto ;background: #C2BE9E;">
     <!-- 柱状图 折线图  饼状图 -->
-    <div style=" width:300px ;height: 80px; margin: 0 auto ; line-height: 80px; font-family:'华文行楷',serif"><h1>SDS
-        测试结果</h1></div>
+    <div style=" width:300px ;margin: 0 180px ; height: 80px; ; line-height: 80px; font-family:'华文行楷',serif">
+        <h1>SDS 测试结果</h1>
+
+    </div>
+    <div id="result"
+         style=" width:300px; margin: 0 auto ;font-size: 20px; color: #6040e7;  font-family:'华文行楷',serif; text-align:  center">
+
+    </div>
+    <br/>
     <div class="layui-card" style="margin: 0 auto ;background: #C2BE9E; ">
         <div class="layui-card-body" lay-filter="add" style="background: #C2BE9E;">
-            <div id="EchartZhu" style="width: 500px; height: 450px;"></div>
+
+            <div id="EchartZhu" style="width: 500px; height: 450px;">
+                sdfsdf
+                <p>sdfasdf</p>
+            </div>
         </div>
     </div>
 

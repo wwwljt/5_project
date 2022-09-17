@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivegroup.project.dao.TblDeptDao">
+    <sql id="likeDept">
+        <where>
+            <if test="tblDept.deptName != null and tblDept.deptName != ''">
+                and dept_name like '%' #{tblDept.deptName} '%'
+            </if>
+            <if test="tblDept.createBy != null and tblDept.createBy != ''">
+                and create_by like '%' #{tblDept.createBy} '%'
+            </if>
+            <if test="tblDept.updateBy != null and tblDept.updateBy != ''">
+                and update_by like '%' #{tblDept.updateBy} '%'
+            </if>
+            and del_flag=0
+        </where>
+        order by order_num
+    </sql>
+    <insert id="save">
+        insert into w_gl.tbl_dept(dept_name,
+                                  order_num,
+                                  `status`,
+                                  create_by,
+                                  create_time,
+                                  update_by,
+                                  update_time)
+        values (#{tblDept.deptName},
+                #{tblDept.orderNum},
+                #{tblDept.status},
+                #{tblDept.createBy},
+                #{tblDept.createTime},
+                #{tblDept.updateBy},
+                #{tblDept.updateTime});
+    </insert>
+    <update id="update">
+        update w_gl.tbl_dept
+        <set>
+            <if test="tblDept.deptName != null and tblDept.deptName != ''">
+                dept_name =#{tblDept.deptName} ,
+            </if>
+            <if test="tblDept.status!= null and tblDept.status != ''">
+                `status` = #{tblDept.status},
+            </if>
+            <if test="tblDept.orderNum != null and tblDept.orderNum != ''">
+                order_num = #{tblDept.orderNum} ,
+            </if>
+            <if test="tblDept.updateBy != null and tblDept.updateBy != ''">
+                update_by= #{tblDept.updateBy},
+            </if>
+            <if test="tblDept.updateTime != null">
+                update_time= #{tblDept.updateTime},
+            </if>
+        </set>
+        where dept_id=#{tblDept.deptId};
+    </update>
+    <delete id="deleteBatch">
+        update w_gl.tbl_dept
+        set del_flag=1
+        where dept_id in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            ${ids}
+        </foreach>
+        ;
+    </delete>
+    <select id="getDeptPageCount" resultType="java.lang.Integer">
+        select count(*)
+        from w_gl.tbl_dept
+        <include refid="likeDept"/>
+    </select>
+    <select id="getDeptPage" resultType="com.fivegroup.project.entity.TblDept">
+        select *
+        from w_gl.tbl_dept
+        <include refid="likeDept"/>
+        limit #{page},#{limit}
+        ;
+    </select>
+</mapper>

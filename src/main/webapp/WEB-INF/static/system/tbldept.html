@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>题目管理</title>
+    <title>部门管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,13 +14,17 @@
 <div class="demoTable" style="margin: 15px;">
     <button class="layui-btn" id="addBtn"><i class="layui-icon">&#xe654;</i> 添加</button>
     <button class="layui-btn layui-btn-warm" id="removeBatch">批量删除</button>
-    <span style="margin-left: 20px;">搜索ID：</span>
+    <span style="margin-left: 20px;"> 部门名称：</span>
     <div class="layui-inline">
-        <input class="layui-input" id="searchId" name="id" autocomplete="off">
+        <input class="layui-input" id="searchDeptName" name="deptname" placeholder="部门名称" autocomplete="off">
     </div>
-    <span style="margin-left: 40px;">搜索创建人：</span>
+    <span style="margin-left: 20px;">创建人：</span>
     <div class="layui-inline">
-        <input class="layui-input" id="searchCreatePerson" name="createBy" autocomplete="off">
+        <input class="layui-input" id="searchCreatePerson" name="createBy" placeholder="创建人" autocomplete="off">
+    </div>
+    <span style="margin-left: 40px;">修改人：</span>
+    <div class="layui-inline">
+        <input class="layui-input" id="searchUpdatePerson" name="updateBy" placeholder="修改人" autocomplete="off">
     </div>
     <button class="layui-btn" data-type="reload" id="search">搜索</button>
     <button type="button" class="layui-btn" id="resetSearch">重置</button>
@@ -49,14 +53,10 @@
         var table = layui.table;
         var $ = layui.jquery;
         var layer = layui.layer;
-        //记录选中的数据:做缓存使用,作为参数传递给后台,然后生成pdf ,压缩
-        var ids = new Array();
-        //当前表格中的全部数据:在表格的checkbox全选的时候没有得到数据, 因此用全局存放变量
-        var table_data = new Array();
         table.render({
             elem: '#test'
             , id: 'rolesReload'
-            , url: '/sds/tblquestion/getTblQuestionSdsPageAll/'
+            , url: '/system/dept/getDeptPage'
             , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                 title: '提示'
@@ -66,86 +66,42 @@
             , title: 'Sds数据表'
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
-                , {field: 'id', fixed: 'left', width: 60, title: 'ID', sort: true, totalRowText: '合计：'}
-                , {field: 'question', width: 250, title: '问题'}
-                , {field: 'optionA', width: 120, title: '选项 A'}
-                , {field: 'optionB', width: 120, title: '选项 B'}
-                , {field: 'optionC', width: 120, title: '选项 C'}
-                , {field: 'optionD', width: 120, title: '选项 D'}
+                , {field: 'deptId', fixed: 'left', width: 60, title: 'ID', sort: true, totalRowText: '合计：'}
+                , {field: 'deptName', width: 160, title: '部门名称'}
+                , {field: 'createBy', width: 160, title: '创建人'}
                 , {
-                    field: 'type', width: 120, title: '类型', templet: function (data) {
-                        if (data.type === 1) {
-                            return "SDS反向计分";
-                        } else if (data.type === 2) {
-                            return "SDS正向计分"
-                        }
-                    }
+                    field: 'createTime',
+                    width: 250,
+                    title: '创建时间',
+                    templet: "<div>{{layui.util.toDateString(d.createTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"
                 }
+                , {field: 'orderNum', width: 80, title: '排序'}
                 , {
                     field: 'status', width: 80, title: '状态', templet: function (data) {
-                        if (data.status === 0) {
+                        if (data.status === "0") {
                             return "<a class='layui-btn  layui-btn-xs'>可用</a>"
                         } else {
                             return "<a class='layui-btn layui-btn-disabled  layui-btn-xs'>失效</a>"
                         }
                     }
                 }
-                , {
-                    field: 'createTime',
-                    width: 160,
-                    title: '创建时间',
-                    templet: "<div>{{layui.util.toDateString(d.createTime, 'yyyy年-MM月-dd日 HH:mm:ss')}}</div>"
-                }
-                , {field: 'createBy', width: 120, title: '创建人'}
+                , {field: 'updateBy', width: 120, title: '修改人'}
+
                 , {
                     field: 'updateTime',
-                    width: 160,
+                    width: 250,
                     title: '修改时间',
                     templet: "<div>{{layui.util.toDateString(d.updateTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"
                 }
-                , {field: 'updateBy', width: 120, title: '修改人'}
                 , {fixed: 'right', title: '操作', width: 125, minWidth: 125, toolbar: '#barDemo'}
             ]]
             , page: true
             , limit: 4
             , limits: [4, 6, 8, 10]
-            /*, done: function (res, curr, count) {
-                //数据表格加载完成时调用此函数
-                //如果是异步请求数据方式，res即为你接口返回的信息。
-                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            //解决页码的问题
 
-                //设置全部数据到全局变量
-                table_data = res.data;
+        })
 
-                //在缓存中找到id ,然后设置data表格中的选中状态
-                //循环所有数据，找出对应关系，设置checkbox选中状态
-                for (var i = 0; i < res.data.length; i++) {
-                    for (var j = 0; j < ids.length; j++) {
-                        //数据id和要勾选的id相同时checkbox选中
-                        if (res.data[i].id == ids[j]) {
-                            //这里才是真正的有效勾选
-                            res.data[i]["LAY_CHECKED"] = 'true';
-                            //找到对应数据改变勾选样式，呈现出选中效果
-                            var index = res.data[i]['LAY_TABLE_INDEX'];
-                            $('.layui-table-fixed-l tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
-                            $('.layui-table-fixed-l tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
-                        }
-                    }
-                }
-                //设置全选checkbox的选中状态，只有改变LAY_CHECKED的值， table.checkStatus才能抓取到选中的状态
-                var checkStatus = table.checkStatus('my-table');
-                if (checkStatus.isAll) {
-                    $(' .layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
-                    $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().addClass('layui-form-checked');
-                }
-                //得到所有数据
-                // console.log(res);
-                //得到当前页码
-                // console.log(curr);
-                //得到数据总量
-                //  console.log(count);
-            }*/
-        });
         $("#search").click(function () {
             search_roles()
         })
@@ -159,8 +115,9 @@
                     curr: 1 //重新从第 1 页开始
                 }
                 , where: {
-                    id: $("#searchId").val(),
+                    deptName: $("#searchDeptName").val(),
                     createBy: $("#searchCreatePerson").val(),
+                    updateBy: $("#searchUpdatePerson").val(),
                 }
             });
         }
@@ -187,59 +144,13 @@
             }
         });
 
-
-        //复选框选中监听,将选中的id 设置到缓存数组,或者删除缓存数组
-        table.on('checkbox(test)', function (obj) {
-            if (obj.checked == true) {
-                if (obj.type == 'one') {
-                    ids.push(obj.data.id);
-                } else {
-                    for (var i = 0; i < table_data.length; i++) {
-                        ids.push(table_data[i].id);
-                    }
-                }
-            } else {
-                if (obj.type == 'one') {
-                    for (var i = 0; i < ids.length; i++) {
-                        if (ids[i] == obj.data.id) {
-                            ids.remove(i);
-                        }
-                    }
-                } else {
-                    for (var i = 0; i < ids.length; i++) {
-                        for (var j = 0; j < table_data.length; j++) {
-                            if (ids[i] == table_data[j].id) {
-                                ids.remove(i);
-                            }
-                        }
-                    }
-                }
-            }
-            console.log(ids)
-        })
-        //删除数组自定义函数
-        Array.prototype.remove = function (dx) {
-            if (isNaN(dx) || dx > this.length) {
-                return false;
-            }
-            for (var i = 0, n = 0; i < this.length; i++) {
-                if (this[i] != this[dx]) {
-                    this[n++] = this[i]
-                }
-            }
-            this.length -= 1
-        }
-
         //监听行工具事件
         table.on('tool(test)', function (obj) {
             var data = obj.data;
-            alert(data.id + "  " + data.name + "   " + data.sn);
-            //console.log(obj)
             if (obj.event === 'del') {
-
                 layer.confirm('真的删除行么', function (index) {
                     $.ajax({
-                        url: '/sds/tblquestion/deleteTblQuestionSds/' + data.id,
+                        url: '/system/dept/deleteBatch/' + data.deptId,
                         type: "DELETE",
                         success: function (data) {
                             console.log(data.toString() + "dfsaf")
@@ -270,14 +181,10 @@
         function updateSds(obj, data) {
             let form = layui.form;
             form.val("add", {
-                "id": data.id,
-                "question": data.question
-                , "optionA": data.optionA
-                , "optionB": data.optionB
-                , "optionC": data.optionC
-                , "optionD": data.optionD
-                , "type": data.type
-                , "status": data.status === 1 ? 0 : 1
+                "deptId": data.deptId
+                , "deptName": data.deptName
+                , "orderNum": data.orderNum
+                , "status": data.status == 1 ? 0 : 1
             });
 
             layer.open({
@@ -299,18 +206,14 @@
                 $.ajax({
                     // dataType : "json",
                     type: "post",
-                    url: "/sds/tblquestion//update",
+                    url: "/system/dept/saveorupdate",
                     // {"deptId": data1.deptId, "deptName": data1.deptName, "deptSn": data1.deptSn}
                     // data: JSON.stringify(massage.field),
                     data: {
-                        "id": data1.id
-                        , "question": data1.question
-                        , "optionA": data1.optionA
-                        , "optionB": data1.optionB
-                        , "optionC": data1.optionC
-                        , "optionD": data1.optionD
-                        , "type": data1.type
-                        , "status": data1.status == "on" ? 0 : 1
+                        "deptId": data1.deptId
+                        , "deptName": data1.deptName
+                        , "orderNum": data1.orderNum
+                        , "status": data1.status === 'on' ? 0 : 1
                     },
                     success: function (msg) {
                         console.log(msg);
@@ -333,27 +236,19 @@
 
         }
 
-        // 数组元素去重
-        /*function uq(array) {
-            //将array数组转换成set对象,再使用Array.from()方法将set对象转换成数组
-            return Array.from(new Set(array));
-        }*/
-
-
         //批量删除
         $("#removeBatch").click(function () {
             var checkStatus = table.checkStatus('rolesReload'),
-                data = checkStatus.data;
-            var ids = [];
-            alert("sdfasdf")
-            console.log("长度 ----" + ids.length)
+                data = checkStatus.data,
+                ids = [];
             if (data.length > 0) {
                 for (var i in data) {
-                    ids[i] = data[i].id;
+                    ids[i] = data[i].deptId;
                 }
+                console.log(ids);//打印获取到选中的id，用，分割
                 layer.confirm('真的删除行么', function (index) {
                     $.ajax({
-                        url: '/sds/tblquestion/deleteTblQuestionSds/' + ids,
+                        url: '/system/dept/deleteBatch/' + ids,
                         type: "DELETE",
                         success: function (data) {
                             console.log(data.toString() + "dfsaf")
@@ -378,7 +273,7 @@
         });
 
         // 添加
-        $("#addBtn").click(function addSds() {
+        $("#addBtn").click(function addSds(obj, data) {
             let form = layui.form;
             // 清空form 表单
             res()
@@ -397,16 +292,12 @@
                 $.ajax({
                     // dataType : "json",
                     type: "post",
-                    url: "/sds/tblquestion/save",
+                    url: "/system/dept/saveorupdate",
                     data: {
-                        "id": data1.id
-                        , "question": data1.question
-                        , "optionA": data1.optionA
-                        , "optionB": data1.optionB
-                        , "optionC": data1.optionC
-                        , "optionD": data1.optionD
-                        , "type": data1.type
-                        , "status": data1.status === 'on' ? 1 : 0
+                        "deptId": data1.deptId
+                        , "deptName": data1.deptName
+                        , "orderNum": data1.orderNum
+                        , "status": data1.status === 'on' ? 0: 1
                     },
                     success: function (msg) {
                         console.log(msg);
@@ -424,7 +315,9 @@
                     }
                 })
                 return false
+
             })
+
         })
 
         // 重置 搜索框的方法
@@ -437,23 +330,15 @@
         // 重置模态框方法
         var res = function () {
             let form = layui.form;
-            form.val("add", {
-                "question": ""
-                , "optionA": ""
-                , "optionB": ""
-                , "optionC": ""
-                , "optionD": ""
-                , "type": ""
-                , "status": ""
+            form.val("add",{
+                "deptId": ""
+                , "deptName": ""
+                , "orderNum":""
+                , "status":0
             });
         }
-        $("#res").click(res);
-
+        $("#res").click(res)
     })
-
-
-
-
 
 </script>
 
@@ -462,52 +347,25 @@
     <div id="add_form" class="layui-form" lay-filter="add" action=""
          style="margin-top: 20px; margin-left: 50px ; align:center;">
         <div class="layui-form-item" style="display: none">
-            <label class="layui-form-label">ID</label>
+            <label class="layui-form-label">部门 ID</label>
             <div class="layui-input-inline" style="width: 50%">
-                <input id="questionId" type="text" name="id"
-                       placeholder="问题 id"
+                <input id="deptId" type="text" name="deptId"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">问题描述</label>
+            <label class="layui-form-label">部门名称</label>
             <div class="layui-input-inline" style="width: 50%">
-                <textarea name="question" placeholder="问题描述" class="layui-textarea"></textarea>
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">选项 A</label>
-            <div class="layui-input-inline" style="width: 50%">
-                <textarea name="optionA" placeholder="选项 A" class="layui-textarea"></textarea>
+                <input id="deptName" type="text" name="deptName"
+                       placeholder="部门名称"
+                       autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">选项 B</label>
+            <label class="layui-form-label">排序</label>
             <div class="layui-input-inline" style="width: 50%">
-                <textarea name="optionB" placeholder="选项 B" class="layui-textarea"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">选项 C</label>
-            <div class="layui-input-inline" style="width: 50%">
-                <textarea name="optionC" placeholder="选项 C" class="layui-textarea"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">选项 D</label>
-            <div class="layui-input-inline" style="width: 50%">
-                <textarea name="optionD" placeholder="选项 C" class="layui-textarea"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">问题类型</label>
-            <div class="layui-input-inline" style="width: 50%">
-                <select name="type" id="questionType" lay-verify="required" lay-filter="xmFilter">
-                    <option value="">请选择</option>
-                    <option value="2">正向计分</option>
-                    <option value="1">反向计分</option>
-                </select>
+                <input id="orderNum" type="number" name="orderNum" lay-verify="number"
+                       autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">

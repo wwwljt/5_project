@@ -63,10 +63,10 @@
         from w_gl.tbl_tester_sds;
     </select>
     <select id="getTbTestStatistics" resultType="com.fivegroup.project.entity.vo.StatisticsVo">
-        select sum((s.forward - s.inversion) > 3)  as normal
-             , sum((s.forward - s.inversion) > 6)  as slight
-             , sum((s.forward - s.inversion) > 9)  as moderate
-             , sum((s.forward - s.inversion) > 12) as severe
+        select sum((s.forward + s.inversion)  &lt; 50)  as normal
+             , sum((s.forward + s.inversion)  &lt;= 60)  as slight
+             , sum((s.forward + s.inversion) &lt;= 70 )  as moderate
+             , sum((s.forward + s.inversion) &gt; 70) as severe
         from (select sum(IF(tqs.type = 1, if(ttrs.answer = 'A', 1,
                                              if(ttrs.answer = 'B', 2,
                                                 if(ttrs.answer = 'C', 3,

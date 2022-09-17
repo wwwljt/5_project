@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script>
+    //记录选中的数据:做缓存使用,作为参数传递给后台,然后生成pdf ,压缩
+    var ids =new Array();
+    //当前表格中的全部数据:在表格的checkbox全选的时候没有得到数据, 因此用全局存放变量
+    var table_data=new Array();
+
+    //分页列表
+    var tableIns = table.render({
+      elem: '#table',
+      url: '${ctx}/submit/info/list',
+      where: tableWhere(),
+      page: true,
+      toolbar: "#toolbar",
+      defaultToolbar: ['filter', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+        title: '提示'
+        ,layEvent: 'LAYTABLE_TIPS'
+        ,icon: 'layui-icon-tips'
+      }],
+      height: "full-120",
+      loading: true,
+      request: {
+        pageName: 'pageNumber' //页码的参数名称，默认：page
+        ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+      },
+      response: {
+        statusName: 'code' //规定数据状态的字段名称，默认：code
+        ,statusCode: 10200 //规定成功的状态码，默认：0
+        ,msgName: 'message' //规定状态信息的字段名称，默认：msg
+        ,countName: 'total' //规定数据总数的字段名称，默认：count
+        ,dataName: 'data' //规定数据列表的字段名称，默认：data
+      },
+      cols: [[
+        {type: 'checkbox', fixed: 'left',align: "left"},
+        {field: "categoryId", title: '业务类别', minWidth: 100, align: "center" },
+        {field: "secondCategoryId", title: '办理事项', minWidth: 100, align: "center" },
+        {field: "realName", title: '上报员工名称', minWidth: 100, align: "center" },
+        {field: "companyId", title: '单位名称', minWidth: 100, align: "center" },
+        {field: "cardNo", title: '证件号', minWidth: 100, align: "center" },
+        {field: "phone", title: '手机号', minWidth: 100, align: "center" },
+        {field: 'shState', title: '审批状态', minWidth: 100, align: "center",templet:function(d) {
+            if (d.shState == 0) {
+              return "<span class=\"layui-bg-green\" >待人力资源审批</span>";
+            } else if(d.shState == 1){
+              return "<span class=\"layui-bg-blue\" >待社保局审批</span>";
+            } else if(d.shState == 2){
+              return "<span class=\"layui-bg-grey\" >审批通过</span>";
+            } else if(d.shState == 3){
+              return "<span class=\"layui-bg-red\" >审批未通过</span>";
+            }
+          }},
+        {field: 'signPic', title: '签名', minWidth: 100, align: "center",templet:
+                  function (d) {
+                    return "<img  class='table-img'  src="+d.signPic+">"
+                  }
+        },
+        {field: "gmtCreate", title: '创建时间', minWidth: 100, align: "center" ,sort: true },
+        {field: "oneTime", title: '人力资源审核时间', minWidth: 100, align: "center" ,sort: true },
+      ]],done: function(res, curr, count){
+        //数据表格加载完成时调用此函数
+        //如果是异步请求数据方式，res即为你接口返回的信息。
+        //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+
+        //设置全部数据到全局变量
+        table_data=res.data;
+
+        //在缓存中找到id ,然后设置data表格中的选中状态
+        //循环所有数据，找出对应关系，设置checkbox选中状态
+        for(var i=0;i< res.data.length;i++){
+          for (var j = 0; j < ids.length; j++) {
+            //数据id和要勾选的id相同时checkbox选中
+            if(res.data[i].id == ids[j])
+            {
+              //这里才是真正的有效勾选
+              res.data[i]["LAY_CHECKED"]='true';
+              //找到对应数据改变勾选样式，呈现出选中效果
+              var index= res.data[i]['LAY_TABLE_INDEX'];
+              $('.layui-table-fixed-l tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+              $('.layui-table-fixed-l tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+            }
+          }
+        }
+        //设置全选checkbox的选中状态，只有改变LAY_CHECKED的值， table.checkStatus才能抓取到选中的状态
+        var checkStatus = table.checkStatus('my-table');
+        if(checkStatus.isAll){
+          $(' .layui-table-header th[data-field="0"] input[type="checkbox"]').prop('checked', true);
+          $('.layui-table-header th[data-field="0"] input[type="checkbox"]').next().addClass('layui-form-checked');
+        }
+        //得到所有数据
+        // console.log(res);
+        //得到当前页码
+        // console.log(curr);
+        //得到数据总量
+        //  console.log(count);
+      }
+    });
+
+
+
+    //删除数组自定义函数
+    Array.prototype.remove=function(dx)
+    {
+      if(isNaN(dx)||dx>this.length){return false;}
+      for(var i=0,n=0;i<this.length;i++)
+      {
+        if(this[i]!=this[dx])
+        {
+          this[n++]=this[i]
+        }
+      }
+      this.length-=1
+    }
+
+    //复选框选中监听,将选中的id 设置到缓存数组,或者删除缓存数组
+    table.on('checkbox(table)', function (obj) {
+      if(obj.checked==true){
+        if(obj.type=='one'){
+          ids.push(obj.data.id);
+        }else{
+          for(var i=0;i<table_data.length;i++){
+            ids.push(table_data[i].id);
+          }
+        }
+      }else{
+        if(obj.type=='one'){
+          for(var i=0;i<ids.length;i++){
+            if(ids[i]==obj.data.id){
+              ids.remove(i);
+            }
+          }
+        }else{
+          for(var i=0;i<ids.length;i++){
+            for(var j=0;j<table_data.length;j++){
+              if(ids[i]==table_data[j].id){
+                ids.remove(i);
+              }
+            }
+          }
+        }
+      }
+      console.log(ids)
+    });
+
+    window.location.href = "${ctx}/submit/info/download?id="+ids;
+  </script>
+</head>
+<body>
+
+</body>
+</html>

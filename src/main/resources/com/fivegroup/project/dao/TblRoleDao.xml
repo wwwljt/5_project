@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivegroup.project.dao.TblRoleDao">
+    <delete id="deleteRole">
+        update w_gl.tbl_role
+        set flag=1
+        where role_id = #{id}
+    </delete>
+    <select id="getRoleCount" resultType="java.lang.Integer">
+        select count(*)
+        from w_gl.tbl_role;
+    </select>
+    <select id="getRolePage" resultType="com.fivegroup.project.entity.TblRole">
+        select *
+        from w_gl.tbl_role
+        where flag = 0;
+    </select>
+</mapper>

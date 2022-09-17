@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivegroup.project.dao.MenuDao">
+
+    <resultMap id="baseResultTreeMap" type="com.fivegroup.project.entity.vo.Menu">
+        <id column="menu_id" jdbcType="INTEGER" property="id"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="menu_name" jdbcType="VARCHAR" property="title"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <collection property="children" ofType="Menu" select="getTree" column="{parentId=menu_id}"/>
+    </resultMap>
+    <select id="getTree" resultMap="baseResultTreeMap">
+        select *
+        from w_gl.tbl_menu
+        <where>
+            <choose>
+                <when test="parentId!=null">
+                    and parent_id = #{parentId}
+                </when>
+                <otherwise>
+                    and parent_id = 0
+                </otherwise>
+            </choose>
+        </where>
+        ;
+    </select>
+    <select id="getMenuId" resultType="integer">
+        select menu_id
+        from w_gl.tbl_role_menu
+        where role_id = #{roleId};
+    </select>
+</mapper>
