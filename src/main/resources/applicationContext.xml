@@ -4,14 +4,20 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd">
     <!--    注解组件扫描-->
-    <context:component-scan base-package="com.fivegroup">
+    <context:component-scan base-package="com.fivegroup.project">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+
+
     <!--spring整合mybatis-->
     <context:property-placeholder location="classpath:dbconfig.properties"/>
     <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
@@ -21,24 +27,27 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
-    <!--================== 配置和MyBatis的整合=============== -->
-   <!-- <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        &lt;!&ndash; 指定mybatis全局配置文件的位置 &ndash;&gt;
-        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+
+
+    <!--SqlSessionFactory创建交给spring的IOC容器-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--数据库环境配置-->
         <property name="dataSource" ref="pooledDataSource"/>
-        &lt;!&ndash; 指定mybatis，mapper文件的位置 &ndash;&gt;
-        <property name="mapperLocations" value="classpath:com/fivegroup/dao"/>
-    </bean>
-    &lt;!&ndash; 配置扫描器，将mybatis接口的实现加入到ioc容器中 &ndash;&gt;
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        &lt;!&ndash;扫描所有dao接口的实现，加入到ioc容器中 &ndash;&gt;
-        <property name="basePackage" value="com.fivegroup.project.dao"/>
+
+        <!--类型别名配置-->
+        <property name="typeAliasesPackage" value="com.fivegroup.project.entity"/>
+
+        <!--如果要引入mybatis主配置文件，可以通过如下配置-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+
+        <!-- 指定mybatis，mapper文件的位置 -->
+        <property name="mapperLocations" value="classpath:com/fivegroup/project/dao/*.xml"/>
+
     </bean>
 
-    &lt;!&ndash; 配置一个可以执行批量的sqlSession &ndash;&gt;
-    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
-        <constructor-arg name="executorType" value="BATCH"/>
-    </bean>-->
+    <!--映射接口扫描配置，由spring创建代理对象，交给IOC容器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.fivegroup.project.dao"/>
+    </bean>
 
 </beans>
