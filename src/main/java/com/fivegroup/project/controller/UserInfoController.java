@@ -1,15 +1,18 @@
 package com.fivegroup.project.controller;
 
 import com.fivegroup.project.entity.Userinfo;
+import com.fivegroup.project.entity.vo.UserinfoVo;
 import com.fivegroup.project.service.UserInfoService;
 import com.fivegroup.project.util.JwtHelper;
 import com.fivegroup.project.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -22,10 +25,53 @@ import javax.servlet.http.HttpServletRequest;
  * <p>
  */
 @RestController
-@RequestMapping("/user/")
-public class UserController {
+@RequestMapping("/system/user/")
+public class UserInfoController {
 	@Autowired
 	private UserInfoService userInfoService;
+	
+	/**
+	 * 批量删除
+	 * @param userid
+	 * @return
+	 */
+	@PostMapping("/deleteBatch")
+	public Result deleteBatch(String userid) {
+		Integer result=userInfoService.deleteBatch(userid);
+		return Result.ok(result);
+	}
+	
+	/**
+	 * 根据 用户名和 id 判断用户是否存在
+	 *
+	 * @param userinfo
+	 * @return
+	 */
+	@GetMapping("/usercheck")
+	public Result userCheck(Userinfo userinfo) {
+		System.out.println("userinfo = " + userinfo);
+		Userinfo user = userInfoService.userCheck(userinfo);
+		if (user != null) {
+			// 用户已存在
+			return Result.fail();
+		} else {
+			// 用户不存在
+			return Result.ok();
+		}
+	}
+	
+	/**
+	 * 保存或修改
+	 *
+	 * @param userinfo
+	 * @return
+	 */
+	@PostMapping("/saveOrUpdate")
+	public Result saveOrUpdate(Userinfo userinfo, HttpServletRequest request) {
+		System.out.println("userinfo = " + userinfo);
+		Integer result = userInfoService.saveOrUpdate(userinfo, request);
+		return Result.ok(result);
+	}
 	
 	/**
 	 * 登录
@@ -69,5 +115,22 @@ public class UserController {
 		}
 	}
 	
+	/**
+	 * 分页条件查询
+	 *
+	 * @param page
+	 * @param limit
+	 * @param userInfo
+	 * @return
+	 */
+	@GetMapping("/getUserInfoPage")
+	public Result getUserInfoPage(Integer page, Integer limit, Userinfo userInfo) {
+		// 根据 条件获取分页总记录数
+		Integer count = userInfoService.getUserInfoCount(userInfo);
+		// 获取分页数据
+		List<UserinfoVo> userinfoList = userInfoService.getUserInfoPage(page, limit, userInfo);
+		userinfoList.forEach(System.out::println);
+		return Result.ok(userinfoList, count);
+	}
 	
 }

@@ -27,13 +27,23 @@ public class TblDeptController {
 	private TblDeptService tblDeptService;
 	
 	/**
+	 * 获取所有部门数据
+	 * @return
+	 */
+	@GetMapping("/getDeptAll")
+	public Result getDeptAll() {
+		List<TblDept> tblDeptList = tblDeptService.getDptAll();
+		return Result.ok(tblDeptList);
+	}
+	
+	/**
 	 * 批量删除
 	 *
 	 * @param ids
 	 * @return
 	 */
 	@DeleteMapping("/deleteBatch/{ids}")
-	public Result deleteBatch(@PathVariable("ids")  Integer[] ids) {
+	public Result deleteBatch(@PathVariable("ids") Integer[] ids) {
 		System.out.println("ids = " + Arrays.toString(ids));
 		Integer result = tblDeptService.deleteBatch(ids);
 		return Result.ok(result);

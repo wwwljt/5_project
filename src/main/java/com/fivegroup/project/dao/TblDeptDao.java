@@ -53,4 +53,17 @@ public interface TblDeptDao {
 	 * @return
 	 */
 	Integer deleteBatch(@Param("ids") Integer[] ids);
+	
+	/**
+	 * 获取所有部门数据
+	 * @return
+	 */
+	List<TblDept> getDptAll();
+	
+	/**
+	 * 根据 id 查询
+	 * @param id
+	 * @return
+	 */
+	TblDept getTblDeptById(@Param("id") Integer id);
 }

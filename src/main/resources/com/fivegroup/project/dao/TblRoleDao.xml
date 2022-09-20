@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fivegroup.project.dao.TblRoleDao">
+
+    <insert id="saveRole" useGeneratedKeys="true" keyProperty="tblRoleVo.roleId">
+        insert into w_gl.tbl_role(role_name,
+                                  role_key,
+                                  role_sort,
+                                  `status`,
+                                  create_by,
+                                  create_time,
+                                  update_by,
+                                  update_time,
+                                  remark)
+        values (#{tblRoleVo.roleName},
+                #{tblRoleVo.roleKey},
+                #{tblRoleVo.roleSort},
+                #{tblRoleVo.status},
+                #{tblRoleVo.createBy},
+                #{tblRoleVo.createTime},
+                #{tblRoleVo.updateBy},
+                #{tblRoleVo.updateTime},
+                #{tblRoleVo.remark})
+        ;
+    </insert>
+    <update id="updateRole">
+        update w_gl.tbl_role
+        <set>
+            <if test="tblRoleVo.roleName != null and tblRoleVo.roleName != ''">
+                role_name=#{tblRoleVo.roleName},
+            </if>
+            <if test="tblRoleVo.roleKey != null and tblRoleVo.roleKey != ''">
+                role_key=#{tblRoleVo.roleKey},
+            </if>
+            <if test="tblRoleVo.roleSort != null">
+                role_sort=#{tblRoleVo.roleSort},
+            </if>
+            <if test="tblRoleVo.status != null and tblRoleVo.status != ''">
+                `status`=#{tblRoleVo.status},
+            </if>
+            <if test="tblRoleVo.remark != null and tblRoleVo.remark != ''">
+                remark=#{tblRoleVo.remark},
+            </if>
+            <if test="tblRoleVo.updateBy != null and tblRoleVo.updateBy != ''">
+                update_by=#{tblRoleVo.updateBy},
+            </if>
+            <if test="tblRoleVo.updateTime != null">
+                update_time=#{tblRoleVo.updateTime},
+            </if>
+        </set>
+        where role_id = #{tblRoleVo.roleId}
+    </update>
     <delete id="deleteRole">
         update w_gl.tbl_role
         set flag=1
@@ -14,5 +63,14 @@
         select *
         from w_gl.tbl_role
         where flag = 0;
+    </select>
+    <select id="getRolePageById" resultType="com.fivegroup.project.entity.TblRole">
+        select *
+        from w_gl.tbl_role
+        where role_id = #{id}
+    </select>
+    <select id="getRoleAll" resultType="com.fivegroup.project.entity.TblRole">
+        select *
+        from w_gl.tbl_role;
     </select>
 </mapper>

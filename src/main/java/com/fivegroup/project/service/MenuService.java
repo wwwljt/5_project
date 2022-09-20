@@ -1,7 +1,9 @@
 package com.fivegroup.project.service;
 
+import com.fivegroup.project.entity.TblMenu;
 import com.fivegroup.project.entity.vo.Menu;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -17,14 +19,47 @@ import java.util.List;
 public interface MenuService {
 	/**
 	 * 根据 id 获取树形结构
+	 *
 	 * @return
 	 */
 	List<Menu> getTree();
 	
 	/**
 	 * 根据 roleId 获取 menuId
+	 *
 	 * @param roleId
 	 * @return
 	 */
 	Integer[] getMenuId(Integer roleId);
+	
+	/**
+	 * 获取所有菜单
+	 *
+	 * @return
+	 */
+	List<TblMenu> getMenuAll();
+	
+	/**
+	 * 根据 id 获取 父类名称
+	 *
+	 * @param id
+	 * @return
+	 */
+	TblMenu getParentNameById(Integer id);
+	
+	/**
+	 * 保存或修改
+	 *
+	 * @param tbMenu
+	 * @param request
+	 * @return
+	 */
+	Integer saveOrUpdate(TblMenu tbMenu, HttpServletRequest request);
+	
+	/**
+	 * 删除
+	 * @param menuId
+	 * @return
+	 */
+	Integer delete(Integer menuId);
 }

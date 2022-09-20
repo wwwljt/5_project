@@ -1,7 +1,9 @@
 package com.fivegroup.project.service;
 
 import com.fivegroup.project.entity.TblRole;
+import com.fivegroup.project.entity.vo.TblRoleVo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -35,8 +37,42 @@ public interface TblRoleService {
 	
 	/**
 	 * 根据id 删除
+	 *
 	 * @param id
 	 * @return
 	 */
 	Integer deleteRole(Integer id);
+	
+
+	
+	/**
+	 * 添加或修改
+	 *
+	 * @param tblRoleVo
+	 * @param request
+	 * @return
+	 */
+	Integer saveOrUpdate(TblRoleVo tblRoleVo, HttpServletRequest request);
+	
+	/**
+	 * 保存
+	 * @param tblRoleVo
+	 * @param request
+	 * @return
+	 */
+	Integer save(TblRoleVo tblRoleVo, HttpServletRequest request);
+	
+	/**
+	 * 修改
+	 * @param tblRoleVo
+	 * @param request
+	 * @return
+	 */
+	Integer update(TblRoleVo tblRoleVo, HttpServletRequest request);
+	/**
+	 * 获取所有角色
+	 *
+	 * @return
+	 */
+	List<TblRole> getRoleAll();
 }

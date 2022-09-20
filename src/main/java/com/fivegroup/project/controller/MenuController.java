@@ -1,14 +1,13 @@
 package com.fivegroup.project.controller;
 
+import com.fivegroup.project.entity.TblMenu;
 import com.fivegroup.project.entity.vo.Menu;
 import com.fivegroup.project.service.MenuService;
 import com.fivegroup.project.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,14 +24,64 @@ import java.util.List;
 @RestController
 @RequestMapping("/system/menu/")
 public class MenuController {
-	
 	@Autowired
 	private MenuService menuService;
 	
 	/**
+	 * 删除
+	 *
+	 * @param menuId
+	 * @return
+	 */
+	@PostMapping("/delete")
+	public Result delete(Integer menuId) {
+		Integer result = menuService.delete(menuId);
+		return Result.ok(result);
+	}
+	
+	/**
+	 * 保存或修改
+	 *
+	 * @param tbMenu
+	 * @return
+	 */
+	@PostMapping("/saveOrUpdate")
+	public Result saveOrUpdate(TblMenu tbMenu, HttpServletRequest request) {
+		System.out.println("tbMenu = " + tbMenu);
+		Integer result = menuService.saveOrUpdate(tbMenu, request);
+		return Result.ok(result);
+	}
+	
+	
+	/**
+	 * 根据 id 获取 父级名称
+	 *
+	 * @param menuId
+	 * @return
+	 */
+	@GetMapping("/getParentNameById")
+	public Result getParentNameById(Integer menuId) {
+		System.out.println("id = " + menuId);
+		TblMenu tblMenu = menuService.getParentNameById(menuId);
+		System.out.println("tblMenu = " + tblMenu);
+		return Result.ok(tblMenu);
+	}
+	
+	/**
+	 * 获取 所有菜单
+	 *
+	 * @return
+	 */
+	@GetMapping("/getMenuAll")
+	public Result getMenuAll() {
+		List<TblMenu> tblMenuList = menuService.getMenuAll();
+		return Result.ok(tblMenuList);
+	}
+	
+	
+	/**
 	 * 获取树形结构
 	 *
-	 * @param id
 	 * @return
 	 */
 	@GetMapping("/getTree")

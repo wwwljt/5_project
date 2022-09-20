@@ -34,6 +34,7 @@ public class TblTestPlanSdsServiceImpl implements TblTestPlanSdsService {
 	 * @param request
 	 * @return
 	 */
+	//	@Transactional
 	@Override
 	public Integer save(TblTestPlanSds tblTestPlanSds, HttpServletRequest request) {
 		String username = JwtHelper.getUsername(request);
@@ -55,6 +56,7 @@ public class TblTestPlanSdsServiceImpl implements TblTestPlanSdsService {
 	 * @return
 	 */
 	@Override
+	//	@Transactional
 	public Integer update(TblTestPlanSds tblTestPlanSds, HttpServletRequest request) {
 		tblTestPlanSds.setUpdateTime(new Date());
 		tblTestPlanSds.setUpdateBy(JwtHelper.getUsername(request));
@@ -68,6 +70,7 @@ public class TblTestPlanSdsServiceImpl implements TblTestPlanSdsService {
 	 * @return
 	 */
 	@Override
+	//	@Transactional
 	public Integer deleteTblTestPlanSds(Integer[] ids) {
 		return tblTestPlanSdsDao.deleteTblTestPlanSds(ids);
 	}

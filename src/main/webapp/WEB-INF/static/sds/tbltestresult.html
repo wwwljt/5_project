@@ -19,7 +19,7 @@
     </div>
     <span style="margin-left: 40px;">测试计划 ID ：</span>
     <div class="layui-inline">
-        <input class="layui-input" id="searchTestPlanId" name="testPlanId" autocomplete="off">
+        <input class="layui-input" type="number" id="searchTestPlanId" name="testPlanId" autocomplete="off">
     </div>
     <button class="layui-btn" data-type="reload" id="search">搜索</button>
     <button type="button" class="layui-btn" id="resetSearch">重置</button>
@@ -186,6 +186,7 @@
                         data: ['正向得分', '反向得分']
                     },
                     series: [{
+                        name:'sds',
                         type: 'pie', //饼状
                         radius: '60%', //圆的大小
                         center: ['50%', '50%'], //居中
@@ -214,6 +215,7 @@
                 title: "抑郁测试结果图示",
                 skin: 'layui-layer-molv',
                 area: ['550px', '500px'],
+                shadeClose:true,
                 content: $("#open_div"),//引用的弹出层的页面层的方式加载修改界面表单
             });
 

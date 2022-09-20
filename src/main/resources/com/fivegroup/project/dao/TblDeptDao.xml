@@ -74,4 +74,11 @@
         limit #{page},#{limit}
         ;
     </select>
+    <select id="getDptAll" resultType="com.fivegroup.project.entity.TblDept">
+        select *
+        from w_gl.tbl_dept;
+    </select>
+    <select id="getTblDeptById" resultType="com.fivegroup.project.entity.TblDept">
+        select * from w_gl.tbl_dept where dept_id =#{id}
+    </select>
 </mapper>

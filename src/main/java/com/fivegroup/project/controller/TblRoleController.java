@@ -1,11 +1,13 @@
 package com.fivegroup.project.controller;
 
 import com.fivegroup.project.entity.TblRole;
+import com.fivegroup.project.entity.vo.TblRoleVo;
 import com.fivegroup.project.service.TblRoleService;
 import com.fivegroup.project.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -23,6 +25,17 @@ import java.util.List;
 public class TblRoleController {
 	@Autowired
 	private TblRoleService tblRoleService;
+	
+	/**
+	 * 获取所有角色
+	 *
+	 * @return
+	 */
+	@GetMapping("/getRoleAll")
+	public Result getRoleAll() {
+		List<TblRole> tblRoleList = tblRoleService.getRoleAll();
+		return Result.ok(tblRoleList);
+	}
 	
 	/**
 	 * 分页条件查询
@@ -55,5 +68,44 @@ public class TblRoleController {
 		System.out.println("id = " + id);
 		Integer count = tblRoleService.deleteRole(id);
 		return Result.ok(count);
+	}
+	
+	/**
+	 * 保存修改
+	 *
+	 * @param tblRoleVo
+	 * @return
+	 */
+	@PostMapping("/saveorupdate")
+	public Result saveOrUpdateRole(TblRoleVo tblRoleVo, HttpServletRequest request) {
+		System.out.println("tblRoleVo = " + tblRoleVo);
+		Integer result = tblRoleService.saveOrUpdate(tblRoleVo, request);
+		return Result.ok(result);
+	}
+	
+	/**
+	 * 保存
+	 *
+	 * @param tblRoleVo
+	 * @return
+	 */
+	@PostMapping("/save")
+	public Result save(TblRoleVo tblRoleVo, HttpServletRequest request) {
+		System.out.println("tblRoleVo = " + tblRoleVo);
+		Integer result = tblRoleService.save(tblRoleVo, request);
+		return Result.ok(result);
+	}
+	
+	/**
+	 * 修改
+	 *
+	 * @param tblRoleVo
+	 * @return
+	 */
+	@PostMapping("/update")
+	public Result update(TblRoleVo tblRoleVo, HttpServletRequest request) {
+		System.out.println("tblRoleVo = " + tblRoleVo);
+		Integer result = tblRoleService.update(tblRoleVo, request);
+		return Result.ok(result);
 	}
 }

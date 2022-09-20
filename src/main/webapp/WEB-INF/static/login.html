@@ -138,7 +138,7 @@
             $('#loginBtn').val("正在登录...");
             $.ajax({
                 type: 'get',
-                url: "/user/login",
+                url: "/system/user/login",
                 data: {"username": params.name, "password": params.password},
                 success: function (data) {
                     layer.close(loginLoadIndex);

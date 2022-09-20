@@ -9,6 +9,85 @@
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <collection property="children" ofType="Menu" select="getTree" column="{parentId=menu_id}"/>
     </resultMap>
+    <insert id="insertMenu">
+        insert into w_gl.tbl_role_menu (role_id, menu_id)
+        values
+        <foreach collection="menus" item="menus" separator=",">
+            (#{roleId},#{menus})
+        </foreach>
+        ;
+    </insert>
+    <insert id="save">
+        insert into w_gl.tbl_menu(menu_name,
+                                  parent_id, order_num,
+                                  url, menu_type,
+                                  perms, icon, create_by,
+                                  create_time, update_by,
+                                  update_time, remark)
+        values (#{tbMenu.menuName},
+                #{tbMenu.parentId},
+                #{tbMenu.orderNum},
+                #{tbMenu.url},
+                #{tbMenu.menuType},
+                #{tbMenu.perms},
+                #{tbMenu.icon},
+                #{tbMenu.createBy},
+                #{tbMenu.createTime},
+                #{tbMenu.updateBy},
+                #{tbMenu.updateTime},
+                #{tbMenu.remark});
+    </insert>
+    <update id="update">
+        update w_gl.tbl_menu
+        <set>
+            <if test="tbMenu.menuName != null and tbMenu.menuName != ''">
+                menu_name =#{tbMenu.menuName} ,
+            </if>
+            <if test="tbMenu.parentId != null ">
+                parent_id =#{tbMenu.parentId} ,
+            </if>
+            <if test="tbMenu.orderNum != null">
+                order_num =#{tbMenu.orderNum} ,
+            </if>
+            <if test="tbMenu.url != null and tbMenu.url != ''">
+                url =#{tbMenu.url} ,
+            </if>
+            <if test="tbMenu.menuType != null and tbMenu.menuType != ''">
+                menu_type =#{tbMenu.menuType} ,
+            </if>
+            <if test="tbMenu.visible != null and tbMenu.visible != ''">
+                `visible` =#{tbMenu.visible} ,
+            </if>
+            <if test="tbMenu.perms != null">
+                perms =#{tbMenu.perms} ,
+            </if>
+            <if test="tbMenu.icon != null and tbMenu.icon != ''">
+                icon =#{tbMenu.icon} ,
+            </if>
+            <if test="tbMenu.createBy != null and tbMenu.createBy != ''">
+                update_by =#{tbMenu.updateBy} ,
+            </if>
+            <if test="tbMenu.updateTime != null ">
+                update_time =#{tbMenu.updateTime} ,
+            </if>
+            <if test="tbMenu.remark != null and tbMenu.remark != ''">
+                remark =#{tbMenu.remark} ,
+            </if>
+
+        </set>
+        where menu_id= #{tbMenu.menuId}
+        ;
+    </update>
+    <delete id="deleteMenuByRoleId">
+        delete
+        from w_gl.tbl_role_menu
+        where role_id = #{roleId};
+    </delete>
+    <delete id="delete">
+        delete
+        from w_gl.tbl_menu
+        where menu_id = #{menuId};
+    </delete>
     <select id="getTree" resultMap="baseResultTreeMap">
         select *
         from w_gl.tbl_menu
@@ -28,5 +107,19 @@
         select menu_id
         from w_gl.tbl_role_menu
         where role_id = #{roleId};
+    </select>
+    <select id="getMenuAll" resultType="com.fivegroup.project.entity.TblMenu">
+        select *
+        from w_gl.tbl_menu;
+    </select>
+    <select id="getMenuByMenuId" resultType="com.fivegroup.project.entity.TblMenu">
+        select *
+        from w_gl.tbl_menu
+        where menu_id = #{id};
+    </select>
+    <select id="getParentNameByMenuId" resultType="com.fivegroup.project.entity.TblMenu">
+        select *
+        from w_gl.tbl_menu
+        where menu_id = #{id};
     </select>
 </mapper>

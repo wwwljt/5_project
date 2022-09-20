@@ -2,6 +2,7 @@ package com.fivegroup.project.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 
 /**
@@ -36,5 +37,17 @@ public final class MD5 {
 		}
 	}
 	
+	public static String getSalt() {
+		String str = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+		// 由 Random 生成随机数
+		Random random = new Random();
+		StringBuffer bu = new StringBuffer();
+		for (int i = 0; i < 22; i++) {
+			int number = random.nextInt(62);
+			// 将产生的数字通过length 次承载到 bu中
+			bu.append(str.charAt(number));
+		}
+		return bu.append("==").toString();
+	}
 	
 }

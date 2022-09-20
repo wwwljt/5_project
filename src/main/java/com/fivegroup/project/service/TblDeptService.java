@@ -51,4 +51,10 @@ public interface TblDeptService {
 	 * @return
 	 */
 	Integer deleteBatch(Integer[] ids);
+	
+	/**
+	 * 获取所有部门数据
+	 * @return
+	 */
+	List<TblDept> getDptAll();
 }

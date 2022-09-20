@@ -1,4 +1,7 @@
+import com.fivegroup.project.util.MD5;
+
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * <p>
@@ -22,7 +25,17 @@ public class MathTest {
 		System.out.println("Math.random() = " + Math.floor(Math.random()*100000+1));
 		System.out.println("Math.random() = " + num);
 		
+		System.out.println("UUID.randomUUID() = " + UUID.randomUUID());
+		UUID uuid = UUID.randomUUID();
+		String replace = uuid.toString().replace("-", "");
+		System.out.println("replace = " + replace);
+		String substring = replace.substring(0, 22);
+		System.out.println("substring = " + substring);
+		System.out.println("MD5.getSalt() = " + MD5.getSalt());
+		System.out.println("MD5.encrypt(MD5.getSalt()) = " + MD5.encrypt(MD5.getSalt()));
 	}
+	
+
 	
 
 	

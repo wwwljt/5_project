@@ -1,15 +1,126 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fivegroup.project.dao.UserInfoDao">
+    <sql id="likeUser">
+        <where>
+            <if test="userInfo.userid != null">
+                and userid = #{userInfo.userid}
+            </if>
+            <if test="userInfo.username != null and userInfo.username != ''">
+                and username like '%' #{userInfo.username} '%'
+            </if>
+            and del_flag=0
+        </where>
+    </sql>
+    <insert id="save">
+        insert into w_gl.userinfo(deptid, username, email,
+                                  phonenumber, sex, avatar,
+                                  `password`, salt,
+                                  create_by, create_time,
+                                  update_by, update_time,
+                                  remark, role_id)
+        values (#{userinfo.deptid}, #{userinfo.username},
+                #{userinfo.email}, #{userinfo.phonenumber},
+                #{userinfo.sex}, #{userinfo.avatar}, #{userinfo.password}, #{userinfo.salt},
+                #{userinfo.createBy}, #{userinfo.createTime}, #{userinfo.updateBy}, #{userinfo.updateTime},
+                #{userinfo.remark}, #{userinfo.roleId});
+    </insert>
+    <update id="update">
+        update w_gl.userinfo
+        <set>
+            <if test="userinfo.deptid != null ">
+                deptid=#{userinfo.deptid} ,
+            </if>
+            <if test="userinfo.username != null and userinfo.username != ''">
+                username=#{userinfo.username},
+            </if>
+            <if test="userinfo.email !=null and userinfo.email !=''">
+                email=#{userinfo.email},
+            </if>
+            <if test="userinfo.phonenumber != null and userinfo.phonenumber != ''">
+                phonenumber=#{userinfo.phonenumber},
+            </if>
+            <if test="userinfo.sex != null">
+                sex =#{userinfo.sex} ,
+            </if>
+            <if test="userinfo.avatar != null">
+                avatar =#{userinfo.avatar} ,
+            </if>
+            <if test="userinfo.password != null and userinfo.password != ''">
+                `password`=#{userinfo.password},
+            </if>
+            <if test="userinfo.salt != null and userinfo.salt != ''">
+                salt=#{userinfo.salt},
+            </if>
+            <if test="userinfo.status != null and userinfo.status !=''">
+                `status`=#{userinfo.status},
+            </if>
+            <if test="userinfo.updateBy != null and userinfo.updateBy != ''">
+                update_by=#{userinfo.updateBy},
+            </if>
+            <if test="userinfo.updateTime != null">
+                update_time=#{userinfo.updateTime},
+            </if>
+            <if test="userinfo.remark != null and userinfo.remark != ''">
+                remark =#{userinfo.remark} ,
+            </if>
+            <if test="userinfo.roleId != null ">
+                role_id=#{userinfo.roleId},
+            </if>
+        </set>
+        where userid=#{userinfo.userid} ;
+    </update>
+    <delete id="deleteBatch">
+        update
+            w_gl.userinfo
+        set del_flag=1
+        where userid in (#{userid});
+    </delete>
     <select id="login" resultType="com.fivegroup.project.entity.Userinfo">
         select *
         from w_gl.userinfo
         where username = #{username}
-          and `password` = #{password};
+          and `password` = #{password}
+          and del_flag = 0;
     </select>
     <select id="getUserOne" resultType="com.fivegroup.project.entity.Userinfo">
         select *
         from w_gl.userinfo
-        where username = #{userName};
+        where username = #{userName}
+          and del_flag = 0;
+    </select>
+    <select id="getUserInfoCount" resultType="java.lang.Integer">
+        select count(*)
+        from w_gl.userinfo
+
+        <include refid="likeUser"/>
+        ;
+    </select>
+    <resultMap id="userMap" type="com.fivegroup.project.entity.vo.UserinfoVo">
+        <!-- 一对一级联查询 -->
+        <association property="tblDept" column="deptid" javaType="com.fivegroup.project.entity.TblDept"
+                     select="com.fivegroup.project.dao.TblDeptDao.getTblDeptById"/>
+        <association property="tblRole" column="role_id" javaType="com.fivegroup.project.entity.TblRole"
+                     select="com.fivegroup.project.dao.TblRoleDao.getRolePageById"/>
+    </resultMap>
+    <select id="getUserInfoPage" resultMap="userMap">
+        select *
+        from w_gl.userinfo
+        <include refid="likeUser"/>
+        limit #{page},#{limit}
+    </select>
+    <select id="userCheck" resultType="com.fivegroup.project.entity.Userinfo">
+        select *
+        from w_gl.userinfo
+        <where>
+            <if test="userinfo.userid!=null">
+                and userid = #{userinfo.userid}
+            </if>
+            <if test="userinfo.username!=null and userinfo.username!=''">
+                and username = #{userinfo.username}
+            </if>
+        </where>
+        ;
+
     </select>
 </mapper>

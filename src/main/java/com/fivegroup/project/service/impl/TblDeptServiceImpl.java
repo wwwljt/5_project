@@ -27,6 +27,16 @@ public class TblDeptServiceImpl implements TblDeptService {
 	private TblDeptDao tblDeptDao;
 	
 	/**
+	 * 获取所有部门数据
+	 *
+	 * @return
+	 */
+	@Override
+	public List<TblDept> getDptAll() {
+		return tblDeptDao.getDptAll();
+	}
+	
+	/**
 	 * 批量删除
 	 *
 	 * @param ids
