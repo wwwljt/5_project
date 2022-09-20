@@ -37,4 +37,14 @@ public class TblTesterSasServiceImpl implements TblTesterSasService {
 
         return i;
     }
+
+
+
+    @Override
+    public List<TblTesterSas> findPie() {
+
+        List<TblTesterSas> pie = tblTesterSasDao.findPie();
+
+        return pie;
+    }
 }

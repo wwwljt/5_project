@@ -150,7 +150,12 @@
 
 <!--查看模态框-->
 <div class="layui-row" id="open_detail_div" style="display:none;">
-    <img src="../image/WBNH.png" style="margin-left: 50px; margin-top: 25px;" />
+<!--    <img src="../image/WBNH.png" style="margin-left: 50px; margin-top: 25px;" />-->
+
+    <div id="qrcode" style="margin-left: 50px; margin-top: 25px;">
+
+    </div>
+
 </div>
 
 <!--右侧工具栏-->
@@ -163,8 +168,10 @@
 
 </body>
 
-
+<!--引入layui-->
 <script src="../layui/layui.js" charset="utf-8"></script>
+<!--引入layui二维码工具-->
+<script src="../js/layui-qrcode.js" charset="utf-8"></script>
 
 <script>
 
@@ -183,6 +190,7 @@
             , id: 'testPlanSas'
             , url: '/findAllPlanSas'
             , method: 'get'
+            , toolbar: true
             , defaultToolbar: ['filter', 'exports', 'print', {
                 title: '帮助'
                 , layEvent: 'LAYTABLE_TIPS'
@@ -339,6 +347,8 @@
             // 如果为查看
             else if (obj.event === 'detail') {
 
+                data = obj.data;
+
                 // 打开模态框
                 layer.open({
                     type: 1,//类型
@@ -346,8 +356,19 @@
                     title: '查看信息',  //题目
                     shadeClose: true,  //点击遮罩层关闭
                     content: $('#open_detail_div'),  //打开的内容
-                    // btn: ['确定', '取消']
                 });
+
+
+
+
+
+                $("#qrcode").qrcode({
+                   render: "canvas",  // 也可以是table
+                   width:  200,
+                   height: 200,
+                   text: "666"
+                });
+
 
             }
 

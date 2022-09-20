@@ -37,7 +37,14 @@
 <!--查看模态框-->
 <div class="layui-row" id="open_detail_div" style="display:none;">
 
-    <div id="detail_main"></div>
+    <div style="width:400px; margin-left: 50px; text-align: center;">
+        <span style="font-family: 华文行楷; text-align: center; font-size: 30px; margin-top: 10px;">SAS测试结果</span>
+        <h1 id="resultH1"
+            style="font-family: 华文行楷; text-align: center; margin-top: 30px; margin-bottom: 20px;"></h1>
+    </div>
+
+
+    <div id="detail_main" style="height:430px; width:100%;"></div>
 
 </div>
 
@@ -50,8 +57,9 @@
 </body>
 
 <script src="../layui/layui.js" charset="utf-8"></script>
-<!--<script src="../js/echarts-5.3.3.js"></script>-->
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.1.1/dist/echarts.min.js"></script>
+<script src="../js/echarts-5.3.3.js" charset="utf-8"></script>
+<!--Staticfile CDN（国内）-->
+<!--<script src="https://cdn.staticfile.org/echarts/5.3.3/echarts.js"></script>-->
 
 <script>
 
@@ -70,6 +78,7 @@
             , id: 'testTesterSas'
             , url: '/findAllTesterSas'
             , method: 'get'
+            , toolbar: true
             , defaultToolbar: ['filter', 'exports', 'print', {
                 title: '帮助'
                 , layEvent: 'LAYTABLE_TIPS'
@@ -114,7 +123,7 @@
 
         });
 
-        // 监听工具条，实现查看,删除,编辑功能
+        // 监听工具条，实现查看,删除功能
         table.on('tool(TesterSasDemo)', function (obj) {    // TesterSasDemo 表示工具列所在表格的 lay-filter 的值
             let data = obj.data;
 
@@ -136,9 +145,6 @@
                         data: {
                             ids: strIds,
                         },
-                        // data: {
-                        //     id: data.id,  // 此处是根据id查询此id是否被删除，故将id传向后端
-                        // },
                         contentType: 'application/json',
                         success: function (data) {
 
@@ -167,18 +173,40 @@
                     title: '查看信息',  //题目
                     shadeClose: true,  //点击遮罩层关闭
                     content: $('#open_detail_div'),  //打开的内容
-                    // btn: ['确定', '取消']
                 });
 
 
+                console.log("ret=====" + data.id)
 
-                var chartDom = document.getElementById('detail_main');
-                var myChart = echarts.init(chartDom);
+                var forward = data.forward;
+                var inversion = data.inversion;
+                var score = forward + inversion;
+                var string = "";
+                if (score < 50) {
+                    string = "您的测试结果为：无焦虑症状"
+                    $("#resultH1").html(string);
+                } else if (score <= 60) {
+                    string = "您的测试结果为：轻度焦虑"
+                    $("#resultH1").html(string);
+                } else if (score <= 70) {
+                    string = "您的测试结果为：中度焦虑"
+                    $("#resultH1").html(string);
+                } else if (score > 70) {
+                    string = "您的测试结果为：重度焦虑"
+                    $("#resultH1").html(string);
+                }
+
+
+                // $("#resultH1").html(string);
+
+
+                var chartDom = document.getElementById('detail_main');  // 获取放置图表的dom
+                var myChart = echarts.init(chartDom);  // 拿到dom, 初始化eacharts实例
                 var option;
 
                 option = {
                     title: {
-                        text: 'Referer of a Website',
+                        text: 'SAS测试结果',
                         subtext: 'Fake Data',
                         left: 'center'
                     },
@@ -187,19 +215,17 @@
                     },
                     legend: {
                         orient: 'vertical',
-                        left: 'left'
+                        left: 'left',
+
                     },
                     series: [
                         {
-                            name: 'Access From',
+                            name: 'SAS焦虑测试',
                             type: 'pie',
                             radius: '50%',
                             data: [
-                                { value: 1048, name: 'Search Engine' },
-                                { value: 735, name: 'Direct' },
-                                { value: 580, name: 'Email' },
-                                { value: 484, name: 'Union Ads' },
-                                { value: 300, name: 'Video Ads' }
+                                {value: forward, name: '正向得分'},
+                                {value: inversion, name: '反向得分'}
                             ],
                             emphasis: {
                                 itemStyle: {
@@ -214,7 +240,9 @@
 
                 option && myChart.setOption(option);
 
+
             }
+
 
         });
 
@@ -328,8 +356,6 @@
                 }
             });
         })
-
-
 
 
     })

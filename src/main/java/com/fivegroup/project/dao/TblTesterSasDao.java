@@ -23,6 +23,9 @@ public interface TblTesterSasDao {
     int delData(List ids);
 
 
+    // 查看饼图信息，报表统计
+    List<TblTesterSas> findPie();
+
 
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +47,6 @@ public class TblTesterSasController {
     @RequestMapping(value = "/delDataTesterSas")
     public int deleteData(String ids) {
 
-        System.out.println("controller==="+ids);
-
         List<Integer> idsList = new ArrayList<>();
 
 
@@ -61,6 +60,63 @@ public class TblTesterSasController {
         int i = tblTesterSasService.delData(idsList);
 
         return i;
+    }
+
+
+    // 查看饼图信息
+    @RequestMapping(value = "/findPie")
+    public List<Integer> findPie(){
+
+        List<TblTesterSas> pie = tblTesterSasService.findPie();
+
+        List<Integer> peopleNums = new ArrayList<>();
+
+        //System.out.println("SIZE:::::"+pie.size());
+
+        BigDecimal score, bInt;
+        int a1;
+
+        //遍历pie,拿到字段和
+        for (TblTesterSas tbl: pie) {
+            BigDecimal forward = tbl.getForward();
+            BigDecimal inversion = tbl.getInversion();
+
+            // 把BigDecimal转换成int类型
+            score = forward.add(inversion);
+            bInt =new BigDecimal(String.valueOf(score));
+            a1 = bInt.intValue();
+
+            peopleNums.add(a1);
+
+        }
+
+
+        // 判断字段和所处的范围，并统计个数
+        int a = 0, b = 0, c = 0, d = 0;
+
+        for (int i = 0; i < peopleNums.size(); i++) {
+            if (peopleNums.get(i) <= 50){
+                a += 1;
+            } else if (peopleNums.get(i) <= 60) {
+                b += 1;
+            } else if (peopleNums.get(i) <= 70) {
+                c += 1;
+            } else if (peopleNums.get(i) > 70) {
+                d += 1;
+            }
+        }
+
+        // 把个数添加到要返回的集合中
+        List<Integer> backNum = new ArrayList<>();
+
+        backNum.add(a);
+        backNum.add(b);
+        backNum.add(c);
+        backNum.add(d);
+
+        System.out.println("======"+backNum);
+
+        return backNum;
     }
 
 

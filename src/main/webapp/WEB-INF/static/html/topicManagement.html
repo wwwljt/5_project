@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <title>Topic Management</title>
     <link href="../layui/css/layui.css" rel="stylesheet" charset="utf-8">
+
+    <style type="text/css">
+        .demoTable .layui-inline[lay-event] {
+            position: relative;
+            right: 10px;
+            width: 26px;
+            height: 26px;
+            padding: 5px;
+            line-height: 16px;
+            border: 1px solid #ccc;
+            /*变小手*/
+            cursor: pointer;
+            transition: .5s all;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -16,12 +32,12 @@
         <i class="layui-icon layui-icon-reduce-circle" style="font-size: 20px; color: white;"></i>删除
     </button>
 
-    <span style="margin-left: 80px;">搜索问题：</span>
+    <span style="margin-left: 50px;">搜索问题：</span>
     <div class="layui-inline">
         <input class="layui-input"  id="searchQuestion" autocomplete="off">
     </div>
 
-    <span style="margin-left: 80px;">搜索创建人：</span>
+    <span style="margin-left: 50px;">搜索创建人：</span>
     <div class="layui-inline">
         <input class="layui-input"  id="createPerson" autocomplete="off">
     </div>
@@ -242,6 +258,7 @@
             elem: '#testTopicManagement'
             , url: '/findQuestionSasAll'
             , method: 'get'
+            , toolbar: true
             , defaultToolbar: ['filter', 'exports', 'print', {
                 title: '帮助'
                 , layEvent: 'LAYTABLE_TIPS'

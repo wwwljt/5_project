@@ -22,4 +22,8 @@ public interface TblTesterSasService {
     // 删除一条数据
     int delData(List ids);
 
+
+    // 查看饼图信息
+    List<TblTesterSas> findPie();
+
 }

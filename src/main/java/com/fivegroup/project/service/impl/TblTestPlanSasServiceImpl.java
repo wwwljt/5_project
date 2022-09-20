@@ -46,7 +46,11 @@ public class TblTestPlanSasServiceImpl implements TblTestPlanSasService {
     @Override
     public int addData(TblTestPlanSas tblTestPlanSas) {
 
-        tblTestPlanSas.setCreateTime(new Date());
+        tblTestPlanSas.setCreateTime(new Date());  // 设置时间
+
+        // 设置六位随机数
+        int i1 = (int) ((Math.random() * 9 + 1) * 100000);
+        tblTestPlanSas.setTestCode(i1);
 
         int i = tblTestPlanSasDao.addData(tblTestPlanSas);
 

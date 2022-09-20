@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Statistics</title>
+    <link href="../layui/css/layui.css" rel="stylesheet" charset="utf-8">
+</head>
+<body>
+
+<!--图表div-->
+<div style="height:100vh">
+
+    <div id="main" style="height: 90%; width: 100%;">
+
+    </div>
+
+</div>
+
+
+</body>
+
+
+<script src="../layui/layui.js" charset="utf-8"></script>
+<!--<script src="../js/echarts-5.3.3.js"></script>-->
+<!--Staticfile CDN（国内）-->
+<script src="https://cdn.staticfile.org/echarts/5.3.3/echarts.js"></script>
+
+
+<script>
+
+    let $ = layui.jquery;
+
+    let normal;  // 正常
+    let mild;  // 轻度
+    let moderate;  // 中度
+    let severe;  // 重度
+
+
+    $.ajax({
+        type: 'get',
+        url: "/findPie",
+
+        success: function (data) {
+
+            console.log(data)
+
+            normal = data[0];
+            mild = data[1];
+            moderate = data[2];
+            severe = data[3];
+
+
+            let chartDom = document.getElementById('main');  // 拿到dom
+            let myChart = echarts.init(chartDom);  // 初始化 eacharts 实例
+            let option;
+
+            // 渲染实例
+            option = {
+                legend: {},
+                tooltip: {
+                    trigger: 'axis',
+                    showContent: true,
+                },
+                xAxis: {type: 'category'},
+                yAxis: {gridIndex: 0},
+                grid: {top: '55%'},
+                series: [
+                    {
+                        name: '人数',
+                        type: 'line',
+                        smooth: true,
+                        // seriesLayoutBy: 'row',
+                        emphasis: {focus: 'series'},
+                        data: [
+                            ['正常情况', normal],
+                            ['轻度焦虑', mild],
+                            ['中度焦虑', moderate],
+                            ['重度焦虑', severe]
+                        ]
+                    },
+                    {
+                        type: 'pie',
+                        id: 'pie',
+                        radius: '30%',
+                        center: ['50%', '25%'],
+                        data: [
+                            {value: normal, name: '正常情况'},
+                            {value: mild, name: '轻度焦虑'},
+                            {value: moderate, name: '中度焦虑'},
+                            {value: severe, name: '重度焦虑'},
+                        ],
+                        emphasis: {
+                            focus: 'self'
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+
+
+        }
+    })
+
+
+</script>
+
+
+</html>
