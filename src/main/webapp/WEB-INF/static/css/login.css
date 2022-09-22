@@ -198,7 +198,8 @@ p, a {
     border: none;
     text-transform: capitalize;
     outline: none;
-    background: #03A9F4;
+    /*background: #03A9F4;*/
+    background: rgba(255, 255, 255, 0.2);
     color: #fff;
     cursor: pointer;
     margin: 0 auto;
@@ -210,7 +211,7 @@ p, a {
 .mail-form-agile input[type="submit"]:hover {
     -webkit-transition-duration: 0.9s;
     transition-duration: 0.9s;
-    background: rgba(91, 157, 214, 0.76);
+    background: rgba(1, 48, 78, 0.76);
 }
 
 .footer {

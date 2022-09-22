@@ -3,11 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <title>Qrcode</title>
+    <link href="../layui/css/layui.css" rel="stylesheet" charset="utf-8">
+
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+
+            justify-content: center;
+            align-items: center;
+        }
+
+        .one_project {
+            height: 600px;
+            width: 400px;
+            background-color: #00F7DE;
+
+
+            display: flex;
+            justify-content:center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .one_project span{
+
+        }
+        .one_project input{
+            height: 40px;
+            width: 250px;
+
+            text-align: center;
+            font-size: 25px;
+        }
+        .spans{
+            position: absolute;
+            top: 15%;
+
+            font-size: 30px;
+            font-family: 楷体;
+
+        }
+    </style>
+
 </head>
 <body>
 
-    <img src="../image/WBNH.png" style="margin-left: 50px; margin-top: 25px;" />
+<span class="spans">
+    二维码信息展示
+</span>
+
+<div class="one_project">
+
+    <span>ID:</span>
+    <label>
+        <input type="text" value="" id="id" >
+    </label>
+    <br>
+    <span>TestName:</span>
+    <label>
+        <input type="text" id="testName">
+    </label>
+    <br>
+    <span>TestCode:</span>
+    <label>
+        <input type="text" id="testCode">
+    </label>
+    <br>
+    <span>TestBegin:</span>
+    <label>
+        <input type="text" id="testBegin" style="font-size: 20px;">
+    </label>
+    <br>
+    <span>TestEnd:</span>
+    <label>
+        <input type="text" id="testEnd" style="font-size: 20px;">
+    </label>
+    <br>
+
+
+</div>
+<div class="one_project">
+
+
+    <span>CreateTime:</span>
+    <label>
+        <input type="text" id="createTime" style="font-size: 20px;">
+    </label>
+    <br>
+    <span>CreateBy:</span>
+    <label>
+        <input type="text" id="createBy">
+    </label>
+    <br>
+    <span>UpdateTime:</span>
+    <label>
+        <input type="text" id="updateTime" style="font-size: 20px;">
+    </label>
+    <br>
+    <span>UpdateBy:</span>
+    <label>
+        <input type="text" id="updateBy">
+    </label>
+    <br>
+    <span>Remark:</span>
+    <label>
+        <input type="text" id="remark">
+    </label>
+
+</div>
 
 
 </body>
+
+
+<!--引入layui-->
+<script src="../layui/layui.js" charset="utf-8"></script>
+
+
+<script>
+
+    let $ = layui.jquery;
+
+    // split拆分法(易于理解，代码中规)
+    function getQueryVariable(variable){
+        let query = decodeURI(window.location.search.substring(1));
+        let vars = query.split("&");
+        for (let i=0;i<vars.length;i++) {
+            let pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+
+
+
+    let id = getQueryVariable("id");
+    let testName = getQueryVariable("testName");
+    let testCode = getQueryVariable("testCode");
+    let testBegin = getQueryVariable("testBegin");
+    let testEnd = getQueryVariable("testEnd");
+    let createTime = getQueryVariable("createTime");
+    let createBy = getQueryVariable("createBy");
+    let updateTime = getQueryVariable("updateTime");
+    let updateBy = getQueryVariable("updateBy");
+    let remark = getQueryVariable("remark");
+
+
+
+
+
+
+    $(document).ready(function(){
+
+        alert("二维码信息加载完成！");
+
+        $("#id").val(id)
+        $("#testName").val(testName)
+        $("#testCode").val(testCode)
+        $("#testBegin").val(testBegin)  // 时间戳转时间
+        $("#testEnd").val(testEnd)
+        $("#createTime").val(createTime)
+        $("#createBy").val(createBy)
+        $("#updateTime").val(updateTime)
+        $("#updateBy").val(updateBy)
+        $("#remark").val(remark)
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
 </html>

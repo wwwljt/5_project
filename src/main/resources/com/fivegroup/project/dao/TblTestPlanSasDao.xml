@@ -33,15 +33,13 @@
 
     <!--添加-->
     <insert id="addData">
-        insert into tbl_test_plan_sas (test_name, test_code, test_begin, test_end, create_time, create_by, update_time,update_by, remark)
-        values (#{tblTestPlanSas.testName},
-                #{tblTestPlanSas.testCode},
+        insert into tbl_test_plan_sas (test_code, test_name, test_begin, test_end, create_time, create_by, remark)
+        values (#{tblTestPlanSas.testCode},
+                #{tblTestPlanSas.testName},
                 #{tblTestPlanSas.testBegin},
                 #{tblTestPlanSas.testEnd},
                 #{tblTestPlanSas.createTime},
                 #{tblTestPlanSas.createBy},
-                #{tblTestPlanSas.updateTime},
-                #{tblTestPlanSas.updateBy},
                 #{tblTestPlanSas.remark})
     </insert>
 
@@ -50,15 +48,11 @@
     <update id="editData">
         update tbl_test_plan_sas
         set test_name   = #{tblTestPlanSas.testName},
-            test_code   = #{tblTestPlanSas.testCode},
             test_begin  = #{tblTestPlanSas.testBegin},
             test_end    = #{tblTestPlanSas.testEnd},
-            create_time = #{tblTestPlanSas.createTime},
-            create_by   = #{tblTestPlanSas.createBy},
             update_time = #{tblTestPlanSas.updateTime},
             update_by   = #{tblTestPlanSas.updateBy},
-            remark      = #{tblTestPlanSas.remark},
-            type        = #{tblTestPlanSas.type}
+            remark      = #{tblTestPlanSas.remark}
         where id = #{tblTestPlanSas.id}
     </update>
 

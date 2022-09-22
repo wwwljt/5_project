@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test-Plan</title>
+    <title>Userinfo</title>
     <link href="../layui/css/layui.css" rel="stylesheet" charset="utf-8">
 </head>
 <body>
-
 
 <!--添加搜索按钮和搜索框-->
 <div class="demoTable" style="margin: 15px;">
@@ -19,12 +18,12 @@
         <i class="layui-icon layui-icon-reduce-circle" style="font-size: 20px; color: white;"></i>删除
     </button>
 
-    <span style="margin-left: 80px;">搜索计划：</span>
+    <span style="margin-left: 80px;">用户编号：</span>
     <div class="layui-inline">
         <input class="layui-input" id="searchQuestion" autocomplete="off">
     </div>
 
-    <span style="margin-left: 80px;">搜索创建人：</span>
+    <span style="margin-left: 80px;">用户名：</span>
     <div class="layui-inline">
         <input class="layui-input" id="createPerson" autocomplete="off">
     </div>
@@ -36,62 +35,98 @@
     </button>
 </div>
 
+<table class="layui-hide" id="testUserinfo" lay-filter="UserinfoDemo"></table>
 
-<table class="layui-hide" id="testTestPlan" lay-filter="TestPlanDemo"></table>
 
 <!--编辑模态框-->
-<div class="layui-row" id="open_div" style="display:none;">
+<div class="layui-row" id="open_edit_div" style="display:none;">
 
     <div id="add_form" class="layui-form" lay-filter="edit" action="" style="margin-top: 20px;align:center;">
 
         <div class="layui-form-item">
             <label class="layui-form-label"> ID </label>
             <div class="layui-input-inline" style="width: 65%">
-                <input id="deptId" lay-verify="number" readonly="readonly" type="text" name="id"
-                       placeholder="计划ID"
+                <input id="deptId" lay-verify="number" readonly="readonly" type="text" name="userId"
+                       placeholder="ID"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门名称</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <select name="dept" lay-filter="DeptZero" id="deptDoor">
+                    <option value="11">测试部门</option>
+                    <option value="12">财务部门</option>
+                    <option value="13">运维部门</option>
+                </select>
+            </div>
+        </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">测试名称</label>
+            <label class="layui-form-label">用户名</label>
             <div class="layui-input-inline" style="width: 65%">
-                <input required lay-verify="required" id="tName" type="text" name="test_name"
-                       placeholder="请输入测试名称" autofocus
+                <input required lay-verify="required" id="userName" type="text" name="userName"
+                       placeholder="请输入用户名" autofocus
                        class="layui-input" autocomplete="off">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">开始时间</label>
+            <label class="layui-form-label">邮箱</label>
             <div class="layui-input-inline" style="width: 65%">
-                <input required lay-verify="required" id="tBegin" type="text" name="test_begin"
-                       placeholder="请输入开始时间" autofocus
+                <input required lay-verify="required" id="email" type="text" name="email"
+                       placeholder="请输入邮箱" autofocus
                        class="layui-input" autocomplete="off">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">结束时间</label>
+            <label class="layui-form-label">电话</label>
             <div class="layui-input-inline" style="width: 65%">
-                <input required lay-verify="required" id="tEnd" type="text" name="test_end"
-                       placeholder="请输入结束时间" autofocus
+                <input required lay-verify="required" id="phone" type="text" name="phone"
+                       placeholder="请输入电话" autofocus
                        class="layui-input" autocomplete="off">
             </div>
         </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input type="radio" name="sex" value="1" title="男" checked="checked">
+                <input type="radio" name="sex" value="0" title="女">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input type="checkbox" name="status" lay-skin="switch" lay-text="可用|失效" value="1">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户身份</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input type="radio" name="identity" value="1" title="管理员">
+                <input type="radio" name="identity" value="2" title="普通角色">
+                <input type="radio" name="identity" value="3" title="测试人员">
+            </div>
+        </div>
+
 
         <div class="layui-form-item">
             <label class="layui-form-label">备注</label>
             <div class="layui-input-inline" style="width: 65%">
-                <input required lay-verify="required" id="tRemark" type="text" name="remark"
+                <input required lay-verify="required" id="remark" type="text" name="remark"
                        placeholder="请输入备注" autofocus
                        class="layui-input" autocomplete="off">
             </div>
         </div>
 
+
         <div class="layui-form-item">
             <div class="layui-input-block" style="margin-left: 150px;">
-                <button class="layui-btn" lay-submit lay-filter="update_submit" style="width: 200px;">立即提交</button>
+                <button class="layui-btn" lay-submit lay-filter="update_edit_submit" style="width: 200px;">立即提交</button>
             </div>
         </div>
     </div>
@@ -104,65 +139,106 @@
     <div id="add_form1" class="layui-form" lay-filter="add" action="" style="margin-top: 20px;align:center;">
 
         <div class="layui-form-item">
-            <label class="layui-form-label">测试名称</label>
+            <label class="layui-form-label">部门名称</label>
             <div class="layui-input-inline" style="width: 65%">
-                <input required lay-verify="required" id="tName1" type="text" name="test_name1"
-                       placeholder="请输入测试名称" autofocus
+                <select name="dept" lay-filter="DeptZero">
+                    <option value="11">测试部门</option>
+                    <option value="12">财务部门</option>
+                    <option value="13">运维部门</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" type="text" name="userName"
+                       placeholder="请输入用户名" autofocus
                        class="layui-input" autocomplete="off">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">开始时间</label>
+            <label class="layui-form-label">邮箱</label>
             <div class="layui-input-inline" style="width: 65%">
-                <input required lay-verify="required" id="tBegin1" type="text" name="test_begin1"
-                       placeholder="请输入开始时间" autofocus
+                <input required lay-verify="required" type="text" name="email"
+                       placeholder="请输入邮箱" autofocus
                        class="layui-input" autocomplete="off">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">结束时间</label>
+            <label class="layui-form-label">电话</label>
             <div class="layui-input-inline" style="width: 65%">
-                <input required lay-verify="required" id="tEnd1" type="text" name="test_end1"
-                       placeholder="请输入结束时间" autofocus
+                <input required lay-verify="required" type="text" name="phoneNumber"
+                       placeholder="请输入电话" autofocus
                        class="layui-input" autocomplete="off">
             </div>
         </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input type="radio" name="sex" value="1" title="男" checked="checked">
+                <input type="radio" name="sex" value="0" title="女">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <div class="layui-input-inline" style="width: 65%">
+                    <input required lay-verify="required" id="password" type="text" name="password"
+                           placeholder="请输入密码" autofocus
+                           class="layui-input" autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户身份</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input type="radio" name="identity" value="1" title="管理员">
+                <input type="radio" name="identity" value="2" title="普通角色">
+                <input type="radio" name="identity" value="3" title="测试人员" checked>
+            </div>
+        </div>
+
 
         <div class="layui-form-item">
             <label class="layui-form-label">备注</label>
             <div class="layui-input-inline" style="width: 65%">
-                <input required lay-verify="required" id="tRemark1" type="text" name="remark1"
+                <input required lay-verify="required" type="text" name="remark"
                        placeholder="请输入备注" autofocus
                        class="layui-input" autocomplete="off">
             </div>
         </div>
 
+
         <div class="layui-form-item">
             <div class="layui-input-block" style="margin-left: 150px;">
-                <button class="layui-btn" lay-submit lay-filter="update_submit1" style="width: 200px;">立即提交</button>
+                <button class="layui-btn" lay-submit lay-filter="update_add_submit" style="width: 200px;">立即提交</button>
             </div>
         </div>
     </div>
 </div>
 
 
-<!--查看模态框-->
-<div class="layui-row" id="open_detail_div" style="display:none;">
-    <!--    <img src="../image/WBNH.png" style="margin-left: 50px; margin-top: 25px;" />-->
-
-    <div id="qrcode" style="margin-left: 50px; margin-top: 25px;">
-
-    </div>
-
-</div>
-
 <!--右侧工具栏-->
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">查看二维码</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">重置密码</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!--绑定模板选择器-->
+<!--状态栏-->
+<script type="text/html" id="buttonTpl">
+    {{#  if(d.status == 1){ }}
+    <button class="layui-btn layui-btn-xs">可用</button>
+    {{#  } else { }}
+    <button class="layui-btn layui-btn-primary layui-btn-xs">失效</button>
+    {{#  } }}
 </script>
 
 
@@ -170,8 +246,6 @@
 
 <!--引入layui-->
 <script src="../layui/layui.js" charset="utf-8"></script>
-<!--引入layui二维码工具-->
-<script src="../js/layui-qrcode.js" charset="utf-8"></script>
 
 <script>
 
@@ -186,9 +260,9 @@
 
         // 创建渲染实例
         table.render({
-            elem: '#testTestPlan'
-            , id: 'testPlanSas'
-            , url: '/findAllPlanSas'
+            elem: '#testUserinfo'
+            , id: 'Userinfo'
+            , url: '/findUserAll'
             , method: 'get'
             , toolbar: true
             , defaultToolbar: ['filter', 'exports', 'print', {
@@ -203,54 +277,64 @@
             }
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
-                , {field: 'id', fixed: 'left', width: 80, title: 'ID', sort: true}
-                , {field: 'testName', width: 150, title: '测试名称'}
-                , {field: 'testCode', width: 150, title: '测试邀请码'}
+                , {field: 'userId', fixed: 'left', width: 80, title: 'ID', sort: true}
+                , {field: 'deptName', width: 100, title: '部门名称'}
+                , {field: 'userName', width: 100, title: '用户名'}
                 , {
-                    field: 'testBegin',
-                    width: 170,
-                    title: '开始时间',
-                    templet: '<div>{{layui.util.toDateString(d.testBegin, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                    field: 'sex',
+                    width: 60,
+                    title: '性别',
+                    templet: function (d) {
+                        if (d.sex == 1){
+                            return "男";
+                        }else {
+                            return "女";
+                        }
+                    }
                 }
+                , {field: 'phoneNumber', width: 150, title: '手机号'}
+                , {field: 'avatar', width: 200, title: '头像'}
+                , {field: 'status', width: 100, title: '状态', templet: "#buttonTpl"}
+                , {field: 'email', width: 200, title: '邮箱'}
+                , {field: 'password', width: 200, title: '密码'}
+                , {field: 'salt', width: 200, title: '盐值'}
                 , {
-                    field: 'testEnd',
-                    width: 170,
-                    title: '结束时间',
-                    templet: '<div>{{layui.util.toDateString(d.testEnd, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                    field: 'roleName',
+                    width: 100,
+                    title: '角色',
                 }
+                , {field: 'createBy', width: 80, title: '创建人'}
                 , {
                     field: 'createTime',
                     width: 170,
                     title: '创建时间',
                     templet: '<div>{{layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'
                 }
-                , {field: 'createBy', width: 80, title: '创建人'}
+                , {field: 'updateBy', width: 80, title: '修改人'}
                 , {
                     field: 'updateTime',
                     width: 170,
                     title: '修改时间',
                     templet: '<div>{{layui.util.toDateString(d.updateTime, "yyyy-MM-dd HH:mm:ss") }}</div>'
                 }
-                , {field: 'updateBy', width: 80, title: '修改人'}
                 , {field: 'remark', width: 150, title: '备注'}
-                , {fixed: 'right', title: '操作', width: 205, minWidth: 205, toolbar: '#barDemo'}
+                , {fixed: 'right', title: '操作', width: 200, minWidth: 205, toolbar: '#barDemo'}
 
             ]]
-
-
         });
 
 
         // 监听工具条，实现查看,删除,编辑功能
-        table.on('tool(TestPlanDemo)', function (obj) {    // genshinDemo 表示工具列所在表格的 lay-filter 的值
+        table.on('tool(UserinfoDemo)', function (obj) {
             let data = obj.data;
+            console.log("data====="+data.roleName)
 
             // 如果为删除
             if (obj.event === 'del') {  //  绑定事件的名称
 
-                layer.confirm('确认删除ID为' + data.id + '的计划吗?', function (index) {
+                layer.confirm('确认删除ID为' + data.userId + '的计划吗?', function (index) {
 
-                    let strIds = "" + data.id;
+                    let strIds = "" + data.userId;
 
                     console.log("strIds===" + strIds);
 
@@ -259,7 +343,7 @@
                     // alert("123123");
                     $.ajax({
                         type: 'get',
-                        url: "/delDataPlanSas",
+                        url: "/delDataUser",
                         data: {
                             ids: strIds,
                         },
@@ -289,42 +373,61 @@
 
                 let form = layui.form;
                 form.val("edit", {
-                    "id": data.id,
-                    "test_name": data.testName,
-                    "test_begin": layui.util.toDateString(data.testBegin, "yyyy-MM-dd HH:mm:ss"),
-                    "test_end": layui.util.toDateString(data.testEnd, "yyyy-MM-dd HH:mm:ss"),
+                    "userId": data.userId,
+                    "dept": data.deptName,
+                    "userName": data.userName,
+                    "email": data.email,
+                    "phone": data.phoneNumber,
+                    "sex": data.sex,
+                    "status": data.status,
+                    "identity": data.roleName,
                     "remark": data.remark,
                 });
+
+                $("#deptDoor").val(data.deptName);
+
+                console.log("deptName==="+data.deptName);
+                console.log("phoneNumber==="+data.phoneNumber);
+                console.log("roleName==="+data.roleName);
+
+                // 判定当前人员身份
+
+
+                // 判定当前人员所属部门
+
 
 
                 // 打开模态框
                 layer.open({
                     type: 1,//类型
-                    area: ['500px', '400px'],  //定义宽和高
-                    title: '编辑计划信息',  //题目
+                    area: ['500px', '650px'],  //定义宽和高
+                    title: '编辑信息',  //题目
                     shadeClose: true,  //点击遮罩层关闭
-                    content: $('#open_div'),  //打开的内容
+                    content: $('#open_edit_div'),  //打开的内容
                     // btn: ['确定', '取消']
                 });
 
 
                 // 拿到修改后的数据，传给后端
-                form.on('submit(update_submit)', function (massage) {
+                form.on('submit(update_edit_submit)', function (massage) {
                     console.log("message为：", massage);
                     let data1 = massage.field;
+
                     $.ajax({
                         type: "post",
-                        url: "/editDataPlanSas",
+                        url: "/editDataUser",
                         // data: JSON.stringify(massage.field),
                         data: {
-                            "id": data1.id,
-                            // "testCode": data.testCode,  // 拿到表格中的测试邀请码，进行编辑操作，防止邀请码变更
-                            "testName": data1.test_name,
-                            "testBegin": data1.test_begin,
-                            "testEnd": data1.test_end,
-                            "remark": data1.remark,
-
+                            "userId": data1.userId,
+                            "deptId": data1.dept,
+                            "userName": data1.userName,
+                            "email": data1.email,
+                            "phoneNumber": data1.phone,
+                            "sex": data1.sex,
+                            "status": data1.status,
+                            "roleId": data1.identity,
                             "updateBy": "CM",
+                            "remark": data1.remark,
                         },
 
                         success: function (msg) {
@@ -370,7 +473,6 @@
                 });
 
 
-
                 /**
                  * 时间戳转换为日期字符串方法
                  * @param {*} timesStamp   // 时间戳
@@ -381,22 +483,22 @@
                     return (new Date(parseInt(timesStamp)).format(datePattern ? datePattern : 'YYYY-MM-DD hh:mm:ss'))
                 }
 
-                Date.prototype.format = function(fmt) {
+                Date.prototype.format = function (fmt) {
                     var o = {
-                        "M+" : this.getMonth()+1,                 //月份
-                        "D+" : this.getDate(),                    //日
-                        "h+" : this.getHours(),                   //小时
-                        "m+" : this.getMinutes(),                 //分
-                        "s+" : this.getSeconds(),                 //秒
-                        "q+" : Math.floor((this.getMonth()+3)/3), //季度
-                        "S"  : this.getMilliseconds()             //毫秒
+                        "M+": this.getMonth() + 1,                 //月份
+                        "D+": this.getDate(),                    //日
+                        "h+": this.getHours(),                   //小时
+                        "m+": this.getMinutes(),                 //分
+                        "s+": this.getSeconds(),                 //秒
+                        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                        "S": this.getMilliseconds()             //毫秒
                     }
-                    if(/(Y+)/i.test(fmt)) {
-                        fmt = fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+                    if (/(Y+)/i.test(fmt)) {
+                        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
                     }
-                    for(var k in o) {
-                        if(new RegExp("("+ k +")").test(fmt)) {
-                            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                    for (var k in o) {
+                        if (new RegExp("(" + k + ")").test(fmt)) {
+                            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
                         }
                     }
                     return fmt
@@ -406,7 +508,6 @@
                 let testEnd1 = datesFormat(testEnd, 'YYYY年MM月DD日 hh:mm:ss');
                 let createTime1 = datesFormat(createTime, 'YYYY年MM月DD日 hh:mm:ss');
                 let updateTime1 = datesFormat(updateTime, 'YYYY年MM月DD日 hh:mm:ss');
-
 
 
                 let strTest = "http://chenmao.fun:88?id=" + id
@@ -436,84 +537,21 @@
         });
 
 
-        // 添加
-        $("#btn-add").click(function () {
-
-            let form1 = layui.form;
-            form1.val("add", {
-                "test_name1": '',
-                "test_begin1": '',
-                "test_end1": '',
-                "remark1": '',
-            });
-
-
-            // 打开模态框
-            layer.open({
-                type: 1,//类型
-                area: ['500px', '400px'],  //定义宽和高
-                title: '添加计划信息',  //题目
-                shadeClose: true,  //点击遮罩层关闭
-                content: $('#open_add_div'),  //打开的内容
-                // btn: ['确定', '取消']
-            });
-
-
-            // 拿到修改后的数据，传给后端
-            form1.on('submit(update_submit1)', function (massage) {
-                console.log("message为：", massage);
-                console.log(massage.field);
-                let data1 = massage.field;
-                $.ajax({
-                    type: "post",
-                    url: "/addDataPlanSas",
-                    // data: JSON.stringify(massage.field),
-                    data: {
-                        "testName": data1.test_name1,
-                        "testBegin": data1.test_begin1,
-                        "testEnd": data1.test_end1,
-                        "remark": data1.remark1,
-
-                        "createBy": "CSH",
-                    },
-
-                    success: function (msg) {
-                        console.log(msg);
-                        layer.closeAll();//关闭所有的弹出层
-                        if (msg == 1) {
-                            layer.msg("添加成功！", {icon: 6}, {time: 2000});
-
-                            $(".layui-laypage-btn").click();  //刷新数据
-
-                        } else {
-                            layer.msg("添加失败！", {icon: 5}, {time: 2000});
-                        }
-                    }
-                })
-
-
-                return false
-
-            })
-
-        });
-
-
         // 批量删除数据
         $("#btn-remove").click(function () {
-            let checkStatus = table.checkStatus('testPlanSas');
+            let checkStatus = table.checkStatus('Userinfo');
             if (checkStatus.data.length == 0) {
                 console.log("checkData===" + checkStatus.data);
                 parent.layer.msg('请先选择要删除的数据行！', {icon: 2, time: 2000});
                 return;
             }
 
-            console.log("checkStatus===" + checkStatus.data.id);
+            console.log("checkStatus===" + checkStatus.data.userId);
 
             // 对拿到的数据进行处理,转为字符串
             let strIds = '';
             for (let i = 0; i < checkStatus.data.length; i++) {
-                strIds += checkStatus.data[i].id + ';';
+                strIds += checkStatus.data[i].userId + ';';
             }
             strIds = strIds.substring(0, strIds.length - 1);  // 去掉 ; 号
 
@@ -526,7 +564,7 @@
 
                 $.ajax({
                     type: 'get',
-                    url: "/delDataPlanSas",
+                    url: "/delDataUser",
                     data: {
                         ids: strIds,
                     },
@@ -558,83 +596,79 @@
         });
 
 
-        // 渲染日期和时间选择器
-        laydate.render({
-            elem: '#tBegin'
-            , type: 'datetime'  // 日期和时间选择器
-        });
-        laydate.render({
-            elem: '#tEnd'
-            , type: 'datetime'  // 日期和时间选择器
-        });
-        laydate.render({
-            elem: '#tBegin1'
-            , type: 'datetime'  // 日期和时间选择器
-        });
-        laydate.render({
-            elem: '#tEnd1'
-            , type: 'datetime'  // 日期和时间选择器
-        });
+        // 添加
+        $("#btn-add").click(function () {
 
-
-        // 搜索
-        $('#search').click(function () {
-
-            // alert("6666666666666");
-
-            // 获取两个输入框的值
-            let question = $('#searchQuestion').val();
-            let person = $('#createPerson').val();
-
-            if (question == "" && person == "") {
-                parent.layer.msg('请输入要搜索的内容！', {icon: 2, time: 2000});
-                return false;
-            }
-
-            //执行重载
-            table.reload('testPlanSas', {
-                method: 'get'
-                , page: {
-                    curr: 1 //重新从第 1 页开始
-                }
-                , where: {
-                    question: question,
-                    person: person,
-                }
+            let form1 = layui.form;
+            form1.val("add", {
+                "dept": 13,
+                "userName": '',
+                "email": '',
+                "phoneNumber": '',
+                "sex": '',
+                "password": '',
+                "identity": 2,
+                "remark": '',
             });
 
+
+            // 打开模态框
+            layer.open({
+                type: 1,//类型
+                area: ['500px', '600px'],  //定义宽和高
+                title: '添加信息',  //题目
+                shadeClose: true,  //点击遮罩层关闭
+                content: $('#open_add_div'),  //打开的内容
+                // btn: ['确定', '取消']
+            });
+
+
+            // 拿到修改后的数据，传给后端
+            form1.on('submit(update_add_submit)', function (massage) {
+                console.log("message为：", massage);
+                console.log(massage.field);
+                let data1 = massage.field;
+                $.ajax({
+                    type: "post",
+                    url: "/addDataUser",
+                    // data: JSON.stringify(massage.field),
+                    data: {
+                        "deptId": data1.dept,
+                        "userName": data1.userName,
+                        "email": data1.email,
+                        "phoneNumber": data1.phoneNumber,
+                        "sex": data1.sex,
+                        "password": data1.password,
+                        "roleId": data1.roleName,
+                        "remark": data1.remark,
+
+                        "createBy": "CSH",
+                    },
+
+                    success: function (msg) {
+                        console.log(msg);
+                        layer.closeAll();//关闭所有的弹出层
+                        if (msg == 1) {
+                            layer.msg("添加成功！", {icon: 6}, {time: 2000});
+
+                            $(".layui-laypage-btn").click();  //刷新数据
+
+                        } else {
+                            layer.msg("添加失败！", {icon: 5}, {time: 2000});
+                        }
+                    }
+                })
+
+
+                return false
+
+            })
+
         });
 
 
-        // 搜索重置
-        $('#resetSearch').click(function () {
-
-            // alert("6666666666666");
-
-            $('#searchQuestion').val('');
-            $('#createPerson').val('');
-
-            // 获取两个输入框的值
-            let question = '';
-            let person = '';
-
-            //执行重载
-            table.reload('testPlanSas', {
-                method: 'get'
-                , page: {
-                    curr: 1 //重新从第 1 页开始
-                }
-                , where: {
-                    question: question,
-                    person: person,
-                }
-            });
-        })
-
-    })
-
+    });
 
 </script>
-
 
 </html>

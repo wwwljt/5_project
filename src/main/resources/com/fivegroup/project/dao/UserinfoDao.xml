@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.fivegroup.project.dao.UserinfoDao">
+
+
+    <select id="findAll" resultType="com.fivegroup.project.entity.Userinfo">
+
+        select user.*, dept.dept_name, role.role_name
+        from userinfo user
+        left join tbl_dept dept on user.deptid = dept.dept_id
+        left join tbl_role role on user.role_id = role.role_id
+
+        <where>
+            <if test="userId != null">
+                and userid like '%' #{userId} '%'
+            </if>
+            <if test="userName != null">
+                and username like '%' #{userName} '%'
+            </if>
+        </where>
+        limit #{page}, #{limit}
+
+    </select>
+
+    <!--删除-->
+    <delete id="delData" parameterType="int">
+        delete
+        from userinfo
+        where userid in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+
+    <!--添加-->
+    <insert id="addData">
+        insert into userinfo(deptid, username, email, phonenumber, sex, `password`, salt, create_by, create_time, remark, role_id)
+        values (#{userinfo.deptId},
+                #{userinfo.userName},
+                #{userinfo.email},
+                #{userinfo.phoneNumber},
+                #{userinfo.sex},
+                #{userinfo.password},
+                #{userinfo.salt},
+                #{userinfo.createBy},
+                #{userinfo.createTime},
+                #{userinfo.remark},
+                #{userinfo.roleId})
+    </insert>
+
+
+    <!--编辑-->
+    <update id="editData">
+        update userinfo
+        set deptid      = #{userinfo.deptId},
+            username    = #{userinfo.userName},
+            email       = #{userinfo.email},
+            phonenumber = #{userinfo.phoneNumber},
+            sex         = #{userinfo.sex},
+            `status`    = #{userinfo.status},
+            update_time = #{userinfo.updateTime},
+            update_by   = #{userinfo.updateBy},
+            remark      = #{userinfo.remark},
+            role_id     = #{userinfo.roleId}
+        where userid = #{userinfo.userId}
+    </update>
+
+
+</mapper>

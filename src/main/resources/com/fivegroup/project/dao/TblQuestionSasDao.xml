@@ -33,7 +33,7 @@
 
     <!--添加-->
     <insert id="addQuestionSas">
-        insert into tbl_question_sas (question, option_a, option_b, option_c, option_d, type, `status`, create_time,create_by, update_time, update_by)
+        insert into tbl_question_sas (question, option_a, option_b, option_c, option_d, type, `status`, create_time,create_by)
         values (#{tblQuestionSas.question},
                 #{tblQuestionSas.optionA},
                 #{tblQuestionSas.optionB},
@@ -42,9 +42,7 @@
                 #{tblQuestionSas.type},
                 #{tblQuestionSas.status},
                 #{tblQuestionSas.createTime},
-                #{tblQuestionSas.createBy},
-                #{tblQuestionSas.updateTime},
-                #{tblQuestionSas.updateBy})
+                #{tblQuestionSas.createBy})
     </insert>
 
 
@@ -58,8 +56,6 @@
             option_d    = #{tblQuestionSas.optionD},
             type        = #{tblQuestionSas.type},
             `status`    = #{tblQuestionSas.status},
-            create_time = #{tblQuestionSas.createTime},
-            create_by   = #{tblQuestionSas.createBy},
             update_time = #{tblQuestionSas.updateTime},
             update_by   = #{tblQuestionSas.updateBy}
         where id = #{tblQuestionSas.id}
