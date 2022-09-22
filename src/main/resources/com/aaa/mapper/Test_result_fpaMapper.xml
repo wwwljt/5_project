@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.Test_result_fpaMapper">
+    <delete id="deleteTRF">
+       update tbl_test_result_fpa set flag=1 where id=#{id}
+    </delete>
+    <select id="getAllTRF" parameterType="test_result_fpa" resultType="test_result_fpa">
+        select * from view_test_result_fpa
+        <where>
+            <if test="test_result.tester_id!=0 and test_result.tester_id!=''">
+                and tester_id=#{tester_id}
+            </if>
+            <if test="test_result.name!=null and test_result.name!=''">
+                and name like concat('%',#{test_result.name},'%')
+            </if>
+            <if test="test_result.test_plan_id!=null and test_result.test_plan_id!=''">
+                and test_plan_id like concat('%',#{test_result.test_plan_id},'%')
+            </if>
+        </where>
+        limit #{begin},#{limit};
+    </select>
+    <select id="countTRF" resultType="int">
+        select count(*) from view_test_result_fpa
+        <where>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="test_plan_id!=null and test_plan_id!=''">
+                and test_plan_id like concat('%',#{test_plan_id},'%')
+            </if>
+        </where>
+    </select>
+    <select id="getById" resultType="result_div">
+        select * from tbl_result_div where id=#{id}
+    </select>
+    <select id="queryAll" resultType="test_result_fpa">
+        select * from view_test_result_fpa ;
+    </select>
+</mapper>

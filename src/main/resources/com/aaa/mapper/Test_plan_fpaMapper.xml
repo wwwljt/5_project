@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.Test_plan_fpaMapper">
+<!--    <insert id="insertTpf" parameterType="test_plan_fpa1" useGeneratedKeys="true" keyProperty="id">-->
+<!--        insert into tbl_test_plan(test_name,test_code,test_begin,test_end,remark)-->
+<!--        values (#{test_name},#{test_code},#{test_begin},#{test_end},#{remark})-->
+<!--    </insert>-->
+<!--    <update id="updateTpf">-->
+<!--        update tbl_test_plan-->
+<!--        <set>-->
+<!--            <if test="test_name!=null">-->
+<!--                test_name=#{test_name},-->
+<!--            </if>-->
+<!--            <if test="test_code!=null">-->
+<!--                test_code=#{test_code},-->
+<!--            </if>-->
+<!--            <if test="test_begin!=null">-->
+<!--                test_begin=#{test_begin},-->
+<!--            </if>-->
+<!--            <if test="test_end!=null">-->
+<!--                test_end=#{test_end},-->
+<!--            </if>-->
+<!--            <if test="create_time!=null">-->
+<!--                create_time=#{create_time},-->
+<!--            </if>-->
+<!--            <if test="create_by!=null">-->
+<!--                create_by=#{create_by},-->
+<!--            </if>-->
+<!--            <if test="update_time!=null">-->
+<!--                update_time=#{update_time},-->
+<!--            </if>-->
+<!--            <if test="update_by!=null">-->
+<!--                update_by=#{update_by},-->
+<!--            </if>-->
+<!--            <if test="remark!=null">-->
+<!--                remark=#{remark},-->
+<!--            </if>-->
+<!--            <if test="type!=null">-->
+<!--                type=#{type},-->
+<!--            </if>-->
+<!--        </set>-->
+<!--        where id=#{id}-->
+<!--    </update>-->
+<!--    <delete id="deleteTpf" parameterType="test_plan_fpa1">-->
+<!--        update set isdelete=0 where id=#{id}-->
+<!--    </delete>-->
+<!--    <select id="getAllTpf" resultType="Test_plan_fpa1">-->
+<!--        select * from-->
+<!--    </select>-->
+<!--    <select id="countTpf" resultType="test_plan_fpa1"></select>-->
+
+</mapper>

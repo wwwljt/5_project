@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>示例演示</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 注意：项目正式环境请勿引用该地址 -->
+    <link href="layui/css/layui.css" rel="stylesheet">
+    <script src="js/echarts.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/html2canvas.js"></script>
+    <script src="js/jspdf.debug.js"></script>
+</head>
+<body style="overflow-x:hidden;overflow-y:hidden;">
+
+    <div class="layui-inline">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" id="name" name="name" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">测试计划ID</label>
+        <div class="layui-input-inline">
+            <input type="text" id="testId" name="testId" placeholder="请输入测试计划ID" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <div class="layui-input-inline">
+            <button class="layui-btn" id="sea" data-type="reload">查询</button>
+            <button type="reset" class="layui-btn layui-btn-primary" id="myButton">重置</button>
+        </div>
+    </div>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+    <div id="show" style="width: 100%;height: 100%; display: none;">
+        <fieldset class="layui-elem-field" id="ceshi">
+            <!--startprint1-->
+            <input id="character" value="黄" hidden>
+            <div class="layui-row">
+                <div class="layui-col-md7">
+                    <div class="main-div" id="myPdf" align="auto">
+                        <div style="background-color:#fcf4ed;border-radius:40px 40px 0 0;z-index: 2;padding: 40px 20px 20px 20px;color: #41464B;width: 520px">
+                            <h1 style="text-align:center;line-height: 60px;font-size: 30px;font-weight: 600;color: #7a2114;">测评报告预览</h1>
+                            <div style="background: rgba(87,144,255,.2);padding: 20px;text-align: center;margin-bottom: 20px" id="div1">
+
+                            </div>
+                            <div id="EchartZhu" style="width: 510px;height: 400px;"></div>
+
+                            <div style="background: rgba(87,144,255,.2);padding: 20px;margin-top: 20px;text-align: center" id="div2">
+
+                            </div>
+                            <div style="background: white;padding: 20px;margin-top: 20px; text-align: center" id="div3">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--endprint1-->
+        </fieldset>
+        <div style="margin-left:40%;">
+            <button class="layui-btn" target="_blank" rel="external nofollow" onclick="makeMpdf('Fpa检测报告')">下载Fpa检测文件
+            </button>
+        </div>
+    </div>
+<script type="text/html" id="toolbarDemo">
+    <a class="layui-btn layui-btn-danger" lay-event="del" id="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
+    <div class="layui-btn-container">
+    </div>
+</script>
+
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="look">查看</a>
+</script>
+
+<!-- 注意：项目正式环境请勿引用该地址 -->
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'dropdown'], function () {
+        var table = layui.table;
+        var f = layui.jquery;
+        var $=layui.jquery;
+        var laypage = layui.laypage, layer = layui.layer;
+        // 创建渲染实例
+        table.render({
+            elem: '#test'
+            , url: '/result/getAllTRF' // 此处为静态模拟数据，实际使用时需换成真实接口
+            , toolbar: '#toolbarDemo'
+            , defaultToolbar: ['filter', 'exports', 'print', {
+                title: '帮助'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , height: 'full-50' // 最大高度减去其他容器已占有的高度差
+            , cellMinWidth: 80
+            , totalRow: true // 开启合计行
+            , page: true
+            , id: 'testReload'
+            , cols: [[
+                 {type: 'checkbox', fixed: 'left'}
+                , {field: 'tester_id', width: 46, title: 'ID',}
+                , {field: 'name', width: 120, title: '姓名'}
+                , {field: 'phone',
+                    title: '电话',
+                    hide: 0,
+                    width: 180
+                }
+                , {field: 'create_time', width: 180, title: '测试时间', sort: true}
+                , {
+                    field: 'red_count',
+                    width: 100,
+                    title: '红色得分',
+                }
+                , {field: 'yellow_count', title: '黄色得分', width: 100, style: '-moz-box-align: start;'}
+                , {
+                    field: 'blue_count', width: 100, title: '蓝色得分', sort: true,
+                }
+                , {
+                    field: 'green_count', title: '绿色得分', width: 100
+                    ,
+                }
+                , {field: 'test_plan_id', title: '测试计划ID', width: 120}
+                , {title:'操作', width: 125, minWidth: 125, toolbar: '#barDemo'}
+            ]]
+        });
+        //触发单元格工具事件
+        table.on('tool(test)', function(obj){ // 双击 toolDouble
+            var data = obj.data;
+            if(obj.event === 'look'){
+                var redCount=obj.data.red_count
+                var yellowCount=obj.data.yellow_count
+                var greenCount=obj.data.green_count
+                var blueCount=obj.data.blue_count
+                layer.open({
+                    title: false,
+                    type: 1,
+                    area: ['49.5%','90%'],
+                    content: $('#show')
+                })
+                $.ajax({
+                    url: "/result/getById",
+                    method: "post",
+                    data: {
+                        id:redCount>yellowCount&&redCount>blueCount&&redCount>greenCount ? 2 :
+                            yellowCount>blueCount&&yellowCount>greenCount ? 1 :
+                                blueCount>greenCount ? 3 : 4
+                    },
+                    success: function (d) {
+                        var div=d.data
+                        $("#div1").html(div.div1)
+                        $("#div2").html(div.div2)
+                        $("#div3").html(div.div3)
+                        var chartZhu = echarts.init(document.getElementById('EchartZhu'));
+                        //指定图表配置项和数据
+                        var optionchartZhe = {
+                            title: {
+                                text: 'FPA性格测试'
+                            },
+                            tooltip: {},
+                            legend: { //顶部显示 与series中的数据类型的name一致
+                                data: ['红色性格', '蓝色性格', '黄色性格', '绿色性格']
+                            },
+                        };
+
+                        var optionchartBing = {
+                            title: {
+                                text: 'FPA性格测试',
+                                x: 'center' //标题居中
+                            },
+                            tooltip: {
+                                // trigger: 'item' //悬浮显示对比
+                            },
+                            legend: {
+                                orient: 'vertical', //类型垂直,默认水平
+                                left: 'left', //类型区分在左 默认居中
+                                data: ['红色性格', '蓝色性格', '黄色性格', '绿色性格'],
+
+                            },
+                            color: ['#fe1313', '#4775eb', '#ebe347', '#30ca40'],
+                            series: [{
+                                type: 'pie', //饼状
+                                radius: '60%', //圆的大小
+                                center: ['50%', '50%'], //居中
+                                show: true,
+                                data: [{
+                                    value: data.red_count,
+                                    name: '红色性格',
+                                },
+                                    {
+                                        value: data.blue_count,
+                                        name: '蓝色性格',
+                                    },
+                                    {
+                                        value: data.yellow_count,
+                                        name: '黄色性格',
+                                    },
+                                    {
+                                        value: data.green_count,
+                                        name: '绿色性格',
+                                    }
+                                ]
+                            }]
+                        };
+                        chartZhu.setOption(optionchartBing, true); // 饼状图
+
+                    }
+                })
+            }
+        });
+        //头工具栏事件
+        table.on('toolbar(test)', function(obj) {
+            // console.log(data)
+            // var checkStatus = table.checkStatus('testReload'),
+            //     data = checkStatus.data;
+            var check=table.checkStatus(obj.config.testId)
+            ,data=check.data
+            console.log("dsff"+data1)
+             // console.log("gdfsgggggggggggggggggggg"+data[0].tester_id)
+            if (data.length === 0) {
+                layer.msg("请选择一行");
+            } else {
+                layer.confirm('真的删除选中的数据吗', function (index) {
+                    var idList = [];
+                    for (let i = 0; i < data.length; i++) {
+                        idList[i] = (data[i].test_id);
+                    }
+                    var map =JSON.stringify(idList)
+                    console.log(idList);
+                    //删除数据库中的数值
+                    $.ajax({
+                        url: 'question_fpa/deleteMore',
+                        type: 'post',
+                        data: {"map":map},
+                        success: function (data) {
+                            if (data === true) {
+                                console.log(data);
+                                console.log(index);
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 1});
+                                // 刷新
+                                location.reload();
+                            } else {
+                                layer.msg("删除失败", {icon: 5})
+                            }
+                        }
+                    });
+                });
+            }
+        })
+
+        f("#sea").click(//绑定点击事件
+        function search_roles() {
+
+            var name = f('#name');//获取问题输入框的值
+            var testId=f('#testId')//获取创建人输入框的值
+            console.log(search_roles)
+            //执行重载
+            table.reload('testReload', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: {
+                    name: name.val(),
+                    test_plan_id:testId.val(),
+                }
+            });
+        }
+        )
+
+        f("#myButton").click(
+            function search_roles() {
+
+                console.log(search_roles)
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        name: "",
+                        test_plan_id:""
+                    }
+                });
+            }
+        )
+
+
+                //触发表格复选框选择
+                table.on('checkbox(test)', function (obj) {
+                    console.log(obj)
+                });
+
+                //触发表格单选框选择
+                table.on('radio(test)', function (obj) {
+                    console.log(obj)
+                });
+
+                // 行单击事件
+                table.on('row(test)', function (obj) {
+                    //console.log(obj);
+                    //layer.closeAll('tips');
+                });
+                // 行双击事件
+                table.on('rowDouble(test)', function (obj) {
+                    console.log(obj);
+                });
+
+                // 单元格编辑事件
+                table.on('edit(test)', function (obj) {
+                    var field = obj.field //得到字段
+                        , value = obj.value //得到修改后的值
+                        , data = obj.data; //得到所在行所有键值
+
+                    var update = {};
+                    update[field] = value;
+                    obj.update(update);
+                });
+    })
+    function makeMpdf(pdfName) {
+        if (confirm("您确认下载该PDF文件吗?")) {
+            $("#ceshi").css('background-color', '#FFF');
+            var element = $("#ceshi"); // 这个dom元素是要导出pdf的范围div
+            var w = element.width();    // 获得该容器的宽
+            var h = element.height();    // 获得该容器的高
+            var offsetTop = element.offset().top;    // 获得该容器到文档顶部的距离
+            var offsetLeft = element.offset().left;    // 获得该容器到文档最左的距离
+            var canvas = document.createElement("canvas");
+            var abs = 0;
+            var win_i = $(window).width();    // 获得当前可视窗口的宽度（不包含滚动条）
+            var win_o = window.innerWidth;    // 获得当前窗口的宽度（包含滚动条）
+            if(win_o>win_i){
+                abs = (win_o - win_i)/2;    // 获得滚动条长度的一半
+            }
+            canvas.width = w;    // 将画布宽&&高放大4倍
+            canvas.height = h;
+            var context = canvas.getContext("2d");
+            context.scale(1, 1);
+            context.translate(-offsetLeft-abs,-offsetTop);
+            //这里默认横向没有滚动条的情况，因为offset.left(),有无滚动条的时候存在差值，因此translate的时候，要把这个差值去掉
+            html2canvas(element, {
+                allowTaint: true,
+                taintTest: true,
+                canvas: canvas,
+                // dpi: 172,//导出pdf清晰度
+                onrendered: function(canvas) {
+                    var contentWidth = canvas.width;
+                    var contentHeight = canvas.height;
+                    //一页pdf显示html页面生成的canvas高度;
+                    var pageHeight = contentWidth;
+                    //未生成pdf的html页面高度
+                    var leftHeight = contentHeight;
+                    //页面偏移
+                    var position = 0;
+                    //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                    var imgWidth = 595.28;
+                    var imgHeight = 592.28/contentWidth * contentHeight;
+                    var pageData = canvas.toDataURL('image/jpeg', 1.0);
+                    var pdf = new jsPDF('', 'pt', [contentWidth, contentHeight]);
+                    //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                    //当内容未超过pdf一页显示的范围，无需分页
+                    // if (leftHeight < pageHeight) {
+                    pdf.addImage(pageData, 'JPEG', 0, 0, contentWidth, contentHeight);
+                    // } else {    // 分页
+                    //     while(leftHeight > 0) {
+                    //         pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                    //         leftHeight -= pageHeight;
+                    //         position -= 841.89;
+                    //         //避免添加空白页
+                    //         if(leftHeight > 0) {
+                    //             pdf.addPage();
+                    //         }
+                    //     }
+                    // }
+                    pdf.save(pdfName+'.pdf');
+                }
+            });
+        }
+    }
+</script>
+<!--<div class="layui-row" id="open_div" style="display:none;">-->
+<!--    <div id="add_form" class="layui-form" lay-filter="add" action="" style="margin-top: 20px;align:center;">-->
+<!--        &lt;!&ndash;        <div class="layui-form-item">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <label class="layui-form-label">ID</label>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div class="layui-input-inline" style="width: 45%">&ndash;&gt;-->
+<!--        <input id="id"  readonly="readonly" type="hidden" name="id"-->
+<!--               placeholder="id"-->
+<!--               autocomplete="off" class="layui-input">-->
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">题目</label>-->
+<!--            <div class="layui-input-inline" style="width: 45%">-->
+<!--                <input id="question" type="text" name="question"-->
+<!--                       placeholder="题目"-->
+<!--                       autocomplete="off" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">选项A</label>-->
+<!--            <div class="layui-input-inline" style="width: 45%">-->
+<!--                <input id="option_a" type="text" name="option_a"-->
+<!--                       placeholder="选项A"-->
+<!--                       autocomplete="off" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">选项B</label>-->
+<!--            <div class="layui-input-inline" style="width: 45%">-->
+<!--                <input id="option_b" type="text" name="option_b"-->
+<!--                       placeholder="选项B"-->
+<!--                       autocomplete="off" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">选项C</label>-->
+<!--            <div class="layui-input-inline" style="width: 45%">-->
+<!--                <input id="option_c" type="text" name="option_c"-->
+<!--                       placeholder="选项C"-->
+<!--                       autocomplete="off" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">选项D</label>-->
+<!--            <div class="layui-input-inline" style="width: 45%">-->
+<!--                <input id="option_d" type="text" name="option_d" placeholder="选项D"-->
+<!--                       autocomplete="off" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">类型</label>-->
+<!--            <div class="layui-input-block" style="width: 45%">-->
+<!--                <select name="type" id="type" lay-filter="aihao">-->
+<!--                    <option type="0">前15题</option>-->
+<!--                    <option type="1">后15题</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">状态</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input id="status" type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <div class="layui-input-block">-->
+<!--                <button class="layui-btn" lay-submit lay-filter="update_submit">立即提交</button>-->
+<!--                <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+</body>
+</html>
