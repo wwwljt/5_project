@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title"
+          style="; width: 700px ;margin-top: 50px; border: 1px; margin-left: 100px ">
+    <legend>个人信息</legend>
+
+</fieldset>
+<form class="layui-form" action="" lay-filter="example" style=" margin:0 auto ; width: 600px" id="userInfo">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户 ID </label>
+        <div class="layui-input-block">
+            <input type="text" name="userid" lay-verify="title" readonly id="userid" autocomplete="off" placeholder=""
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">部门名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="deptName" id="deptName" readonly placeholder="部门名称" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align: left; position: relative">
+        <label class="layui-form-label">用户名</label>
+
+        <div class="layui-input-block">
+            <input type="text" name="username" id="username" placeholder="用户名" autocomplete="off"
+                   class="layui-input">
+        </div>
+        <label></label>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="phonenumber" id="phonenumber" placeholder="" autocomplete="off"
+                   class="layui-input">
+        </div>
+        <label></label>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱</label>
+        <div class="layui-input-block">
+            <input type="email" id="email" name="email" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+        <label></label>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <div class="layui-upload">
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="demo1" style="width: 100px ; height: 100px"
+                         src="https://w-aaa.oss-cn-hangzhou.aliyuncs.com/2022/09/09/3de7bf5b177f4b9e9e302b736a952151R0abff6a6f1ed7239f52330423d1ac1d9.jpg">
+                    <p id="demoText"></p>
+                    <div style="width: 100px;">
+                        <div class="layui-progress layui-progress-big" lay-showpercent="yes" lay-filter="demo">
+                            <div class="layui-progress-bar" lay-percent=""></div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="layui-btn" id="test1">
+                    修改头像
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="text-align: right">
+            <span type="submit" class="layui-btn" id="userSubmit" lay-submit="" lay-filter="demo1">立即提交</span>
+        </div>
+    </div>
+</form>
+
+</body>
+<script src="../layui/layui.js"></script>
+<script>
+    layui.use(['upload', 'element', 'layer'], function () {
+        var $ = layui.jquery
+            , upload = layui.upload
+            , element = layui.element
+            , layer = layui.layer;
+        var updateSubmitBtn = $("button[lay-filter='demo1']");
+        var usernameCheck = true;
+        // 用户名校验
+        $("#userInfo input[name='username']").on('blur', function () {
+            var username = $("#userInfo input[name='username']");
+            if (username.val() === "") {
+                usernameCheck = false;
+                username.parent().next().html("用户名不能为空").attr("style", "color: #ff0000;line-height: 38px; margin-left: 110px;margin-top:10px");
+                // updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+            } else {
+                // 获取当前编辑用户的id
+                var userid = $("#userInfo input[name='userid']").val();
+                // 唯一性校验
+                $.ajax({
+                    url: '/system/user/usercheck',
+                    data: {
+                        username: username.val(),
+                        userid: userid
+                    },
+                    dataType: 'JSON',
+                    type: 'GET',
+                    success: function (redata) {
+                        if (redata.code == 0) {
+                            username.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px; margin-left: 110px;margin-top:10px");
+                            // updateSubmitBtn.removeAttr("disabled").removeAttr("style", "background-color: #808080");
+                            usernameCheck = true;
+                        } else {
+                            username.parent().next().html("用户名重复，请更换").attr("style", "color: #ff0000; margin-left: 110px;margin-top:10px");
+                            // updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                            usernameCheck = false;
+                        }
+                    }
+                });
+            }
+        })
+        var emailCheck = true;
+        // 邮箱校验
+        $("#userInfo input[name='email']").on('blur', function () {
+            var email = $("#userInfo input[name='email']");
+            var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+            if (email.val() === "") {
+                email.parent().next().html("邮箱不能为空").attr("style", "color: #ff0000;line-height: 38px;margin-left: 110px;margin-top:10px");
+                // updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                emailCheck = false;
+            } else if (!reg.test(email.val())) {
+                email.parent().next().html("请填写正确的邮箱格式!~").attr("style", "color: #ff0000;line-height: 38px;margin-left: 110px;margin-top:10px");
+                // updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                emailCheck = false;
+            } else {
+                email.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px;margin-left: 110px;margin-top:10px");
+                // updateSubmitBtn.removeAttr("disabled").removeAttr("style");
+                emailCheck = true;
+
+            }
+        })
+        var phoneCheck = true;
+        // 电话校验
+        $("#userInfo input[name='phonenumber']").on('blur', function () {
+            var phonenumber = $("#userInfo input[name='phonenumber']");
+            var reg = new RegExp("^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$");
+            if (phonenumber.val() === "") {
+                phonenumber.parent().next().html("电话不能为空").attr("style", "color: #ff0000;line-height: 38px;margin-left: 110px;margin-top:10px");
+                phoneCheck = false;
+            } else if (!reg.test(phonenumber.val())) {
+                phonenumber.parent().next().html("请填写正确的电话格式!~").attr("style", "color: #ff0000;line-height: 38px;margin-left: 110px;margin-top:10px");
+                phoneCheck = false;
+            } else {
+                phonenumber.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px;margin-left: 110px;margin-top:10px");
+                phoneCheck = true;
+            }
+        })
+
+        //常规使用 - 普通图片上传
+        var uploadInst = upload.render(
+            {
+                elem: '#test1'
+                , url: '/system/user/uploadFileAvatar' //此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+                , accept: 'images' //普通文件
+                , field: 'file'
+                , done: function (res) {
+                    console.log(JSON.stringify(res))
+                    $('#demo1').attr('src', res.data)
+                    //如果上传失败
+                    if (res.code > 0) {
+                        return layer.msg('上传失败');
+                    }
+                    //上传成功的一些操作
+                    //……
+                    $('#demoText').html(''); //置空上传失败的状态
+                }
+                , error: function () {
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                }
+                //进度条
+                , progress: function (n, elem, e) {
+                    element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
+                    if (n == 100) {
+                        layer.msg('上传完毕', {icon: 1});
+                    }
+                }
+            })
+        $(function () {
+            // 查询用户信息
+            $.get(
+                "/system/user/getUserOne",
+                function (data) {
+                    $('#demo1').attr('src', data.data.avatar); //图片链接（base64）
+                    $("#userid").val(data.data.userid);
+                    $.ajax({
+                        // dataType : "json",
+                        type: "get",
+                        url: "/system/dept/getTblDeptById",
+                        data: {
+                            "id": data.data.deptid
+                        },
+                        success: function (data) {
+                            $("#deptName").val(data.data.deptName);
+                        }
+                    })
+                    $("#username").val(data.data.username);
+                    $("#phonenumber").val(data.data.phonenumber);
+                    $("#email").val(data.data.email);
+                }
+            );
+        });
+
+        $("#userSubmit").click(function () {
+            if (usernameCheck && phoneCheck && emailCheck) {
+                $.ajax({
+                    url: '/system/user/saveOrUpdate',
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        "userid": $("#userid").val(),
+                        "deptName": $("#deptName").val(),
+                        "username": $("#username").val(),
+                        "phonenumber": $("#phonenumber").val(),
+                        "email": $("#email").val(),
+                        "avatar": $('#demo1')[0].src
+                    },
+                    success: function (data) {
+                        alert("执行")
+                        if (data.code == 0) {
+                            layer.msg("修改成功", {icon: 6});
+                            window.location.href = "/exit";
+                        } else {
+                            layer.msg("修改失败", {icon: 5});
+                        }
+
+
+                    }
+                });
+            } else {
+                //错误，vu能执行
+                alert("提交失败，请核实个人信息！！！")
+               return false;
+            }
+
+        })
+    })
+</script>
+
+</html>

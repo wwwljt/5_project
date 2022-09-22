@@ -6,7 +6,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="layui/css/layui.css">
+
 
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
@@ -58,37 +58,7 @@
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test" id="nav">
-                <!--     <li class="layui-nav-item layui-nav-itemed">
-                         <a class="" href="javascript:;">
-                             <i class="layui-icon ">&#xe63a; 抑郁测试</i>
 
-                         </a>
-                         <dl class="layui-nav-child">
-                             <dd><a href="sds/tblquestion.html" target="ifr">测试题目</a></dd>
-                             <dd><a href="sds/tbltestplan.html" target="ifr">测试计划</a></dd>
-                             <dd><a href="sds/tbltestresult.html" target="ifr">测试结果</a></dd>
-                             <dd><a href="sds/tblstatistics.html" target="ifr">报表统计</a></dd>
-                         </dl>
-                     </li>
-                     <li class="layui-nav-item layui-nav-itemed">
-                         <a class="" href="javascript:;">
-                             <i class="layui-icon ">&#xe653; 系统管理</i>
-                         </a>
-                         <dl class="layui-nav-child">
-                             <dd><a href="system/tbldept.html" target="ifr">部门管理</a></dd>
-                             <dd><a href="system/tblrole.html" target="ifr">角色管理</a></dd>
-                             <dd><a href="system/menu.html" target="ifr">菜单管理</a></dd>
-                             <dd><a href="system/user.html" target="ifr"> 用户管理</a></dd>
-                         </dl>
-                     </li>
-                     <li class="layui-nav-item layui-nav-itemed">
-                         <a class="" href="javascript:;">
-                             <i class="layui-icon ">&#xe68d; 日志监控</i>
-                         </a>
-                         <dl class="layui-nav-child">
-                             <dd><a href="log/log.html" target="ifr">操作日志</a></dd>
-                         </dl>
-                     </li>-->
             </ul>
         </div>
     </div>
@@ -106,15 +76,59 @@
 </div>
 <script src="layui/layui.js" charset="utf-8"></script>
 <script>
+    var $ = layui.jquery;
+    $(function () {
+        $.get({
+            url: '/system/menu/getTreeByParentId/',
+            data: {"parentId": 0},
+            type: 'get',
+            success: function (data) {
+                $.each(data.data, function (index, val) {
+                    let menu = "";
+                    menu +=
+                        "<li class='layui-nav-item layui-nav-itemed'>" +
+                        "<a href='javascript:;'>" +
+                        "<i class='" + val.icon + "'>  " + val.menuName + "</i>" +
+                        "</a>";
+                    let menu2 = "";
+                    $.get({
+                        url: '/system/menu/getTreeByParentId/',
+                        data: {"parentId": val.menuId},
+                        type: 'get',
+                        success: function (data) {
+                            menu2 += "<dl class='layui-nav-child'>";
+                            $.each(data.data, function (index, val) {
+                                menu2 +=
+                                    "<dd>" +
+                                    "<a href='" + val.url + "' target='ifr'>" + val.menuName + "</a>"
+                                    + "</dd>";
+
+                            });
+                            menu2 += "</dl>"
+                            menu += menu2;
+                            menu += "</li>";
+                            $("#nav").append(menu);
+                            layui.element.init();
+                        }
+
+                    });
+
+
+                });
+
+            }
+        })
+
+    })
     //JS
     layui.use(['element', 'layer', 'util'], function () {
+
         var element = layui.element
             , layer = layui.layer
             , util = layui.util
-            , $ = layui.$;
+
 
         $(function () {
-
             // 查询用户信息
             $.get(
                 "/system/user/getUserOne",
@@ -122,51 +136,8 @@
                     let msg = "欢迎回来 " + data.data.username;
                     $("#span_username").html(msg);
                     $("#imgs")[0].src = data.data.avatar;
-
-                    var roleId = data.data.roleId
-                    $.get({
-                        url: '/system/menu/getTreeByParentId/',
-                        data: {"parentId": 0, "roleId": roleId},
-                        type: 'get',
-                        success: function (data) {
-                            $.each(data.data, function (index, val) {
-                                let menu = "";
-                                menu +=
-                                    "<li class='layui-nav-item'>" +
-                                    "<a href='javascript:;'>" +
-                                    "<i class='" + val.icon + "'>  " + val.menuName + "</i>" +
-                                    "</a>";
-                                let menu2 = "";
-                                $.get({
-                                    url: '/system/menu/getTreeByParentId/',
-                                    data: {"parentId": val.menuId, "roleId": roleId},
-                                    type: 'get',
-                                    success: function (data) {
-                                        menu2 += "<dl class='layui-nav-child'>";
-                                        $.each(data.data, function (index, val) {
-                                            menu2 += "<dd>" +
-                                                "<a href='" + val.url + "' target='ifr'>" + val.menuName + "</a>"
-                                                + "</dd>";
-                                            console.log(menu2);
-
-                                        });
-                                        menu2 += "</dl>"
-                                        menu += menu2;
-                                        menu += "</li>";
-                                        $("#nav").append(menu);
-                                        layui.element.init();
-                                    }
-
-                                });
-
-
-                            });
-
-                        }
-                    })
                 }
             );
-
         });
         //头部事件
         util.event('lay-header-event', {
@@ -186,10 +157,12 @@
             }
         });
 
-    });
+    })
+    ;
+
 
 </script>
-
+<link rel="stylesheet" href="layui/css/layui.css">
 
 </body>
 </html>

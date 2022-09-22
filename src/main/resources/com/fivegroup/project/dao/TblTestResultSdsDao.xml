@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivegroup.project.dao.TblTestResultSdsDao">
+    <delete id="deleteById">
+        delete from w_gl.tbl_test_result_sds where tbl_test_result_sds.tester_id in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+</mapper>

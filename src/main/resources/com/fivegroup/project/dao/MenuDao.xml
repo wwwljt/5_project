@@ -122,4 +122,19 @@
         from w_gl.tbl_menu
         where menu_id = #{id};
     </select>
+    <select id="getTestByParentId" resultType="com.fivegroup.project.entity.TblMenu">
+        select rs.*
+        from(select tm.*
+             from w_gl.tbl_role_menu trm
+                      left join w_gl.tbl_menu tm on tm.menu_id= trm.menu_id
+             where role_id = #{roleId}) as rs
+        where rs.parent_id = #{parentId}
+        order by rs.order_num;
+    </select>
+    <select id="getMenuByRoleId" resultType="com.fivegroup.project.entity.vo.Menu">
+        select tm.*
+        from w_gl.tbl_role_menu trm
+        left join w_gl.tbl_menu tm on tm.menu_id= trm.menu_id
+        where role_id = #{roleId};
+    </select>
 </mapper>

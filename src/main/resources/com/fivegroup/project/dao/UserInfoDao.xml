@@ -94,6 +94,7 @@
         from w_gl.userinfo
 
         <include refid="likeUser"/>
+
         ;
     </select>
     <resultMap id="userMap" type="com.fivegroup.project.entity.vo.UserinfoVo">
@@ -112,15 +113,22 @@
     <select id="userCheck" resultType="com.fivegroup.project.entity.Userinfo">
         select *
         from w_gl.userinfo
-        <where>
-            <if test="userinfo.userid!=null">
-                and userid = #{userinfo.userid}
-            </if>
-            <if test="userinfo.username!=null and userinfo.username!=''">
-                and username = #{userinfo.username}
-            </if>
-        </where>
+        where username = #{userinfo.username}
+          and del_flag = 0
         ;
 
+    </select>
+    <select id="getUserAll" resultType="com.fivegroup.project.entity.Userinfo">
+        select *
+        from w_gl.userinfo
+        where del_flag = 0
+        ;
+    </select>
+    <select id="getSalt" resultType="com.fivegroup.project.entity.Userinfo">
+        select *
+        from w_gl.userinfo
+        where username = #{username}
+          and del_flag = 0
+        ;
     </select>
 </mapper>

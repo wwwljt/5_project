@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * (TblTestResultSds)实体类
+ * (TblTestResultSdsDao)实体类
  *
  * @author makejava
  * @since 2022-09-14 20:15:06

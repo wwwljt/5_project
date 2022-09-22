@@ -73,4 +73,10 @@ public interface UserInfoService {
 	 * @return
 	 */
 	Integer deleteBatch(String userid);
+	
+	/**
+	 * 获取所有用户
+	 * @return
+	 */
+	List<Userinfo> getUserAll();
 }

@@ -28,6 +28,16 @@ public class TblTestPlanSdsServiceImpl implements TblTestPlanSdsService {
 	private TblTestPlanSdsDao tblTestPlanSdsDao;
 	
 	/**
+	 * 获取所有测试计划
+	 *
+	 * @return
+	 */
+	@Override
+	public List<TblTestPlanSds> getTestPlanSdsAll() {
+		return tblTestPlanSdsDao.getTestPlanSdsAll();
+	}
+	
+	/**
 	 * 保存
 	 *
 	 * @param tblTestPlanSds

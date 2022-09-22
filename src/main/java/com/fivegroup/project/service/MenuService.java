@@ -62,4 +62,18 @@ public interface MenuService {
 	 * @return
 	 */
 	Integer delete(Integer menuId);
+	
+	/**
+	 * 根据父级 id 获取 菜单
+	 * @param parentId
+	 * @return
+	 */
+	List<TblMenu> getTestByParentId(Integer parentId, Integer roleId);
+	
+	/**
+	 * 根据 roleid 获取Menu
+	 * @param roleId
+	 * @return
+	 */
+	List<Menu> getMenuByRoleId(Integer roleId);
 }

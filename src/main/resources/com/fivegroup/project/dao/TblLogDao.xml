@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivegroup.project.dao.TblLogDao">
+    <insert id="insert">
+        insert into w_gl.tbl_log(login_name, user_name, ip,
+                                 class_name, method_name, params,
+                                 create_time)
+        values (#{tblLog.loginName},
+                #{tblLog.userName},
+                #{tblLog.ip},
+                #{tblLog.className},
+                #{tblLog.methodName},
+                #{tblLog.params},
+                #{tblLog.createTime});
+    </insert>
+    <select id="getLogCount" resultType="java.lang.Integer">
+        select count(*)
+        from w_gl.tbl_log;
+    </select>
+    <select id="getDeptPage" resultType="com.fivegroup.project.entity.TblLog">
+        select *
+        from w_gl.tbl_log
+        limit #{page},#{limit}
+    </select>
+</mapper>

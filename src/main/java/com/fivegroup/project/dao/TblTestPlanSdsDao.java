@@ -52,4 +52,10 @@ public interface TblTestPlanSdsDao {
 	 * @return
 	 */
 	Integer save(@Param("tblTestPlanSds") TblTestPlanSds tblTestPlanSds);
+	/**
+	 * 获取所有测试计划
+	 *
+	 * @return
+	 */
+	List<TblTestPlanSds> getTestPlanSdsAll();
 }

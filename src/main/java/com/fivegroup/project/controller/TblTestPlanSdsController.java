@@ -26,6 +26,18 @@ import java.util.List;
 public class TblTestPlanSdsController {
 	@Autowired
 	private TblTestPlanSdsService tblTestPlanSdsService;
+	
+	/**
+	 * 获取所有测试计划
+	 *
+	 * @return
+	 */
+	@GetMapping("/getTestPlanSdsAll")
+	public Result getTestPlanSdsAll() {
+		List<TblTestPlanSds> tblTestPlanSdsList = tblTestPlanSdsService.getTestPlanSdsAll();
+		return Result.ok(tblTestPlanSdsList);
+	}
+	
 	/**
 	 * 保存
 	 *
@@ -39,6 +51,7 @@ public class TblTestPlanSdsController {
 		Integer result = tblTestPlanSdsService.save(tblTestPlanSds, request);
 		return Result.ok(result);
 	}
+	
 	/**
 	 * 修改
 	 *
@@ -87,9 +100,6 @@ public class TblTestPlanSdsController {
 		List<TblTestPlanSds> tblTestPlanSdsList = tblTestPlanSdsService.getTbTestPlanSdsPageAll(tblTestPlanSds, page, limit);
 		return Result.ok(tblTestPlanSdsList, count);
 	}
-	
-	
-	
 	
 	
 }

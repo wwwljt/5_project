@@ -96,5 +96,6 @@ public class UserinfoVo implements Serializable {
 	 * 角色
 	 */
 	private TblRole tblRole;
+	
 }
 

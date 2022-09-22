@@ -23,8 +23,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/system/role")
 public class TblRoleController {
+	
 	@Autowired
 	private TblRoleService tblRoleService;
+	
 	
 	/**
 	 * 获取所有角色

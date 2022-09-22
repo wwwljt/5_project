@@ -27,6 +27,17 @@ public class TblDeptServiceImpl implements TblDeptService {
 	private TblDeptDao tblDeptDao;
 	
 	/**
+	 * 根据 id查询部门
+	 *
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public TblDept getTblDeptById(Integer id) {
+		return tblDeptDao.getTblDeptById(id);
+	}
+	
+	/**
 	 * 获取所有部门数据
 	 *
 	 * @return

@@ -8,22 +8,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 注意：项目正式环境请勿引用该地址 -->
     <link rel="stylesheet" href="/layui/css/layui.css" charset="utf-8">
-
+    <style>
+    </style>
 </head>
 <body>
-<div class="demoTable" style="margin: 15px;">
+<form class="layui-form" action="" id="searchFrom" style="margin-top: 8px ;margin-left: 12px">
     <button class="layui-btn layui-btn-warm" id="removeBatch">批量删除</button>
-    <span style="margin-left: 20px;">姓名：</span>
     <div class="layui-inline">
-        <input class="layui-input" id="testName" name="name" autocomplete="off">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" id="testName" name="name" autocomplete="off">
+        </div>
     </div>
-    <span style="margin-left: 40px;">测试计划 ID ：</span>
+    <div class="layui-inline"><label class="layui-form-label">测试计划ID</label>
+        <div class="layui-input-inline">
+            <select placeholder="选择ID" id="plan" name="testPlanId">
+            </select>
+        </div>
+    </div>
     <div class="layui-inline">
-        <input class="layui-input" type="number" id="searchTestPlanId" name="testPlanId" autocomplete="off">
+        <div class="layui-input-inline">
+            <button class="layui-btn" lay-submit lay-filter="searchFormSubmit">查询</button>
+            <button type="reset" class="layui-btn layui-btn-primary" id="searchReset">重置</button>
+        </div>
     </div>
-    <button class="layui-btn" data-type="reload" id="search">搜索</button>
-    <button type="button" class="layui-btn" id="resetSearch">重置</button>
-</div>
+</form>
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script type="text/html" id="toolbarDemo">
@@ -48,6 +57,7 @@
         var table = layui.table;
         var $ = layui.jquery;
         var layer = layui.layer;
+        let form = layui.form;
 
         table.render({
             elem: '#test'
@@ -84,7 +94,35 @@
 
         })
 
-        $("#search").click(function () {
+        // 搜索
+        form.on('submit(searchFormSubmit)', function (data) {
+            table.reload('rolesReload', {
+                where: {
+                    name: data.field.name,
+                    testPlanId: data.field.testPlanId
+                },
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        // 搜索表单重置
+        $("#searchReset").click(function () {
+            table.reload('rolesReload', {
+                where: {
+                    name: "",
+                    testPlanId: ''
+                },
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+            });
+            // 清空搜索框
+            $("#searchFrom")[0].reset()
+            return false;
+        })
+/*        $("#search").click(function () {
             search_roles()
         })
 
@@ -98,11 +136,26 @@
                 }
                 , where: {
                     name: $("#testName").val(),
-                    testPlanId: $("#searchTestPlanId").val(),
+                    testPlanId: $("#plan").val(),
                 }
             });
-        }
+        }*/
 
+        $.ajax({
+            url: '/sds/tbltestplan/getTestPlanSdsAll/',
+            type: 'GET',
+            dataType: 'JSON',
+            async: false,
+            success: function (ret) {
+                if (ret.code == 0) {
+                    $("#plan").append("<option selected value='' >请选择</option>");
+                    $.each(ret.data, function (index, val) {
+                        $("#plan").append("<option value='" + val.id + "'>" + val.id +" : "+ val.testName+ "</option>")
+                    });
+                    layui.form.render("select");
+                }
+            }
+        });
         //头工具栏事件
         table.on('toolbar(test)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
@@ -186,7 +239,7 @@
                         data: ['正向得分', '反向得分']
                     },
                     series: [{
-                        name:'sds',
+                        name: 'sds',
                         type: 'pie', //饼状
                         radius: '60%', //圆的大小
                         center: ['50%', '50%'], //居中
@@ -215,7 +268,7 @@
                 title: "抑郁测试结果图示",
                 skin: 'layui-layer-molv',
                 area: ['550px', '500px'],
-                shadeClose:true,
+                shadeClose: true,
                 content: $("#open_div"),//引用的弹出层的页面层的方式加载修改界面表单
             });
 
@@ -287,8 +340,6 @@
         <div class="layui-card-body" lay-filter="add" style="background: #C2BE9E;">
 
             <div id="EchartZhu" style="width: 500px; height: 450px;">
-                sdfsdf
-                <p>sdfasdf</p>
             </div>
         </div>
     </div>

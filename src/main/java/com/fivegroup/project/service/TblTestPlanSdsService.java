@@ -55,4 +55,10 @@ public interface TblTestPlanSdsService {
 	 * @return
 	 */
 	Integer save(TblTestPlanSds tblTestPlanSds, HttpServletRequest request);
+	/**
+	 * 获取所有测试计划
+	 *
+	 * @return
+	 */
+	List<TblTestPlanSds> getTestPlanSdsAll();
 }

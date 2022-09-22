@@ -40,6 +40,16 @@ public class UserInfoServiceImpl implements UserInfoService {
 	}
 	
 	/**
+	 * 获取所有用户
+	 *
+	 * @return
+	 */
+	@Override
+	public List<Userinfo> getUserAll() {
+		return userInfoDao.getUserAll();
+	}
+	
+	/**
 	 * 根据 用户名和 id 判断用户是否存在
 	 *
 	 * @param userinfo
@@ -63,10 +73,18 @@ public class UserInfoServiceImpl implements UserInfoService {
 		String username = JwtHelper.getUsername(request);
 		userinfo.setUpdateBy(username);
 		userinfo.setUpdateTime(new Date());
-		String salt = MD5.encrypt(MD5.getSalt());
-		userinfo.setPassword(salt);
-		userinfo.setSalt(salt);
-		userinfo.setAvatar("https://w-aaa.oss-cn-hangzhou.aliyuncs.com/2022/09/09/c93d8559dd9d4d3a9cd8570c80ce3488wl.png");
+		if (userinfo.getPassword() != null) {
+			String salt = MD5.getSalt();
+			System.out.println("+++++++++++++++++++ salt = " + salt);
+			System.out.println("userinfo.getPassword() = " + userinfo.getPassword());
+			String password = MD5.encrypt(userinfo.getPassword() + salt);
+			userinfo.setPassword(password);
+			userinfo.setSalt(salt);
+			System.out.println("++++++++++++++++++++ password = " + password);
+		}
+		if (userinfo.getAvatar() == null) {
+			userinfo.setAvatar("https://w-aaa.oss-cn-hangzhou.aliyuncs.com/2022/09/09/c93d8559dd9d4d3a9cd8570c80ce3488wl.png");
+		}
 		Integer result;
 		if (userid == null || userid == 0) {
 			userinfo.setCreateBy(username);
@@ -124,6 +142,11 @@ public class UserInfoServiceImpl implements UserInfoService {
 	 */
 	@Override
 	public Userinfo login(String username, String password) {
+		Userinfo userinfo = userInfoDao.getSalt(username);
+		String salt = userinfo.getSalt();
+		System.out.println("--------------------------salt " + salt);
+		password = MD5.encrypt(password + salt);
+		System.out.println("----------------------password = " + password);
 		// 对密码进行加密
 		//		password = MD5.encrypt(password);
 		return userInfoDao.login(username, password);

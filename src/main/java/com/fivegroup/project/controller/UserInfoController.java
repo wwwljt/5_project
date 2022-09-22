@@ -4,12 +4,14 @@ import com.fivegroup.project.entity.Userinfo;
 import com.fivegroup.project.entity.vo.UserinfoVo;
 import com.fivegroup.project.service.UserInfoService;
 import com.fivegroup.project.util.JwtHelper;
+import com.fivegroup.project.util.OSSUtil;
 import com.fivegroup.project.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -31,13 +33,27 @@ public class UserInfoController {
 	private UserInfoService userInfoService;
 	
 	/**
+	 * 上传头像
+	 *
+	 * @param file
+	 * @return
+	 */
+	@PostMapping("/uploadFileAvatar")
+	public Result upload(MultipartFile file) {
+		String path = OSSUtil.uploadFileAvatar(file);
+		System.out.println(path);
+		return Result.ok(path);
+	}
+	
+	/**
 	 * 批量删除
+	 *
 	 * @param userid
 	 * @return
 	 */
 	@PostMapping("/deleteBatch")
 	public Result deleteBatch(String userid) {
-		Integer result=userInfoService.deleteBatch(userid);
+		Integer result = userInfoService.deleteBatch(userid);
 		return Result.ok(result);
 	}
 	
@@ -50,14 +66,21 @@ public class UserInfoController {
 	@GetMapping("/usercheck")
 	public Result userCheck(Userinfo userinfo) {
 		System.out.println("userinfo = " + userinfo);
-		Userinfo user = userInfoService.userCheck(userinfo);
-		if (user != null) {
-			// 用户已存在
-			return Result.fail();
-		} else {
-			// 用户不存在
-			return Result.ok();
+		List<Userinfo> userinfoList = userInfoService.getUserAll();
+		for (Userinfo userinfo1 : userinfoList) {
+			if (userinfo1.getUserid().equals(userinfo.getUserid())
+					    && userinfo1.getUsername().equals(userinfo.getUsername())) {
+				return Result.ok();
+			} else if (userinfo1.getUsername().equals(userinfo.getUsername())) {
+				// 用户已存在
+				return Result.fail();
+			}
 		}
+		return Result.ok();
+		// 用户已存在
+		
+		// 用户不存在
+		//			return Result.ok();
 	}
 	
 	/**
@@ -70,7 +93,7 @@ public class UserInfoController {
 	public Result saveOrUpdate(Userinfo userinfo, HttpServletRequest request) {
 		System.out.println("userinfo = " + userinfo);
 		Integer result = userInfoService.saveOrUpdate(userinfo, request);
-		return Result.ok(result);
+		return Result.ok();
 	}
 	
 	/**

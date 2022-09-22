@@ -27,7 +27,19 @@ public class TblDeptController {
 	private TblDeptService tblDeptService;
 	
 	/**
+	 * 根据 id查询部门
+	 *
+	 * @return
+	 */
+	@GetMapping("/getTblDeptById")
+	public Result getTblDeptById(Integer id) {
+		TblDept tblDept = tblDeptService.getTblDeptById(id);
+		return Result.ok(tblDept);
+	}
+	
+	/**
 	 * 获取所有部门数据
+	 *
 	 * @return
 	 */
 	@GetMapping("/getDeptAll")

@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>用户管理</title>
     <link rel="stylesheet" href="../layui/css/layui.css">
-<style>
-    .layui-table-cell{
-        height: auto;
-        line-height: 80px;
-    }
-</style>
+    <style>
+        .layui-table-cell {
+            height: auto;
+            line-height: 80px;
+        }
+    </style>
 </head>
 <body>
 <script type="text/html" id="toolbarDemo">
@@ -23,7 +23,7 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <!--搜索框-->
-<form class="layui-form" action="" id="searchFrom">
+<form class="layui-form" action="" id="searchFrom"  style="margin-top: 20px ;margin-left: 12px">
     <div class="layui-inline">
         <label class="layui-form-label">用户编号</label>
         <div class="layui-input-inline">
@@ -137,7 +137,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">部门名称</label>
         <div class="layui-input-inline">
-            <select name="deptId" lay-verify="" id="updateDeptList">
+            <select name="deptid" lay-verify="" id="updateDeptList">
 
             </select>
         </div>
@@ -199,7 +199,7 @@
 <table id="demo" class="layui-table-cell" lay-filter="test"></table>
 <script src="../layui/layui.js"></script>
 <script>
-    layui.use(['table', 'form', 'jquery', 'element'], function () {
+    layui.use(['table', 'form', 'jquery', 'element'], function (message) {
         let table = layui.table;
         let form = layui.form;
         let $ = layui.jquery;
@@ -207,12 +207,13 @@
         // 校验
         // 添加的提交按钮
         var addSubmitBtn = $("button[lay-filter='addUserSubmit']");
+        var adduser = true;
         // 用户名校验
         $("#addUserForm input[name='username']").on('blur', function () {
             var username = $("#addUserForm input[name='username']");
             if (username.val() === "") {
                 username.parent().next().html("用户名不能为空").attr("style", "color: #ff0000;line-height: 38px");
-                addSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                adduser = false;
             } else {
                 // 唯一性校验
                 $.ajax({
@@ -223,60 +224,64 @@
                     success: function (redata) {
                         if (redata.code == 0) {
                             username.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px");
-                            addSubmitBtn.removeAttr("disabled").removeAttr("style", "background-color: #808080");
+                            adduser = true;
                         } else {
                             username.parent().next().html("用户名重复，请更换").attr("style", "color: #ff0000;line-height: 38px");
-                            addSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                            adduser = false;
                         }
                     }
                 });
             }
         })
         // 邮箱校验
+        var addEmail = true;
         $("#addUserForm input[name='email']").on('blur', function () {
             var email = $("#addUserForm input[name='email']");
             var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
             if (email.val() === "") {
                 email.parent().next().html("邮箱不能为空").attr("style", "color: #ff0000;line-height: 38px");
-                addSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                addEmail = false;
             } else if (!reg.test(email.val())) {
                 email.parent().next().html("请填写正确的邮箱格式!~").attr("style", "color: #ff0000;line-height: 38px");
-                addSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                addEmail = false;
             } else {
                 email.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px");
-                addSubmitBtn.removeAttr("disabled").removeAttr("style");
+                addEmail = true;
             }
         })
+        var addPhone = true;
         // 电话校验
         $("#addUserForm input[name='phonenumber']").on('blur', function () {
             var phonenumber = $("#addUserForm input[name='phonenumber']");
             var reg = new RegExp("^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$");
             if (phonenumber.val() === "") {
                 phonenumber.parent().next().html("电话不能为空").attr("style", "color: #ff0000;line-height: 38px");
-                addSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                addPhone = false;
             } else if (!reg.test(phonenumber.val())) {
                 phonenumber.parent().next().html("请填写正确的电话格式!~").attr("style", "color: #ff0000;line-height: 38px");
-                addSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                addPhone = false;
             } else {
                 phonenumber.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px");
-                addSubmitBtn.removeAttr("disabled").removeAttr("style");
+                addPhone = true;
             }
         })
+        var addPassword = true;
         // 密码校验
         $("#addUserForm input[name='password']").on('blur', function () {
             var password = $("#addUserForm input[name='password']");
             var reg = new RegExp("^[0-9]{6,18}$");
             if (password.val() === "") {
                 password.parent().next().html("密码不能为空").attr("style", "color: #ff0000;line-height: 38px");
-                addSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                addPassword = false;
             } else if (!reg.test(password.val())) {
                 password.parent().next().html("请输入6~18位的密码").attr("style", "color: #ff0000;line-height: 38px");
-                addSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                addPassword = false;
             } else {
                 password.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px");
-                addSubmitBtn.removeAttr("disabled").removeAttr("style");
+                addPassword = true;
             }
         })
+        var updateUser = true;
         // 修改的提交按钮
         var updateSubmitBtn = $("button[lay-filter='updateUserSubmit']");
         // 用户名校验
@@ -284,7 +289,7 @@
             var username = $("#updateUserForm input[name='username']");
             if (username.val() === "") {
                 username.parent().next().html("用户名不能为空").attr("style", "color: #ff0000;line-height: 38px");
-                updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                updateUser = false;
             } else {
                 // 获取当前编辑用户的id
                 var userid = $("#updateUserForm input[name='userid']").val();
@@ -300,54 +305,57 @@
                     success: function (redata) {
                         if (redata.code == 0) {
                             username.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px");
-                            updateSubmitBtn.removeAttr("disabled").removeAttr("style", "background-color: #808080");
+                            updateUser = true;
                         } else {
                             username.parent().next().html("用户名重复，请更换").attr("style", "color: #ff0000;line-height: 38px");
-                            updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                            updateUser = false;
                         }
                     }
                 });
             }
         })
+        var updateEmail = true;
         // 邮箱校验
         $("#updateUserForm input[name='email']").on('blur', function () {
             var email = $("#updateUserForm input[name='email']");
             var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
             if (email.val() === "") {
                 email.parent().next().html("邮箱不能为空").attr("style", "color: #ff0000;line-height: 38px");
-                updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                updateEmail = false;
             } else if (!reg.test(email.val())) {
                 email.parent().next().html("请填写正确的邮箱格式!~").attr("style", "color: #ff0000;line-height: 38px");
-                updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                updateEmail = false;
             } else {
                 email.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px");
-                updateSubmitBtn.removeAttr("disabled").removeAttr("style");
+                updateEmail = true;
             }
         })
+        var updatePhone = true;
         // 电话校验
         $("#updateUserForm input[name='phonenumber']").on('blur', function () {
             var phonenumber = $("#updateUserForm input[name='phonenumber']");
             var reg = new RegExp("^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$");
             if (phonenumber.val() === "") {
                 phonenumber.parent().next().html("电话不能为空").attr("style", "color: #ff0000;line-height: 38px");
-                updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                updatePhone = false;
             } else if (!reg.test(phonenumber.val())) {
                 phonenumber.parent().next().html("请填写正确的电话格式!~").attr("style", "color: #ff0000;line-height: 38px");
-                updateSubmitBtn.attr("disabled", "disabled").attr("style", "background-color: #808080");
+                updatePhone = false;
             } else {
                 phonenumber.parent().next().html("√").attr("style", "color: #00ff00;line-height: 38px");
-                updateSubmitBtn.removeAttr("disabled").removeAttr("style");
+                updatePhone = true;
             }
         })
         // 渲染用户数据表格
         table.render({
             elem: '#demo'
-            ,cellHeight: 300
+            , cellHeight: 300
             , url: '/system/user/getUserInfoPage'  // 数据接口
             , page: true // 开启分页
             , limit: 5
             , limits: [5, 10, 15, 20, 25, 30, 50]
-            , autoSort: false// 禁用前端的自动排序，开启后端的服务器排序，根据客户需求
+            // , autoSort: false// 禁用前端的自动排序，开启后端的服务器排序，根据客户需求
+            , autoSort: true// 禁用前端的自动排序，开启后端的服务器排序，根据客户需求
             , toolbar: '#toolbarDemo'// 开启顶部工具栏
             , cols: [[ // 表头
                 {type: 'checkbox', fixed: 'left'},
@@ -413,16 +421,7 @@
                 {fixed: 'right', title: '操作', width: 200, align: 'center', toolbar: '#barDemo'}
             ]]
         });
-        // 触发排序事件
-        table.on('sort(test)', function (obj) { //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
-            table.reload('demo', {
-                initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。
-                , where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
-                    field: obj.field //排序字段
-                    , order: obj.type //排序方式
-                }
-            });
-        });
+
         // 搜索
         form.on('submit(searchFormSubmit)', function (data) {
             table.reload('demo', {
@@ -448,7 +447,7 @@
                 },
             });
             // 清空搜索框
-            $("#searchFrom").reset()
+            $("#searchFrom")[0].reset()
             return false;
         })
         // 监听头工具栏事件
@@ -486,7 +485,8 @@
                             });
                         }
                     });
-                    form.render();
+                    // 重置表单
+                    $("#addUserForm")[0].reset()
                     // 弹出添加时的form表单
                     layer.open({
                         title: '添加用户',
@@ -496,31 +496,37 @@
                     });
                     // 监听添加form的提交事件
                     form.on('submit(addUserSubmit)', function (data) {
-                        /*if (data.status == "on") {
+                        alert(adduser + addPassword + addPhone + addEmail)
+                        if (adduser && addPassword && addPhone && addEmail) {
+                            /*if (data.status == "on") {
                             data.status = '1';
                         } else {
                             data.status = '0';
                         }*/
-                        // ajax方式提交表单数据，将数据保存至数据库中
-                        console.log(data.field.username);
-                        $.ajax({
-                            url: '/system/user/saveOrUpdate',
-                            type: 'POST',
-                            dataType: 'JSON',
-                            data: data.field,
-                            success: function (ret) {
-                                if (ret.code == 0) {
-                                    layer.closeAll();// 关闭对话框
-                                    table.reload('demo', {
-                                        page: {
-                                            curr: 1 // 重新从第 1 页开始
-                                        }
-                                    });
+                            // ajax方式提交表单数据，将数据保存至数据库中
+                            console.log(data.field.username);
+                            $.ajax({
+                                url: '/system/user/saveOrUpdate',
+                                type: 'POST',
+                                dataType: 'JSON',
+                                data: data.field,
+                                success: function (ret) {
+                                    if (ret.code == 0) {
+                                        layer.closeAll();// 关闭对话框
+                                        table.reload('demo', {
+                                            page: {
+                                                curr: 1 // 重新从第 1 页开始
+                                            }
+                                        });
+                                    }
+                                    layer.msg("添加成功", {icon: 6});
                                 }
-                                layer.msg(ret.msg);
-                            }
-                        });
-                        return false; // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                            });
+                            return false; // 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        } else {
+                            alert("提交失败，请核实用户信息 ！！！")
+                            return false;
+                        }
                     });
                     break;
                 case 'delete':
@@ -547,7 +553,7 @@
                                         // 刷新表格数据
                                         table.reload('demo');
                                     }
-                                    layer.msg("删除成功",{icon: 6});
+                                    layer.msg("删除成功", {icon: 6});
                                 }
                             });
                         });
@@ -574,16 +580,17 @@
                 // 提交重置密码表单
                 form.on('submit(resetPasswordSubmit)', function (data) {
                     $.ajax({
-                        url: '/springmvc/user/resetPassword.do',
+                        url: '/system/user/saveOrUpdate',
                         data: data.field,
                         dataType: 'JSON',
                         type: 'POST',
                         success: function (redata) {
                             if (redata.code == 0) {
+                                layer.msg("密码修改成功", {icon: 6});
                                 layer.closeAll();//关闭对话框
-                                window.location.href = "/springmvc/page/loginUser.jsp";
+                                window.location.href = "../login.html";
                             } else {
-                                layer.msg(redata.msg);
+                                layer.msg("密码修改失败", {icon: 5});
                             }
                         }
                     });
@@ -603,7 +610,7 @@
                                 layer.closeAll();
                                 // 刷新表格数据
                                 table.reload('demo');
-                                layer.msg("删除成功",{icon: 6});
+                                layer.msg("删除成功", {icon: 6});
                             }
                         }
                     });
@@ -635,7 +642,6 @@
                     dataType: 'JSON',
                     async: false,
                     success: function (ret) {
-                        $("#updateDeptList").empty();
                         $.each(ret.data, function (index, val) {
                             if (val.deptName == data.tblDept.deptName) {
                                 $("#updateDeptList").append("<option selected value='" + val.deptId + "'>" + val.deptName + "</option>")
@@ -672,36 +678,42 @@
                 });
                 // 监听表单的修改事件
                 form.on('submit(updateUserSubmit)', function (data) {
-                    if (data.field.status == "on") {
-                        data.field.status = '1';
-                    } else {
-                        data.field.status = '0';
-                    }
-                    alert(data.field.status)
-                    $.ajax({
-                        url: '/system/user/saveOrUpdate',
-                        type: "POST",
-                        dataType: "JSON",
-                        data: data.field,
-                        success: function (redata) {
-                            if (redata.code == 0) {
-                                layer.closeAll();// 关闭对话框
-                                table.reload('demo', {
-                                    page: {
-                                        curr: 1
-                                    }
-                                });
-                            } else {
-                                layer.msg(redata.msg);
+                    alert(updateUser + updateEmail + updatePhone)
+                    if (updateUser && updateEmail && updatePhone) {
+                        if (data.field.status == "on") {
+                            data.field.status = '1';
+                        } else {
+                            data.field.status = '0';
+                        }
+                        $.ajax({
+                            url: '/system/user/saveOrUpdate',
+                            type: "POST",
+                            dataType: "JSON",
+                            data: data.field,
+                            success: function (redata) {
+                                if (redata.code == 0) {
+                                    layer.msg("修改成功", {icon: 6});
+                                    layer.closeAll();// 关闭对话框
+                                    table.reload('demo', {
+                                        page: {
+                                            curr: 1
+                                        }
+                                    });
+                                } else {
+                                    layer.msg("修改失败", {icon: 5});
+                                }
                             }
-                        }
-                    });
-                    table.reload('demo', {
-                        page: {
-                            curr: 1
-                        }
-                    });
-                    return false;
+                        });
+                        table.reload('demo', {
+                            page: {
+                                curr: 1
+                            }
+                        });
+                        return false;
+                    } else {
+                        alert("请输入正确的用户信息！！！")
+                        return false;
+                    }
                 });
             }
         });

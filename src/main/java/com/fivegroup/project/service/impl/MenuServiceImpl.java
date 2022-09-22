@@ -28,6 +28,28 @@ public class MenuServiceImpl implements MenuService {
 	private MenuDao menuDao;
 	
 	/**
+	 * 根据 roleid 获取Menu
+	 *
+	 * @param roleId
+	 * @return
+	 */
+	@Override
+	public List<Menu> getMenuByRoleId(Integer roleId) {
+		return menuDao.getMenuByRoleId(roleId);
+	}
+	
+	/**
+	 * 根据父级 id 获取 菜单
+	 *
+	 * @param parentId
+	 * @return
+	 */
+	@Override
+	public List<TblMenu> getTestByParentId(Integer parentId, Integer roleId) {
+		return menuDao.getTestByParentId(parentId,roleId);
+	}
+	
+	/**
 	 * 删除
 	 *
 	 * @param menuId

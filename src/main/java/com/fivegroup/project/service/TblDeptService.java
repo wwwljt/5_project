@@ -57,4 +57,10 @@ public interface TblDeptService {
 	 * @return
 	 */
 	List<TblDept> getDptAll();
+	/**
+	 * 根据 id查询部门
+	 *
+	 * @return
+	 */
+	TblDept getTblDeptById(Integer id);
 }

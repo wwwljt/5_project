@@ -1,5 +1,6 @@
 package com.fivegroup.project.service.impl;
 
+import com.fivegroup.project.dao.TblTestResultSdsDao;
 import com.fivegroup.project.dao.TblTesterSdsDao;
 import com.fivegroup.project.entity.vo.StatisticsVo;
 import com.fivegroup.project.entity.vo.TblTestResultVo;
@@ -23,6 +24,9 @@ import java.util.List;
 public class TblTesterSdsServiceImpl implements TblTesterSdsService {
 	@Autowired
 	private TblTesterSdsDao tblTesterSdsDao;
+	
+	@Autowired
+	private TblTestResultSdsDao tblTestResultSdsDao;
 	
 	/**
 	 * 获取总记录数
@@ -52,6 +56,7 @@ public class TblTesterSdsServiceImpl implements TblTesterSdsService {
 	 */
 	@Override
 	public Integer deleteTblTestResulSds(Integer[] ids) {
+		Integer result=tblTestResultSdsDao.deleteById(ids);
 		return tblTesterSdsDao.deleteTblTestResulSds(ids);
 	}
 	

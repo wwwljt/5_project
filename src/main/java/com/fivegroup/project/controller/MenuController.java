@@ -28,6 +28,29 @@ public class MenuController {
 	private MenuService menuService;
 	
 	/**
+	 * 根据 roleid 获取Menu
+	 * @param roleId
+	 * @return
+	 */
+	public Result getMenuByRoleId(Integer roleId) {
+		List<Menu> menuList = menuService.getMenuByRoleId(roleId);
+		return Result.ok(menuList);
+	}
+	
+	/**
+	 * 根据父级 id 获取 菜单
+	 *
+	 * @return
+	 */
+	@GetMapping("/getTreeByParentId")
+	public Result getTreeByParentId(Integer parentId, Integer roleId) {
+		System.out.println("parentId = " + parentId);
+		System.out.println("roleId = " + roleId);
+		List<TblMenu> tblMenuList = menuService.getTestByParentId(parentId, roleId);
+		return Result.ok(tblMenuList);
+	}
+	
+	/**
 	 * 删除
 	 *
 	 * @param menuId
@@ -46,6 +69,7 @@ public class MenuController {
 	 * @return
 	 */
 	@PostMapping("/saveOrUpdate")
+	
 	public Result saveOrUpdate(TblMenu tbMenu, HttpServletRequest request) {
 		System.out.println("tbMenu = " + tbMenu);
 		Integer result = menuService.saveOrUpdate(tbMenu, request);

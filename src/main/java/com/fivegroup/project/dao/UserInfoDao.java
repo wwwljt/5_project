@@ -75,4 +75,16 @@ public interface UserInfoDao {
 	 * @return
 	 */
 	Integer deleteBatch(@Param("userid") String userid);
+	/**
+	 * 获取所有用户
+	 * @return
+	 */
+	List<Userinfo> getUserAll();
+	
+	/**
+	 * 获取 盐值
+	 * @param username
+	 * @return
+	 */
+	Userinfo getSalt(@Param("username") String username);
 }

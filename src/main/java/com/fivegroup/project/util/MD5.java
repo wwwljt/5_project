@@ -50,4 +50,14 @@ public final class MD5 {
 		return bu.append("==").toString();
 	}
 	
+	/**
+	 * 方法入口
+	 *
+	 * @param args 参数
+	 */
+	public static void main(String[] args) {
+		String encrypt = encrypt(123456 + "KJBFASAVQqspeGGn5RQtAv==");
+		// 12cc4c2387959df5cef143053ef199ce
+		System.out.println(encrypt);
+	}
 }

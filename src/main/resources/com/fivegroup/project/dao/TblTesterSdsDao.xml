@@ -21,182 +21,182 @@
 
     </delete>
     <select id="getTbTestResultSdsCount" resultType="java.lang.Integer">
-        select  count(*)
+        select count(*)
+        from
+        (select rs.tester_id AS tester_id,
+        sum(((
+        (rs.Forward_countA + (rs.Forward_countB * 2))
+        + (rs.Forward_countC * 3)) + (rs.Forward_countD * 4)
+        )) AS forward,
+        sum(((
+        ((rs.inversion_countA * 4) + (rs.inversion_countB * 3))
+        + (rs.inversion_countC * 2)) + rs.inversion_countD
+        )) AS inversion
         from (
-        (
-        select `aaa`.`tester_id` AS `tester_id`,
-        sum(((
-        (`aaa`.`Forward_countA` + (`aaa`.`Forward_countB` * 2))
-        + (`aaa`.`Forward_countC` * 3)) + (`aaa`.`Forward_countD` * 4)
-        )) AS `forward`,
-        sum(((
-        ((`aaa`.`inversion_countA` * 4) + (`aaa`.`inversion_countB` * 3))
-        + (`aaa`.`inversion_countC` * 2)) + `aaa`.`inversion_countD`
-        )) AS `inversion`
-        from (select `temp_count`.`tester_id` AS `tester_id`,
+        select temp_count.tester_id AS tester_id,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'A'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countA`,
+        when ((temp_count.type = '1') and (temp_count.answer = 'A'))
+        then temp_count.result_count end)), 0) AS Forward_countA,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'B'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countB`,
+        when ((temp_count.type = '1') and (temp_count.answer = 'B'))
+        then temp_count.result_count end)), 0) AS Forward_countB,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'C'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countC`,
+        when ((temp_count.type = '1') and (temp_count.answer = 'C'))
+        then temp_count.result_count end)), 0) AS Forward_countC,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'D'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countD`,
+        when ((temp_count.type = '1') and (temp_count.answer = 'D'))
+        then temp_count.result_count end)), 0) AS Forward_countD,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'A'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countA`,
+        when ((temp_count.type = '2') and (temp_count.answer = 'A'))
+        then temp_count.result_count end)), 0) AS inversion_countA,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'B'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countB`,
+        when ((temp_count.type = '2') and (temp_count.answer = 'B'))
+        then temp_count.result_count end)), 0) AS inversion_countB,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'C'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countC`,
+        when ((temp_count.type = '2') and (temp_count.answer = 'C'))
+        then temp_count.result_count end)), 0) AS inversion_countC,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'D'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countD`
-        from (select `sds`.`type` AS `type`,
-        `ansds`.`tester_id` AS `tester_id`,
-        `ansds`.`answer` AS `answer`,
-        count(`ansds`.`id`) AS `result_count`
-        from (`tbl_test_result_sds` `ansds` left join `tbl_question_sds` `sds`
-        on ((`ansds`.`question_id` = `sds`.`id`)))
-        group by `sds`.`type`, `ansds`.`tester_id`, `ansds`.`answer`) `temp_count`
-        group by `temp_count`.`tester_id`) `aaa`
-        group by `aaa`.`tester_id`) `xxx` left join `tbl_tester_sds` `usertest`
-        on ((`xxx`.`tester_id` = `usertest`.`id`)))
+        when ((temp_count.type = '2') and (temp_count.answer = 'D'))
+        then temp_count.result_count end)), 0) AS inversion_countD
+        from (select tqs.type as type,
+        ttrs.tester_id as tester_id,
+        ttrs.answer as answer,
+        count(ttrs.id) as result_count
+        from tbl_test_result_sds ttrs
+        left join tbl_question_sds tqs on ttrs.question_id = tqs.id
+        group by tqs.type, ttrs.tester_id, ttrs.answer) temp_count
+        group by temp_count.tester_id) rs
+        group by rs.tester_id) as rest left join tbl_tester_sds tts
+        on ((rest.tester_id = tts.id))
         <where>
             <if test="tblTestResultVo.name!=null and tblTestResultVo.name!=''">
-                and `usertest`.`name` like '%' #{tblTestResultVo.name} '%'
+                and tts.name like '%' #{tblTestResultVo.name} '%'
             </if>
             <if test="tblTestResultVo.testPlanId!=null and tblTestResultVo.testPlanId!=''">
-                and  `usertest`.`test_plan_id` = #{tblTestResultVo.testPlanId}
+                and tts.test_plan_id = #{tblTestResultVo.testPlanId}
             </if>
         </where>
     </select>
     <select id="getTbTestResultSdsPageAll" resultType="com.fivegroup.project.entity.vo.TblTestResultVo">
-        select `usertest`.`id` AS `id`,
-        `usertest`.`name` AS `name`,
-        `usertest`.`phone` AS `phone`,
-        `usertest`.`create_time` AS `createTime`,
-        `xxx`.`forward` AS `forward`,
-        `xxx`.`inversion` AS `inversion`,
-        `usertest`.`test_plan_id` AS `testPlanId`
+        select tts.id AS id,
+        tts.name AS `name`,
+        tts.phone AS phone,
+        tts.create_time AS createTime,
+        rest.forward AS forward,
+        rest.inversion AS inversion,
+        tts.test_plan_id AS testPlanId
+        from
+        (select rs.tester_id AS tester_id,
+        sum(((
+        (rs.Forward_countA + (rs.Forward_countB * 2))
+        + (rs.Forward_countC * 3)) + (rs.Forward_countD * 4)
+        )) AS forward,
+        sum(((
+        ((rs.inversion_countA * 4) + (rs.inversion_countB * 3))
+        + (rs.inversion_countC * 2)) + rs.inversion_countD
+        )) AS inversion
         from (
-            (
-            select `aaa`.`tester_id` AS `tester_id`,
-        sum(((
-        (`aaa`.`Forward_countA` + (`aaa`.`Forward_countB` * 2))
-        + (`aaa`.`Forward_countC` * 3)) + (`aaa`.`Forward_countD` * 4)
-        )) AS `forward`,
-        sum(((
-        ((`aaa`.`inversion_countA` * 4) + (`aaa`.`inversion_countB` * 3))
-        + (`aaa`.`inversion_countC` * 2)) + `aaa`.`inversion_countD`
-        )) AS `inversion`
-        from (select `temp_count`.`tester_id` AS `tester_id`,
+        select temp_count.tester_id AS tester_id,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'A'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countA`,
+        when ((temp_count.type = '1') and (temp_count.answer = 'A'))
+        then temp_count.result_count end)), 0) AS Forward_countA,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'B'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countB`,
+        when ((temp_count.type = '1') and (temp_count.answer = 'B'))
+        then temp_count.result_count end)), 0) AS Forward_countB,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'C'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countC`,
+        when ((temp_count.type = '1') and (temp_count.answer = 'C'))
+        then temp_count.result_count end)), 0) AS Forward_countC,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'D'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countD`,
+        when ((temp_count.type = '1') and (temp_count.answer = 'D'))
+        then temp_count.result_count end)), 0) AS Forward_countD,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'A'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countA`,
+        when ((temp_count.type = '2') and (temp_count.answer = 'A'))
+        then temp_count.result_count end)), 0) AS inversion_countA,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'B'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countB`,
+        when ((temp_count.type = '2') and (temp_count.answer = 'B'))
+        then temp_count.result_count end)), 0) AS inversion_countB,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'C'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countC`,
+        when ((temp_count.type = '2') and (temp_count.answer = 'C'))
+        then temp_count.result_count end)), 0) AS inversion_countC,
         ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'D'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countD`
-        from (select `sds`.`type` AS `type`,
-        `ansds`.`tester_id` AS `tester_id`,
-        `ansds`.`answer` AS `answer`,
-        count(`ansds`.`id`) AS `result_count`
-        from (`tbl_test_result_sds` `ansds` left join `tbl_question_sds` `sds`
-        on ((`ansds`.`question_id` = `sds`.`id`)))
-        group by `sds`.`type`, `ansds`.`tester_id`, `ansds`.`answer`) `temp_count`
-        group by `temp_count`.`tester_id`) `aaa`
-        group by `aaa`.`tester_id`) `xxx` left join `tbl_tester_sds` `usertest`
-        on ((`xxx`.`tester_id` = `usertest`.`id`)))
+        when ((temp_count.type = '2') and (temp_count.answer = 'D'))
+        then temp_count.result_count end)), 0) AS inversion_countD
+        from (select tqs.type as type,
+        ttrs.tester_id as tester_id,
+        ttrs.answer as answer,
+        count(ttrs.id) as result_count
+        from tbl_test_result_sds ttrs
+        left join tbl_question_sds tqs on ttrs.question_id = tqs.id
+        group by tqs.type, ttrs.tester_id, ttrs.answer) temp_count
+        group by temp_count.tester_id) rs
+        group by rs.tester_id) as rest left join tbl_tester_sds tts
+        on ((rest.tester_id = tts.id))
         <where>
             <if test="tblTestResultVo.name!=null and tblTestResultVo.name!=''">
-                and `usertest`.`name` like '%' #{tblTestResultVo.name} '%'
+                and tts.name like '%' #{tblTestResultVo.name} '%'
             </if>
             <if test="tblTestResultVo.testPlanId!=null and tblTestResultVo.testPlanId!=''">
-                and  `usertest`.`test_plan_id` = #{tblTestResultVo.testPlanId}
+                and tts.test_plan_id = #{tblTestResultVo.testPlanId}
             </if>
         </where>
         limit #{page} ,#{limit}
         ;
     </select>
     <select id="getTblTestCount" resultType="java.lang.Integer">
-        select count(*)
-        from w_gl.tbl_tester_sds;
+        select count(distinct(tester_id))
+        from w_gl.tbl_test_result_sds;
     </select>
     <select id="getTbTestStatistics" resultType="com.fivegroup.project.entity.vo.StatisticsVo">
-        select sum((s.forward + s.inversion) &lt; 50)                                     as normal,
-        sum(50 &lt;= (s.forward + s.inversion) &amp;&amp; (s.forward + s.inversion) &lt;= 60) as slight,
-        sum(60 &lt; (s.forward + s.inversion) &amp;&amp; (s.forward + s.inversion) &lt;= 70)  as moderate,
-        sum((s.forward + s.inversion) > 70)                                     as severe,
-        forward,
-        inversion
-        from (
-        (select `aaa`.`tester_id` AS `tester_id`,
-        sum(((
-        (`aaa`.`Forward_countA` + (`aaa`.`Forward_countB` * 2))
-        + (`aaa`.`Forward_countC` * 3)) + (`aaa`.`Forward_countD` * 4)
-        ))            AS `forward`,
-        sum(((
-        ((`aaa`.`inversion_countA` * 4) + (`aaa`.`inversion_countB` * 3))
-        + (`aaa`.`inversion_countC` * 2)) + `aaa`.`inversion_countD`
-        ))            AS `inversion`
-        from (select `temp_count`.`tester_id`                                       AS `tester_id`,
-        ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'A'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countA`,
-        ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'B'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countB`,
-        ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'C'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countC`,
-        ifnull(sum((case
-        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'D'))
-        then `temp_count`.`result_count` end)), 0) AS `Forward_countD`,
-        ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'A'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countA`,
-        ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'B'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countB`,
-        ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'C'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countC`,
-        ifnull(sum((case
-        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'D'))
-        then `temp_count`.`result_count` end)), 0) AS `inversion_countD`
-        from (select `sds`.`type`        AS `type`,
-        `ansds`.`tester_id` AS `tester_id`,
-        `ansds`.`answer`    AS `answer`,
-        count(`ansds`.`id`) AS `result_count`
-        from (`tbl_test_result_sds` `ansds` left join `tbl_question_sds` `sds`
-        on ((`ansds`.`question_id` = `sds`.`id`)))
-        group by `sds`.`type`, `ansds`.`tester_id`, `ansds`.`answer`) `temp_count`
-        group by `temp_count`.`tester_id`) `aaa`
-        group by `aaa`.`tester_id`) `s` left join `tbl_tester_sds` `usertest`
-        on ((`s`.`tester_id` = `usertest`.`id`)));
+        select sum((rest.forward + rest.inversion) &lt; 50)                                                as normal,
+               sum(50 &lt;= (rest.forward + rest.inversion) &amp;&amp; (rest.forward + rest.inversion) &lt;= 60) as slight,
+               sum(60 &lt; (rest.forward + rest.inversion) &amp;&amp; (rest.forward + rest.inversion) &lt;= 70)  as moderate,
+               sum((rest.forward + rest.inversion) > 70)                                                   as severe
+
+        from
+            (select rs.tester_id AS tester_id,
+                    sum(((
+                                 (rs.Forward_countA + (rs.Forward_countB * 2))
+                                 + (rs.Forward_countC * 3)) + (rs.Forward_countD * 4)
+                        )) AS forward,
+                    sum(((
+                                 ((rs.inversion_countA * 4) + (rs.inversion_countB * 3))
+                                 + (rs.inversion_countC * 2)) + rs.inversion_countD
+                        )) AS inversion
+             from (
+                      select temp_count.tester_id AS tester_id,
+                             ifnull(sum((case
+                                             when ((temp_count.type = '1') and (temp_count.answer = 'A'))
+                                                 then temp_count.result_count end)), 0) AS Forward_countA,
+                             ifnull(sum((case
+                                             when ((temp_count.type = '1') and (temp_count.answer = 'B'))
+                                                 then temp_count.result_count end)), 0) AS Forward_countB,
+                             ifnull(sum((case
+                                             when ((temp_count.type = '1') and (temp_count.answer = 'C'))
+                                                 then temp_count.result_count end)), 0) AS Forward_countC,
+                             ifnull(sum((case
+                                             when ((temp_count.type = '1') and (temp_count.answer = 'D'))
+                                                 then temp_count.result_count end)), 0) AS Forward_countD,
+                             ifnull(sum((case
+                                             when ((temp_count.type = '2') and (temp_count.answer = 'A'))
+                                                 then temp_count.result_count end)), 0) AS inversion_countA,
+                             ifnull(sum((case
+                                             when ((temp_count.type = '2') and (temp_count.answer = 'B'))
+                                                 then temp_count.result_count end)), 0) AS inversion_countB,
+                             ifnull(sum((case
+                                             when ((temp_count.type = '2') and (temp_count.answer = 'C'))
+                                                 then temp_count.result_count end)), 0) AS inversion_countC,
+                             ifnull(sum((case
+                                             when ((temp_count.type = '2') and (temp_count.answer = 'D'))
+                                                 then temp_count.result_count end)), 0) AS inversion_countD
+                      from (select tqs.type as type,
+                                   ttrs.tester_id as tester_id,
+                                   ttrs.answer as answer,
+                                   count(ttrs.id) as result_count
+                            from tbl_test_result_sds ttrs
+                                     left join tbl_question_sds tqs on ttrs.question_id = tqs.id
+                            group by tqs.type, ttrs.tester_id, ttrs.answer) temp_count
+                      group by temp_count.tester_id) rs
+             group by rs.tester_id) as rest left join tbl_tester_sds tts
+                                                      on ((rest.tester_id = tts.id))
     </select>
 </mapper>

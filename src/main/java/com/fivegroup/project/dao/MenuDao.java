@@ -96,4 +96,17 @@ public interface MenuDao {
 	 * @return
 	 */
 	Integer delete(@Param("menuId") Integer menuId);
+	/**
+	 * 根据父级 id 获取 菜单
+	 * @param parentId
+	 * @param roleId
+	 * @return
+	 */
+	List<TblMenu> getTestByParentId(@Param("parentId") Integer parentId, @Param("roleId") Integer roleId);
+	/**
+	 * 根据 roleid 获取Menu
+	 * @param roleId
+	 * @return
+	 */
+	List<Menu> getMenuByRoleId(@Param("roleId") Integer roleId);
 }
