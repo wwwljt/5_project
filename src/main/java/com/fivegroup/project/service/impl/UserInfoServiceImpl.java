@@ -142,6 +142,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 	 */
 	@Override
 	public Userinfo login(String username, String password) {
+		if (username == null || password == null){
+			return null;
+		}
 		Userinfo userinfo = userInfoDao.getSalt(username);
 		String salt = userinfo.getSalt();
 		System.out.println("--------------------------salt " + salt);

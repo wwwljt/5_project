@@ -40,5 +40,5 @@
         <!-- 设定文件上传时写入内存的最大值，如果小于这个参数不会生成临时文件，默认为10240 -->
         <property name="maxInMemorySize" value="40960"/>
     </bean>
-    <aop:aspectj-autoproxy  />
+    <aop:aspectj-autoproxy />
 </beans>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Topic Management</title>
+    <link href="../layui/css/layui.css" rel="stylesheet" charset="utf-8">
+
+    <style type="text/css">
+        .demoTable .layui-inline[lay-event] {
+            position: relative;
+            right: 10px;
+            width: 26px;
+            height: 26px;
+            padding: 5px;
+            line-height: 16px;
+            border: 1px solid #ccc;
+            /*变小手*/
+            cursor: pointer;
+            transition: .5s all;
+        }
+    </style>
+
+</head>
+<body>
+
+<!--添加搜索按钮和搜索框-->
+<div class="demoTable" style="margin: 15px;">
+
+
+    <button class="layui-btn" id="btn-add"><i class="layui-icon layui-icon-add-circle" style="font-size: 20px; color: white;"></i>添加</button>
+    <button class="layui-btn layui-btn-warm" id="btn-remove" lay-event="getCheckData">
+        <i class="layui-icon layui-icon-reduce-circle" style="font-size: 20px; color: white;"></i>删除
+    </button>
+
+    <span style="margin-left: 50px;">搜索问题：</span>
+    <div class="layui-inline">
+        <input class="layui-input"  id="searchQuestion" autocomplete="off">
+    </div>
+
+    <span style="margin-left: 50px;">搜索创建人：</span>
+    <div class="layui-inline">
+        <input class="layui-input"  id="createPerson" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload" id="search"><i class="layui-icon layui-icon-search" style="font-size: 20px; color: white;"></i>搜索</button>
+    <button class="layui-btn" data-type="reload" id="resetSearch"><i class="layui-icon layui-icon-refresh" style="font-size: 20px; color: white;"></i>重置</button>
+</div>
+
+
+<table class="layui-hide" id="testTopicManagement" lay-filter="TopicManagementDemo"></table>
+
+<!--编辑模态框-->
+<div class="layui-row" id="open_div" style="display:none;">
+
+    <div id="add_form" class="layui-form" lay-filter="edit" action="" style="margin-top: 20px;align:center;">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"> ID </label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input id="deptId" lay-verify="number" readonly="readonly" type="text" name="id"
+                       placeholder="题目ID"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">问题</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="question" type="text" name="question"
+                       placeholder="请输入问题"  autofocus
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选项A</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="opa" type="text" name="option_a"
+                       placeholder="请输入选项A" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选项B</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="opb" type="text" name="option_b"
+                       placeholder="请输入选项B" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选项C</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="opc" type="text" name="option_c"
+                       placeholder="请输入选项C" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选项D</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="opd" type="text" name="option_d"
+                       placeholder="请输入选项D" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline" style="width: 65%">
+<!--                <input required lay-verify="required" id="type" type="text" name="type"-->
+<!--                       placeholder="请输入类型" autofocus-->
+<!--                       class="layui-input" autocomplete="off">-->
+
+
+                    <select name="type" lay-filter="TypeZero" >
+                        <option value="1">SAS正向计分</option>
+                        <option value="0">SAS反向计分</option>
+                    </select>
+
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline" style="width: 65%">
+<!--                <input required lay-verify="required" id="status" type="text" name="status"-->
+<!--                       placeholder="请输入状态" autofocus-->
+<!--                       class="layui-input" autocomplete="off" >-->
+
+                <input type="checkbox" name="status" lay-skin="switch" lay-text="可用|失效" value="1" checked >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="margin-left: 150px;">
+                <button class="layui-btn" lay-submit lay-filter="update_submit" style="width: 200px;" >立即提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--添加模态框-->
+<div class="layui-row" id="open_add_div" style="display:none;">
+
+    <div id="add_form1" class="layui-form" lay-filter="add" action="" style="margin-top: 20px;align:center;">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">问题</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="question1" type="text" name="question1"
+                       placeholder="请输入问题"  autofocus
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选项A</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="opa1" type="text" name="opa1"
+                       placeholder="请输入选项A" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选项B</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="opb1" type="text" name="opb1"
+                       placeholder="请输入选项B" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选项C</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="opc1" type="text" name="opc1"
+                       placeholder="请输入选项C" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选项D</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="opd1" type="text" name="opd1"
+                       placeholder="请输入选项D" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline" style="width: 65%">
+
+                <select name="type1" >
+                    <option value="1">SAS正向计分</option>
+                    <option value="0">SAS反向计分</option>
+                </select>
+
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline" style="width: 65%">
+
+                <input type="checkbox" name="status1" lay-skin="switch" lay-text="可用|失效" value="1" checked >
+
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="margin-left: 150px;">
+                <button class="layui-btn" lay-submit lay-filter="update_submit1" style="width: 200px;" >立即提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--右侧工具栏-->
+<script type="text/html" id="barDemo">
+    <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!--绑定模板选择器-->
+<!--状态栏-->
+<script type="text/html" id="buttonTpl">
+    {{#  if(d.status == 1){ }}
+    <button class="layui-btn layui-btn-xs">可用</button>
+    {{#  } else { }}
+    <button class="layui-btn layui-btn-primary layui-btn-xs">失效</button>
+    {{#  } }}
+</script>
+
+</body>
+
+<script src="../layui/layui.js" charset="utf-8"></script>
+
+<script>
+
+    layui.use(['table'], function () {
+        var table = layui.table;
+        var $ = layui.jquery;
+        var util = layui.util;
+        var laypage = layui.laypage,
+            layer = layui.layer;
+
+
+        // 创建渲染实例
+        table.render({
+            elem: '#testTopicManagement'
+            , url: '/findQuestionSasAll'
+            , method: 'get'
+            , toolbar: true
+            , defaultToolbar: ['filter', 'exports', 'print', {
+                title: '帮助'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , page: {  // 允许分页
+                first: 1,
+                limits: [10, 20, 30, 40, 50],  // 规定每页显示的条数
+                limit: 10,  // 规定默认显示条数
+            }
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', fixed: 'left', width: 80, title: 'ID', sort: true}
+                , {field: 'question', width: 150, title: '问题'}
+                , {field: 'optionA', width: 150, title: '选项A'}
+                , {field: 'optionB', width: 150, title: '选项B'}
+                , {field: 'optionC', width: 150, title: '选项C'}
+                , {field: 'optionD', width: 150, title: '选项D'}
+                , {
+                    field: 'type',
+                    width: 120,
+                    title: '类型',
+                    templet: function (d) {  // 函数转义用法😀
+                        let res;
+                        if (d.type == 1) {
+                            res = "SAS正向计分"
+                        } else {
+                            res = "SAS反向计分"
+                        }
+                        return res;
+                    }
+
+                }
+                , {field: 'status', width: 80, title: '状态', templet: "#buttonTpl"}
+                , {
+                    field: 'createTime',
+                    width: 170,
+                    title: '创建时间',
+                    templet: '<div>{{layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                }
+                , {field: 'createBy', width: 80, title: '创建人'}
+                , {
+                    field: 'updateTime',
+                    width: 170,
+                    title: '修改时间',
+                    templet: '<div>{{layui.util.toDateString(d.updateTime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                }
+                , {field: 'updateBy', width: 80, title: '修改人'}
+                // , {field: 'flag', width: 80, title: 'flag'}
+                , {fixed: 'right', title: '操作', width: 125, minWidth: 125, toolbar: '#barDemo'}
+
+            ]]
+            , id: 'searchTwo'
+
+        });
+
+
+        // 监听工具条，实现删除功能
+        table.on('tool(TopicManagementDemo)', function (obj) {    // genshinDemo 表示工具列所在表格的 lay-filter 的值
+            let data = obj.data;
+            console.log("删除DATA==="+data);
+
+            if (obj.event === 'del') {  //  绑定事件的名称
+
+                layer.confirm('确认删除ID为' + data.id + '的题目吗?', function (index) {
+
+                    let strIds = ""+data.id;
+
+                    console.log("strIds==="+strIds);
+
+                    layer.close(index);   // 关闭弹框
+                    // 向服务端发送删除命令，获取后端
+                    // alert("123123");
+                    $.ajax({
+                        type: 'get',
+                        url: "/delTblQuestionSas",
+                        data: {
+                          ids: strIds,
+                        },
+                        // data: {
+                        //     id: data.id,  // 此处是根据id查询此id是否被删除，故将id传向后端
+                        // },
+                        contentType: 'application/json',
+                        success: function (data) {
+
+                            console.log(data);
+
+                            if (data == 1) {
+                                obj.del();  // 删除对应行（tr）的DOM结构
+                                layer.msg('删除成功！', {icon: 1}, {time: 2000});  // icon 为图标，time为弹出框消息停留时间
+
+                            } else {
+                                layer.msg('删除失败！', {icon: 2}, {time: 2000});
+                            }
+
+                        }
+                    })
+                });
+            }
+
+            // 监听工具条，实现编辑功能
+            else if (obj.event === 'edit') {
+
+                let form = layui.form;
+                form.val("edit", {
+                    "id": data.id,
+                    "question": data.question,
+                    "option_a": data.optionA,
+                    "option_b": data.optionB,
+                    "option_c": data.optionC,
+                    "option_d": data.optionD,
+                    "type": data.type,
+                    "status": data.status,
+                });
+
+
+                // 打开模态框
+                layer.open({
+                    type: 1,//类型
+                    area:['500px','600px'],  //定义宽和高
+                    title:'编辑题目信息',  //题目
+                    shadeClose: true,  //点击遮罩层关闭
+                    content: $('#open_div'),  //打开的内容
+                    // btn: ['确定', '取消']
+                });
+
+
+                // 拿到修改后的数据，传给后端
+                form.on('submit(update_submit)', function (massage) {
+                    console.log("message为：", massage);
+                    let data1 = massage.field;
+                    $.ajax({
+                        type: "post",
+                        url: "/editQuestionSas",
+                        // data: JSON.stringify(massage.field),
+                        data: {
+                            "id": data1.id,
+                            "question": data1.question,
+                            "optionA": data1.option_a,
+                            "optionB": data1.option_b,
+                            "optionC": data1.option_c,
+                            "optionD": data1.option_d,
+                            "type": data1.type,
+                            "status": data1.status,
+
+                            "updateBy": "CM",
+                        },
+
+                        success: function (msg) {
+                            console.log(msg);
+                            layer.closeAll();//关闭所有的弹出层
+                            if (msg == 1) {
+                                layer.msg("修改成功", {icon: 6}, {time: 2000});
+
+                                $(".layui-laypage-btn").click();  // CSH自创
+
+                            } else {
+                                layer.msg("修改失败", {icon: 5}, {time: 2000});
+                            }
+                        }
+                    })
+                    return false
+                });
+
+            }
+
+        });
+
+
+        // 添加
+        $("#btn-add").click(function () {
+
+            let form1 = layui.form;
+            form1.val("add", {
+                "question1": '',
+                "opa1": '',
+                "opb1": '',
+                "opc1": '',
+                "opd1": '',
+                "type1": '',
+                "status1": '',
+            });
+
+
+            // 打开模态框
+            layer.open({
+                type: 1,//类型
+                area:['500px','600px'],  //定义宽和高
+                title:'添加题目信息',  //题目
+                shadeClose: true,  //点击遮罩层关闭
+                content: $('#open_add_div'),  //打开的内容
+                // btn: ['确定', '取消']
+            });
+
+
+            // 拿到修改后的数据，传给后端
+            form1.on('submit(update_submit1)', function (massage) {
+                console.log("message为：", massage);
+                console.log(massage.field);
+                let data1 = massage.field;
+                $.ajax({
+                    type: "post",
+                    url: "/addTblQuestionSas",
+                    // data: JSON.stringify(massage.field),
+                    data: {
+                        "question": data1.question1,
+                        "optionA": data1.opa1,
+                        "optionB": data1.opb1,
+                        "optionC": data1.opc1,
+                        "optionD": data1.opd1,
+                        "type": data1.type1,
+                        "status": data1.status1,
+
+                        "createBy": "CSH",
+                    },
+
+                    success: function (msg) {
+                        console.log(msg);
+                        layer.closeAll();//关闭所有的弹出层
+                        if (msg == 1) {
+                            layer.msg("添加成功！", {icon: 6}, {time: 2000});
+
+                            $(".layui-laypage-btn").click();  //刷新数据
+
+                        } else {
+                            layer.msg("添加失败！", {icon: 5}, {time: 2000});
+                        }
+                    }
+                })
+
+
+                return false
+
+            })
+
+        });
+
+        
+        // 批量删除数据
+        $("#btn-remove").click(function () {
+            let checkStatus = table.checkStatus('searchTwo');
+            if (checkStatus.data.length == 0){
+                console.log("checkData==="+checkStatus.data);
+                parent.layer.msg('请先选择要删除的数据行！', {icon: 2 , time:2000});
+                return ;
+            }
+
+            console.log("checkStatus==="+checkStatus.data.id);
+
+            // 对拿到的数据进行处理,转为字符串
+            let strIds = '';
+            for (let i = 0; i < checkStatus.data.length; i++) {
+                strIds += checkStatus.data[i].id + ';';
+            }
+            strIds = strIds.substring(0, strIds.length -1);  // 去掉 ; 号
+
+            // 弹出确认删除框
+            layer.confirm('确认删除ID为 [' + strIds + '] 的题目吗?', function (index) {
+
+                console.log("strIds==="+strIds)
+
+                parent.layer.msg('删除中...', {icon: 16,shade: 0.3,time:2000});
+
+                $.ajax({
+                    type: 'get',
+                    url: "/delTblQuestionSas",
+                    data: {
+                        ids: strIds,
+                    },
+                    contentType: 'application/json',
+                    success: function (data) {
+
+                        console.log(data);
+
+                        if (data !== 0) {
+                            layer.closeAll('loading');  // 关闭加载动画
+                            window.setTimeout(function () {  // 延时两秒后再执行方法体
+                                layer.msg('删除成功！', {icon: 1}, {time: 1000});  // icon 为图标，time为弹出框消息停留时间
+                            }, 2000);
+
+                            $(".layui-laypage-btn").click();  //刷新数据
+                        } else {
+                            layer.closeAll('loading');  // 关闭加载动画
+                            window.setTimeout(function () {
+                                layer.msg('删除失败！', {icon: 2}, {time: 1000});
+                            }, 2000);
+
+                        }
+
+                    }
+                })
+
+            })
+
+        });
+
+
+        // 搜索
+        $('#search').click(function () {
+
+            // alert("6666666666666");
+
+            // 获取两个输入框的值
+            let question = $('#searchQuestion').val();
+            let person = $('#createPerson').val();
+
+            if (question == "" && person == ""){
+                parent.layer.msg('请输入要搜索的内容！', {icon: 2 , time:2000});
+                return false;
+            }
+
+            //执行重载
+            table.reload('searchTwo', {
+                method: 'get'
+                ,page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                ,where: {
+                    question: question,
+                    person: person,
+                }
+            });
+
+        });
+
+        // 搜索重置
+        $('#resetSearch').click(function () {
+
+            // alert("6666666666666");
+
+            $('#searchQuestion').val('');
+            $('#createPerson').val('');
+
+            // 获取两个输入框的值
+            let question = '';
+            let person = '';
+
+            //执行重载
+            table.reload('searchTwo', {
+                method: 'get'
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: {
+                    question: question,
+                    person: person,
+                }
+            });
+        })
+
+    })
+
+
+
+
+
+
+</script>
+
+
+</html>

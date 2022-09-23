@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fivegroup.project.dao.QuestionFpaMapper">
+    <insert id="insertQF" parameterType="questionFpa1" useGeneratedKeys="true" keyProperty ="id">
+<!--         insert into tbl_question_fpa(id,question,option_a,optionB,option_c,option_d,type,status,createTime,createBy,updateTime,updateBy)
+         values (#{id},#{question},#{option_a},#{optionB},#{option_c},#{option_d},#{type},#{status},#{createTime},#{createBy},#{updateTime},#{updateBy})-->
+            insert into tbl_question_fpa(id,question,option_a,option_b,option_c,option_d,type,status)
+         values (#{id},#{question},#{optionA},#{optionB},#{optionC},#{optionD},#{type},#{status})
+    </insert>
+    <update id="updateQF" parameterType="questionFpa">
+        update tbl_question_fpa
+            <set>
+                <if test="question!=null">
+                    question=#{question},
+                </if>
+                <if test="optionA!=null">
+                    option_a=#{optionA},
+                </if>
+                <if test="optionB!=null">
+                    option_b=#{optionB},
+                </if>
+                <if test="optionC!=null">
+                    option_c=#{optionA},
+                </if>
+                <if test="optionD!=null">
+                    option_d=#{optionD},
+                </if>
+                <if test="type!=null">
+                    type=#{type},
+                </if>
+                <if test="status!=null">
+                    status=#{status},
+                </if>
+                <if test="createTime!=null">
+                    createTime=#{createTime},
+                </if>
+                <if test="createBy!=null">
+                    createBy=#{createBy},
+                </if>
+                <if test="updateTime!=null">
+                    updateTime=#{updateTime},
+                </if>
+                <if test="updateBy!=null">
+                    updateBy=#{updateBy},
+                </if>
+
+            </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteQF" parameterType="questionFpa">
+        update tbl_question_fpa set flag=1 where id=#{id}
+    </delete>
+    <select id="getAllQF" resultType="questionFpa">
+        select * from tbl_question_fpa
+        <where>
+            flag=0
+            <if test="questionFpa.question!=null and questionFpa.question!=''">
+                and question like concat('%',#{questionFpa.question},'%')
+            </if>
+            <if test="questionFpa.createBy!=null and questionFpa.createBy!=''">
+                and createBy like concat('%',#{questionFpa.createBy},'%')
+            </if>
+        </where>
+        limit #{begin},#{limit};
+    </select>
+
+    <select id="countQF" resultType="int">
+        select count(*) from tbl_question_fpa
+        <where>
+            flag=0
+            <if test="question!=null and question!=''">
+                and question like concat('%',#{question},'%')
+            </if>
+            <if test="createBy!=null and createBy!=''">
+                and createBy like concat('%',#{createBy},'%')
+            </if>
+        </where>
+    </select>
+<!--    <select id="getAll" resultType="question_fpa">-->
+<!--        select * from tbl_question_fpa-->
+<!--    </select>-->
+
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivegroup.project.dao.TblTesterSasDao">
+
+
+
+    <!--查找所有并分页-->
+    <select id="findAll" resultType="com.fivegroup.project.entity.TblTesterSas">
+
+        select `usertest`.`id` AS `id`,
+        `usertest`.`name` AS `name`,
+        `usertest`.`phone` AS `phone`,
+        `usertest`.`create_time` AS `create_time`,
+        `xxx`.`forward` AS `forward`,
+        `xxx`.`inversion` AS `inversion`,
+        `usertest`.`test_plan_id` AS `test_plan_id`
+        from ((select `aaa`.`tester_id` AS `tester_id`,
+        sum((((`aaa`.`Forward_countA` + (`aaa`.`Forward_countB` * 2)) + (`aaa`.`Forward_countC` * 3)) +
+        (`aaa`.`Forward_countD` * 4))) AS `forward`,
+        sum(((((`aaa`.`inversion_countA` * 4) + (`aaa`.`inversion_countB` * 3)) +
+        (`aaa`.`inversion_countC` * 2)) + `aaa`.`inversion_countD`)) AS `inversion`
+        from (select `temp_count`.`tester_id` AS `tester_id`,
+        ifnull(sum((case
+        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'A'))
+        then `temp_count`.`result_count` end)), 0) AS `Forward_countA`,
+        ifnull(sum((case
+        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'B'))
+        then `temp_count`.`result_count` end)), 0) AS `Forward_countB`,
+        ifnull(sum((case
+        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'C'))
+        then `temp_count`.`result_count` end)), 0) AS `Forward_countC`,
+        ifnull(sum((case
+        when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'D'))
+        then `temp_count`.`result_count` end)), 0) AS `Forward_countD`,
+        ifnull(sum((case
+        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'A'))
+        then `temp_count`.`result_count` end)), 0) AS `inversion_countA`,
+        ifnull(sum((case
+        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'B'))
+        then `temp_count`.`result_count` end)), 0) AS `inversion_countB`,
+        ifnull(sum((case
+        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'C'))
+        then `temp_count`.`result_count` end)), 0) AS `inversion_countC`,
+        ifnull(sum((case
+        when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'D'))
+        then `temp_count`.`result_count` end)), 0) AS `inversion_countD`
+        from (select `sds`.`type` AS `type`,
+        `ansds`.`tester_id` AS `tester_id`,
+        `ansds`.`answer` AS `answer`,
+        count(`ansds`.`id`) AS `result_count`
+        from (`tbl_test_result_sas` `ansds` left join `tbl_question_sas` `sds`
+        on ((`ansds`.`question_id` = `sds`.`id`)))
+        group by `sds`.`type`, `ansds`.`tester_id`, `ansds`.`answer`) `temp_count`
+        group by `temp_count`.`tester_id`) `aaa`
+        group by `aaa`.`tester_id`) `xxx` left join `tbl_tester_sas` `usertest`
+        on ((`xxx`.`tester_id` = `usertest`.`id`)))
+        <where>
+            <if test="name != null">
+                and `name` like '%' #{name} '%'
+            </if>
+            <if test="planId != null">
+                and test_plan_id like '%' #{planId} '%'
+            </if>
+        </where>
+        limit #{page}, #{limit}
+
+
+    </select>
+
+
+    <!--删除-->
+    <delete id="delData" parameterType="int">
+        delete
+        from tbl_tester_sas
+        where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+
+    <!--查找Pie-->
+    <select id="findPie" resultType="com.fivegroup.project.entity.TblTesterSas">
+        select `usertest`.`id` AS `id`,
+               `usertest`.`name` AS `name`,
+               `usertest`.`phone` AS `phone`,
+               `usertest`.`create_time` AS `create_time`,
+               `xxx`.`forward` AS `forward`,
+               `xxx`.`inversion` AS `inversion`,
+               `usertest`.`test_plan_id` AS `test_plan_id`
+        from ((select `aaa`.`tester_id` AS `tester_id`,
+                      sum((((`aaa`.`Forward_countA` + (`aaa`.`Forward_countB` * 2)) + (`aaa`.`Forward_countC` * 3)) +
+                           (`aaa`.`Forward_countD` * 4))) AS `forward`,
+                      sum(((((`aaa`.`inversion_countA` * 4) + (`aaa`.`inversion_countB` * 3)) +
+                            (`aaa`.`inversion_countC` * 2)) + `aaa`.`inversion_countD`)) AS `inversion`
+               from (select `temp_count`.`tester_id` AS `tester_id`,
+                            ifnull(sum((case
+                                            when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'A'))
+                                                then `temp_count`.`result_count` end)), 0) AS `Forward_countA`,
+                            ifnull(sum((case
+                                            when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'B'))
+                                                then `temp_count`.`result_count` end)), 0) AS `Forward_countB`,
+                            ifnull(sum((case
+                                            when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'C'))
+                                                then `temp_count`.`result_count` end)), 0) AS `Forward_countC`,
+                            ifnull(sum((case
+                                            when ((`temp_count`.`type` = '1') and (`temp_count`.`answer` = 'D'))
+                                                then `temp_count`.`result_count` end)), 0) AS `Forward_countD`,
+                            ifnull(sum((case
+                                            when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'A'))
+                                                then `temp_count`.`result_count` end)), 0) AS `inversion_countA`,
+                            ifnull(sum((case
+                                            when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'B'))
+                                                then `temp_count`.`result_count` end)), 0) AS `inversion_countB`,
+                            ifnull(sum((case
+                                            when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'C'))
+                                                then `temp_count`.`result_count` end)), 0) AS `inversion_countC`,
+                            ifnull(sum((case
+                                            when ((`temp_count`.`type` = '2') and (`temp_count`.`answer` = 'D'))
+                                                then `temp_count`.`result_count` end)), 0) AS `inversion_countD`
+                     from (select `sds`.`type` AS `type`,
+                                  `ansds`.`tester_id` AS `tester_id`,
+                                  `ansds`.`answer` AS `answer`,
+                                  count(`ansds`.`id`) AS `result_count`
+                           from (`tbl_test_result_sas` `ansds` left join `tbl_question_sas` `sds`
+                                 on ((`ansds`.`question_id` = `sds`.`id`)))
+                           group by `sds`.`type`, `ansds`.`tester_id`, `ansds`.`answer`) `temp_count`
+                     group by `temp_count`.`tester_id`) `aaa`
+               group by `aaa`.`tester_id`) `xxx` left join `tbl_tester_sas` `usertest`
+              on ((`xxx`.`tester_id` = `usertest`.`id`)))
+    </select>
+
+
+</mapper>

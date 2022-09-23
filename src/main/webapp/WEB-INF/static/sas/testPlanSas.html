@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test-Plan</title>
+    <link href="../layui/css/layui.css" rel="stylesheet" charset="utf-8">
+
+</head>
+<body>
+
+
+<!--添加搜索按钮和搜索框-->
+<div class="demoTable" style="margin: 15px;">
+
+
+    <button class="layui-btn" id="btn-add"><i class="layui-icon layui-icon-add-circle"
+                                              style="font-size: 20px; color: white;"></i>添加
+    </button>
+    <button class="layui-btn layui-btn-warm" id="btn-remove" lay-event="getCheckData">
+        <i class="layui-icon layui-icon-reduce-circle" style="font-size: 20px; color: white;"></i>删除
+    </button>
+
+    <span style="margin-left: 80px;">搜索计划：</span>
+    <div class="layui-inline">
+        <input class="layui-input" id="searchQuestion" autocomplete="off">
+    </div>
+
+    <span style="margin-left: 80px;">搜索创建人：</span>
+    <div class="layui-inline">
+        <input class="layui-input" id="createPerson" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload" id="search"><i class="layui-icon layui-icon-search"
+                                                                style="font-size: 20px; color: white;"></i>搜索
+    </button>
+    <button class="layui-btn" data-type="reload" id="resetSearch"><i class="layui-icon layui-icon-refresh"
+                                                                     style="font-size: 20px; color: white;"></i>重置
+    </button>
+</div>
+
+
+<table class="layui-hide" id="testTestPlan" lay-filter="TestPlanDemo"></table>
+
+<!--编辑模态框-->
+<div class="layui-row" id="open_div" style="display:none;">
+
+    <div id="add_form" class="layui-form" lay-filter="edit" action="" style="margin-top: 20px;align:center;">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"> ID </label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input id="deptId" lay-verify="number" readonly="readonly" type="text" name="id"
+                       placeholder="计划ID"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">测试名称</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="tName" type="text" name="test_name"
+                       placeholder="请输入测试名称" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="tBegin" type="text" name="test_begin"
+                       placeholder="请输入开始时间" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="tEnd" type="text" name="test_end"
+                       placeholder="请输入结束时间" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="tRemark" type="text" name="remark"
+                       placeholder="请输入备注" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="margin-left: 150px;">
+                <button class="layui-btn" lay-submit lay-filter="update_submit" style="width: 200px;">立即提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--添加模态框-->
+<div class="layui-row" id="open_add_div" style="display:none;">
+
+    <div id="add_form1" class="layui-form" lay-filter="add" action="" style="margin-top: 20px;align:center;">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">测试名称</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="tName1" type="text" name="test_name1"
+                       placeholder="请输入测试名称" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="tBegin1" type="text" name="test_begin1"
+                       placeholder="请输入开始时间" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="tEnd1" type="text" name="test_end1"
+                       placeholder="请输入结束时间" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-inline" style="width: 65%">
+                <input required lay-verify="required" id="tRemark1" type="text" name="remark1"
+                       placeholder="请输入备注" autofocus
+                       class="layui-input" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="margin-left: 150px;">
+                <button class="layui-btn" lay-submit lay-filter="update_submit1" style="width: 200px;">立即提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--查看模态框-->
+<div class="layui-row" id="open_detail_div" style="display:none;">
+    <!--    <img src="../image/WBNH.png" style="margin-left: 50px; margin-top: 25px;" />-->
+
+    <div id="qrcode" style="margin-left: 50px; margin-top: 25px;">
+
+    </div>
+
+</div>
+
+<!--右侧工具栏-->
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">查看二维码</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+</body>
+
+<!--引入layui-->
+<script src="../layui/layui.js" charset="utf-8"></script>
+<!--引入layui二维码工具-->
+<script src="../layui/js/layui-qrcode.js"></script>
+<script>
+
+    layui.use(['table'], function () {
+        var table = layui.table;
+        var $ = layui.jquery;
+        var util = layui.util;
+        var laypage = layui.laypage,
+            layer = layui.layer;
+        let laydate = layui.laydate;
+
+
+        // 创建渲染实例
+        table.render({
+            elem: '#testTestPlan'
+            , id: 'testPlanSas'
+            , url: '/findAllPlanSas'
+            , method: 'get'
+            , toolbar: true
+            , defaultToolbar: ['filter', 'exports', 'print', {
+                title: '帮助'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , page: {  // 允许分页
+                first: 1,
+                limits: [10, 20, 30, 40, 50],  // 规定每页显示的条数
+                limit: 10,  // 规定默认显示条数
+            }
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', fixed: 'left', width: 80, title: 'ID', sort: true}
+                , {field: 'testName', width: 150, title: '测试名称'}
+                , {field: 'testCode', width: 150, title: '测试邀请码'}
+                , {
+                    field: 'testBegin',
+                    width: 170,
+                    title: '开始时间',
+                    templet: '<div>{{layui.util.toDateString(d.testBegin, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                }
+                , {
+                    field: 'testEnd',
+                    width: 170,
+                    title: '结束时间',
+                    templet: '<div>{{layui.util.toDateString(d.testEnd, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                }
+                , {
+                    field: 'createTime',
+                    width: 170,
+                    title: '创建时间',
+                    templet: '<div>{{layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                }
+                , {field: 'createBy', width: 80, title: '创建人'}
+                , {
+                    field: 'updateTime',
+                    width: 170,
+                    title: '修改时间',
+                    templet: '<div>{{layui.util.toDateString(d.updateTime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                }
+                , {field: 'updateBy', width: 80, title: '修改人'}
+                , {field: 'remark', width: 150, title: '备注'}
+                , {fixed: 'right', title: '操作', width: 205, minWidth: 205, toolbar: '#barDemo'}
+
+            ]]
+
+
+        });
+
+
+        // 监听工具条，实现查看,删除,编辑功能
+        table.on('tool(TestPlanDemo)', function (obj) {    // genshinDemo 表示工具列所在表格的 lay-filter 的值
+            let data = obj.data;
+
+            // 如果为删除
+            if (obj.event === 'del') {  //  绑定事件的名称
+
+                layer.confirm('确认删除ID为' + data.id + '的计划吗?', function (index) {
+
+                    let strIds = "" + data.id;
+
+                    console.log("strIds===" + strIds);
+
+                    layer.close(index);   // 关闭弹框
+                    // 向服务端发送删除命令，获取后端
+                    // alert("123123");
+                    $.ajax({
+                        type: 'get',
+                        url: "/delDataPlanSas",
+                        data: {
+                            ids: strIds,
+                        },
+                        // data: {
+                        //     id: data.id,  // 此处是根据id查询此id是否被删除，故将id传向后端
+                        // },
+                        contentType: 'application/json',
+                        success: function (data) {
+
+                            console.log(data);
+
+                            if (data == 1) {
+                                obj.del();  // 删除对应行（tr）的DOM结构
+                                layer.msg('删除成功！', {icon: 1}, {time: 2000});  // icon 为图标，time为弹出框消息停留时间
+
+                            } else {
+                                layer.msg('删除失败！', {icon: 2}, {time: 2000});
+                            }
+
+                        }
+                    })
+                });
+            }
+
+            // 如果为编辑
+            else if (obj.event === 'edit') {   // 监听工具条，实现编辑功能
+
+                let form = layui.form;
+                form.val("edit", {
+                    "id": data.id,
+                    "test_name": data.testName,
+                    "test_begin": layui.util.toDateString(data.testBegin, "yyyy-MM-dd HH:mm:ss"),
+                    "test_end": layui.util.toDateString(data.testEnd, "yyyy-MM-dd HH:mm:ss"),
+                    "remark": data.remark,
+                });
+
+
+                // 打开模态框
+                layer.open({
+                    type: 1,//类型
+                    area: ['500px', '400px'],  //定义宽和高
+                    title: '编辑计划信息',  //题目
+                    shadeClose: true,  //点击遮罩层关闭
+                    content: $('#open_div'),  //打开的内容
+                    // btn: ['确定', '取消']
+                });
+
+
+                // 拿到修改后的数据，传给后端
+                form.on('submit(update_submit)', function (massage) {
+                    console.log("message为：", massage);
+                    let data1 = massage.field;
+                    $.ajax({
+                        type: "post",
+                        url: "/editDataPlanSas",
+                        // data: JSON.stringify(massage.field),
+                        data: {
+                            "id": data1.id,
+                            // "testCode": data.testCode,  // 拿到表格中的测试邀请码，进行编辑操作，防止邀请码变更
+                            "testName": data1.test_name,
+                            "testBegin": data1.test_begin,
+                            "testEnd": data1.test_end,
+                            "remark": data1.remark,
+
+                            "updateBy": "CM",
+                        },
+
+                        success: function (msg) {
+                            console.log(msg);
+                            layer.closeAll();//关闭所有的弹出层
+                            if (msg == 1) {
+                                layer.msg("修改成功", {icon: 6}, {time: 2000});
+
+                                $(".layui-laypage-btn").click();  // CSH自创
+
+                            } else {
+                                layer.msg("修改失败", {icon: 5}, {time: 2000});
+                            }
+                        }
+                    })
+                    return false
+                });
+
+            }
+
+            // 如果为查看
+            else if (obj.event === 'detail') {
+
+                let id = data.id;
+                let testName = data.testName;
+                let testCode = data.testCode;
+                let testBegin = data.testBegin;
+                let testEnd = data.testEnd;
+                let createTime = data.createTime;
+                let createBy = data.createBy;
+                let updateTime = data.updateTime;
+                let updateBy = data.updateBy;
+                let remark = data.remark;
+
+
+                // 打开模态框
+                layer.open({
+                    type: 1,//类型
+                    area: ['300px', '300px'],  //定义宽和高
+                    title: '查看信息',  //题目
+                    shadeClose: true,  //点击遮罩层关闭
+                    content: $('#open_detail_div'),  //打开的内容
+                });
+
+
+
+                /**
+                 * 时间戳转换为日期字符串方法
+                 * @param {*} timesStamp   // 时间戳
+                 * @param {*} datePattern  // 转换格式
+                 * @returns
+                 */
+                function datesFormat(timesStamp, datePattern = '') {
+                    return (new Date(parseInt(timesStamp)).format(datePattern ? datePattern : 'YYYY-MM-DD hh:mm:ss'))
+                }
+
+                Date.prototype.format = function(fmt) {
+                    var o = {
+                        "M+" : this.getMonth()+1,                 //月份
+                        "D+" : this.getDate(),                    //日
+                        "h+" : this.getHours(),                   //小时
+                        "m+" : this.getMinutes(),                 //分
+                        "s+" : this.getSeconds(),                 //秒
+                        "q+" : Math.floor((this.getMonth()+3)/3), //季度
+                        "S"  : this.getMilliseconds()             //毫秒
+                    }
+                    if(/(Y+)/i.test(fmt)) {
+                        fmt = fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+                    }
+                    for(var k in o) {
+                        if(new RegExp("("+ k +")").test(fmt)) {
+                            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                        }
+                    }
+                    return fmt
+                }
+
+                let testBegin1 = datesFormat(testBegin, 'YYYY年MM月DD日 hh:mm:ss');
+                let testEnd1 = datesFormat(testEnd, 'YYYY年MM月DD日 hh:mm:ss');
+                let createTime1 = datesFormat(createTime, 'YYYY年MM月DD日 hh:mm:ss');
+                let updateTime1 = datesFormat(updateTime, 'YYYY年MM月DD日 hh:mm:ss');
+
+
+
+                let strTest = "http://chenmao.fun:88?id=" + id
+                    + "&testName=" + testName
+                    + "&testCode=" + testCode
+                    + "&testBegin=" + testBegin1
+                    + "&testEnd=" + testEnd1
+                    + "&createTime=" + createTime1
+                    + "&createBy=" + createBy
+                    + "&updateTime=" + updateTime1
+                    + "&updateBy=" + updateBy
+                    + "&remark=" + remark;
+
+
+                $("#qrcode").html('');  // 清空先前的二维码
+
+                $("#qrcode").qrcode({
+                    render: "canvas",  // 也可以是table
+                    width: 200,
+                    height: 200,
+                    text: encodeURI(strTest),
+                });
+
+
+            }
+
+        });
+
+
+        // 添加
+        $("#btn-add").click(function () {
+
+            let form1 = layui.form;
+            form1.val("add", {
+                "test_name1": '',
+                "test_begin1": '',
+                "test_end1": '',
+                "remark1": '',
+            });
+
+
+            // 打开模态框
+            layer.open({
+                type: 1,//类型
+                area: ['500px', '400px'],  //定义宽和高
+                title: '添加计划信息',  //题目
+                shadeClose: true,  //点击遮罩层关闭
+                content: $('#open_add_div'),  //打开的内容
+                // btn: ['确定', '取消']
+            });
+
+
+            // 拿到修改后的数据，传给后端
+            form1.on('submit(update_submit1)', function (massage) {
+                console.log("message为：", massage);
+                console.log(massage.field);
+                let data1 = massage.field;
+                $.ajax({
+                    type: "post",
+                    url: "/addDataPlanSas",
+                    // data: JSON.stringify(massage.field),
+                    data: {
+                        "testName": data1.test_name1,
+                        "testBegin": data1.test_begin1,
+                        "testEnd": data1.test_end1,
+                        "remark": data1.remark1,
+
+                        "createBy": "CSH",
+                    },
+
+                    success: function (msg) {
+                        console.log(msg);
+                        layer.closeAll();//关闭所有的弹出层
+                        if (msg == 1) {
+                            layer.msg("添加成功！", {icon: 6}, {time: 2000});
+
+                            $(".layui-laypage-btn").click();  //刷新数据
+
+                        } else {
+                            layer.msg("添加失败！", {icon: 5}, {time: 2000});
+                        }
+                    }
+                })
+
+
+                return false
+
+            })
+
+        });
+
+
+        // 批量删除数据
+        $("#btn-remove").click(function () {
+            let checkStatus = table.checkStatus('testPlanSas');
+            if (checkStatus.data.length == 0) {
+                console.log("checkData===" + checkStatus.data);
+                parent.layer.msg('请先选择要删除的数据行！', {icon: 2, time: 2000});
+                return;
+            }
+
+            console.log("checkStatus===" + checkStatus.data.id);
+
+            // 对拿到的数据进行处理,转为字符串
+            let strIds = '';
+            for (let i = 0; i < checkStatus.data.length; i++) {
+                strIds += checkStatus.data[i].id + ';';
+            }
+            strIds = strIds.substring(0, strIds.length - 1);  // 去掉 ; 号
+
+            // 弹出确认删除框
+            layer.confirm('确认删除ID为 [' + strIds + '] 的题目吗?', function (index) {
+
+                console.log("strIds===" + strIds)
+
+                parent.layer.msg('删除中...', {icon: 16, shade: 0.3, time: 2000});
+
+                $.ajax({
+                    type: 'get',
+                    url: "/delDataPlanSas",
+                    data: {
+                        ids: strIds,
+                    },
+                    contentType: 'application/json',
+                    success: function (data) {
+
+                        console.log(data);
+
+                        if (data !== 0) {
+                            layer.closeAll('loading');  // 关闭加载动画
+                            window.setTimeout(function () {  // 延时两秒后再执行方法体
+                                layer.msg('删除成功！', {icon: 1}, {time: 1000});  // icon 为图标，time为弹出框消息停留时间
+                            }, 2000);
+
+                            $(".layui-laypage-btn").click();  //刷新数据
+                        } else {
+                            layer.closeAll('loading');  // 关闭加载动画
+                            window.setTimeout(function () {
+                                layer.msg('删除失败！', {icon: 2}, {time: 1000});
+                            }, 2000);
+
+                        }
+
+                    }
+                })
+
+            })
+
+        });
+
+
+        // 渲染日期和时间选择器
+        laydate.render({
+            elem: '#tBegin'
+            , type: 'datetime'  // 日期和时间选择器
+        });
+        laydate.render({
+            elem: '#tEnd'
+            , type: 'datetime'  // 日期和时间选择器
+        });
+        laydate.render({
+            elem: '#tBegin1'
+            , type: 'datetime'  // 日期和时间选择器
+        });
+        laydate.render({
+            elem: '#tEnd1'
+            , type: 'datetime'  // 日期和时间选择器
+        });
+
+
+        // 搜索
+        $('#search').click(function () {
+
+            // alert("6666666666666");
+
+            // 获取两个输入框的值
+            let question = $('#searchQuestion').val();
+            let person = $('#createPerson').val();
+
+            if (question == "" && person == "") {
+                parent.layer.msg('请输入要搜索的内容！', {icon: 2, time: 2000});
+                return false;
+            }
+
+            //执行重载
+            table.reload('testPlanSas', {
+                method: 'get'
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: {
+                    question: question,
+                    person: person,
+                }
+            });
+
+        });
+
+
+        // 搜索重置
+        $('#resetSearch').click(function () {
+
+            // alert("6666666666666");
+
+            $('#searchQuestion').val('');
+            $('#createPerson').val('');
+
+            // 获取两个输入框的值
+            let question = '';
+            let person = '';
+
+            //执行重载
+            table.reload('testPlanSas', {
+                method: 'get'
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: {
+                    question: question,
+                    person: person,
+                }
+            });
+        })
+
+    })
+
+
+</script>
+
+
+</html>

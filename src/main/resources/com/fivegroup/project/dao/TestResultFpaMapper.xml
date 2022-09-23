@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fivegroup.project.dao.TestResultFpaMapper">
+    <delete id="deleteTRF">
+       update tbl_testResult_fpa set flag=1 where id=#{id}
+    </delete>
+    <select id="getAllTRF"  resultType="testResultFpa">
+        select * from view_test_result_fpa
+        <where>
+            <if test="testResult.testerId!=0 and testResult.testerId!=''">
+                and tester_id=#{testerId}
+            </if>
+            <if test="testResult.name!=null and testResult.name!=''">
+                and name like concat('%',#{testResult.name},'%')
+            </if>
+            <if test="testResult.testPlanId!=null and testResult.testPlanId!=''">
+                and test_plan_id like concat('%',#{testResult.testPlanId},'%')
+            </if>
+        </where>
+        limit #{begin},#{limit};
+    </select>
+    <select id="countTRF" resultType="int">
+        select count(*) from view_test_result_fpa
+        <where>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="testPlanId!=null and testPlanId!=''">
+                and test_plan_id like concat('%',#{testPlanId},'%')
+            </if>
+        </where>
+    </select>
+    <select id="getById" resultType="resultDiv">
+        select * from tbl_result_div where id=#{id}
+    </select>
+    <select id="queryAll" resultType="testResultFpa">
+        select * from view_test_result_fpa ;
+    </select>
+</mapper>

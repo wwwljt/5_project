@@ -101,7 +101,8 @@
 
     <div class="layui-footer">
         <!-- 底部固定区域 -->
-        底部固定区域
+        <p>© 2022 FiveG Management System. All Rights Reserved | Design by FiveG</a>
+        </p>
     </div>
 </div>
 <script src="layui/layui.js" charset="utf-8"></script>
@@ -112,7 +113,6 @@
             , layer = layui.layer
             , util = layui.util
             , $ = layui.$;
-
         $(function () {
 
             // 查询用户信息
@@ -147,8 +147,6 @@
                                             menu2 += "<dd>" +
                                                 "<a href='" + val.url + "' target='ifr'>" + val.menuName + "</a>"
                                                 + "</dd>";
-                                            console.log(menu2);
-
                                         });
                                         menu2 += "</dl>"
                                         menu += menu2;

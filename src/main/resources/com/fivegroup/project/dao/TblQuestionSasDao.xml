@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.fivegroup.project.dao.TblQuestionSasDao">
+
+
+    <!--查找所有并分页-->
+    <select id="findQuestionSas" resultType="com.fivegroup.project.entity.TblQuestionSas">
+        select *
+        from tbl_question_sas
+        <where>
+            <if test="question != null">
+                and question like '%' #{question} '%'
+            </if>
+            <if test="person != null">
+                and create_by like '%' #{person} '%'
+            </if>
+        </where>
+        limit #{page}, #{limit}
+    </select>
+
+    <!--删除-->
+    <delete id="delTblQuestionSas" parameterType="int">
+        delete
+        from tbl_question_sas
+        where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")" >
+            #{ids}
+        </foreach>
+    </delete>
+
+
+    <!--添加-->
+    <insert id="addQuestionSas">
+        insert into tbl_question_sas (question, option_a, option_b, option_c, option_d, type, `status`, create_time,create_by)
+        values (#{tblQuestionSas.question},
+                #{tblQuestionSas.optionA},
+                #{tblQuestionSas.optionB},
+                #{tblQuestionSas.optionC},
+                #{tblQuestionSas.optionD},
+                #{tblQuestionSas.type},
+                #{tblQuestionSas.status},
+                #{tblQuestionSas.createTime},
+                #{tblQuestionSas.createBy})
+    </insert>
+
+
+    <!--编辑-->
+    <update id="editQuestionSas">
+        update tbl_question_sas
+        set question    = #{tblQuestionSas.question},
+            option_a    = #{tblQuestionSas.optionA},
+            option_b    = #{tblQuestionSas.optionB},
+            option_c    = #{tblQuestionSas.optionC},
+            option_d    = #{tblQuestionSas.optionD},
+            type        = #{tblQuestionSas.type},
+            `status`    = #{tblQuestionSas.status},
+            update_time = #{tblQuestionSas.updateTime},
+            update_by   = #{tblQuestionSas.updateBy}
+        where id = #{tblQuestionSas.id}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.fivegroup.project.dao.TblTestPlanSasDao">
+
+
+    <!--查找所有并分页-->
+    <select id="findAll" resultType="com.fivegroup.project.entity.TblTestPlanSas">
+        select *
+        from tbl_test_plan_sas
+        <where>
+            <if test="testName != null">
+                and test_name like '%' #{testName} '%'
+            </if>
+            <if test="person != null">
+                and create_by like '%' #{person} '%'
+            </if>
+        </where>
+        limit #{page}, #{limit}
+    </select>
+
+
+    <!--删除-->
+    <delete id="delData" parameterType="int">
+        delete
+        from tbl_test_plan_sas
+        where id in
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+
+    <!--添加-->
+    <insert id="addData">
+        insert into tbl_test_plan_sas (test_code, test_name, test_begin, test_end, create_time, create_by, remark)
+        values (#{tblTestPlanSas.testCode},
+                #{tblTestPlanSas.testName},
+                #{tblTestPlanSas.testBegin},
+                #{tblTestPlanSas.testEnd},
+                #{tblTestPlanSas.createTime},
+                #{tblTestPlanSas.createBy},
+                #{tblTestPlanSas.remark})
+    </insert>
+
+
+    <!--编辑-->
+    <update id="editData">
+        update tbl_test_plan_sas
+        set test_name   = #{tblTestPlanSas.testName},
+            test_begin  = #{tblTestPlanSas.testBegin},
+            test_end    = #{tblTestPlanSas.testEnd},
+            update_time = #{tblTestPlanSas.updateTime},
+            update_by   = #{tblTestPlanSas.updateBy},
+            remark      = #{tblTestPlanSas.remark}
+        where id = #{tblTestPlanSas.id}
+    </update>
+
+
+</mapper>

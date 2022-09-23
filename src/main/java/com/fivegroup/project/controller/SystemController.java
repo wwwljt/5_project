@@ -39,7 +39,10 @@ public class SystemController {
 		HttpSession session = request.getSession();
 		// 清除 token
 		session.removeAttribute("token");
+		session.invalidate();
+		System.out.println("session 清空了");
 		return "forward:login.html";
+		
 	}
 	
 

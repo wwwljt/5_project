@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -104,13 +107,15 @@ public class UserInfoController {
 	 * @return
 	 */
 	@GetMapping("/login")
-	public Result login(String username, String password, HttpServletRequest request) {
+	public Result login(String username, String password, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("username = " + username);
 		System.out.println("password = " + password);
 		System.out.println("登陆执行");
 		Userinfo userInfo = userInfoService.login(username, password);
 		if (userInfo == null) {
-			throw new RuntimeException("用户名或者密码有误");
+			System.out.println("用户名或者密码有误");
+			response.sendRedirect("login.html");
+			return Result.fail();
 		} else {
 			request.getSession().setAttribute("token", JwtHelper.createToken(username));
 			System.out.println("token = " + JwtHelper.createToken(username));
@@ -129,7 +134,12 @@ public class UserInfoController {
 		
 		String token = (String) request.getSession().getAttribute("token");
 		String userName = JwtHelper.getUserName(token);
-		Userinfo userInfo = userInfoService.getUserOne(userName);
+		Userinfo userInfo = null;
+		try {
+			userInfo = userInfoService.getUserOne(userName);
+		} catch (Exception e) {
+			System.out.println("e.getMessage() = " + e.getMessage());
+		}
 		System.out.println("userInfo = " + userInfo);
 		if (userInfo == null) {
 			throw new RuntimeException("用户不存在");

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<html>
+<head>
+    <title>fpa报表统计</title>
+<!--    <link href="layui/css/layui.css" rel="stylesheet">-->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.1/dist/echarts.min.js"></script>
+    <script src="../layui/js/html2canvas.js"></script>
+</head>
+<body style="overflow-x:hidden;overflow-y:hidden;">
+<!-- 为 ECharts 准备一个定义了宽高的 DOM，必须定                   义宽高才可以显示 -->
+<div style="width: 100vw;height: 100vh;verflow-x:hidden;overflow-y:hidden;" id="shopping"></div>
+</body>
+<script src="../layui/js/jquery-3.6.0.min.js"></script>
+<!--<script src="layui/layui.js" charset="utf-8"></script>-->
+<script src="../layui/layui.js"></script>
+<script type="text/javascript">
+
+        $.ajax({
+
+            url: "/result/queryAll",
+            dataType: "json",
+            type: "post",
+            success: function (re) {
+                var shopping = echarts.init(document.getElementById('shopping'), 'dark');
+
+                // 指定图表的配置项和数据
+                var optionShopping = {
+
+                    title: {
+                        text: 'Fpa性格测试',
+                        subtext: '测试人数：' + (Number(re.data.red) + Number(re.data.yellow) + Number(re.data.blue) + Number(re.data.green) + Number(re.data.command)),
+                        left: 'left'
+                    },
+                    tooltip: {},
+                    legend: {
+                        left: 'center',
+                        data: ['人数']
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: ['红色性格', '黄色性格', '蓝色性格', '绿色性格', '复合性格']
+                    },
+                    yAxis: {
+                        type: 'value',
+                        gridIndex: 0
+                    },
+                    grid: {top: '50%'},
+
+                    series: [
+                        //折线图
+                        {
+                            name: '人数',
+                            data: [re.data.red, re.data.yellow, re.data.blue, re.data.green, re.data.command],
+                            type: 'line',
+                            symbolSize: 10,
+                            lineStyle: {
+                                color: '#39c5bb',
+                                width: 2,
+                            },
+                            itemStyle: {
+                                color: '#66ccff'
+                            },
+                            smooth: true
+                        },
+                        //饼图
+                        {
+                            name: 'Access From',
+                            type: 'pie',
+                            radius: '25%',
+                            center: ['50%', '20%'],
+                            data: [
+                                {value: re.data.red, name: '红色性格'},
+                                {value: re.data.yellow, name: '黄色性格'},
+                                {value: re.data.blue, name: '蓝色性格'},
+                                {value: re.data.green, name: '绿色性格'},
+                                {value: re.data.command, name: '复合性格'},
+                            ],
+                            itemStyle: {
+                                normal: {//柱子颜色
+                                    color: function (colors) {
+                                        var colorList = [
+                                            '#dc4242',
+                                            '#e3e84c',
+                                            '#4c67d2',
+                                            '#69d54e',
+                                            '#945FCF'];
+                                        return colorList[colors.dataIndex];
+                                    }
+
+                                }
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                shopping.setOption(optionShopping);
+            }
+        })
+
+</script>
+
+</html>
