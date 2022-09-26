@@ -66,6 +66,10 @@
 
 
     </select>
+    <!--查询条数-->
+    <select id="selectAll" resultType="java.lang.Integer">
+        select count(*) from view_test_result_sas
+    </select>
 
 
     <!--删除-->
@@ -75,6 +79,15 @@
         where id in
         <foreach collection="list" item="ids" open="(" separator="," close=")">
             #{ids}
+        </foreach>
+    </delete>
+    <!--测试结果删除-->
+    <delete id="delTestData">
+        delete
+        from tbl_test_result_sas
+        where tester_id in
+        <foreach collection="list" item="idt" open="(" separator="," close=")">
+            #{idt}
         </foreach>
     </delete>
 
@@ -129,6 +142,7 @@
                group by `aaa`.`tester_id`) `xxx` left join `tbl_tester_sas` `usertest`
               on ((`xxx`.`tester_id` = `usertest`.`id`)))
     </select>
+
 
 
 </mapper>

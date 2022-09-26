@@ -33,6 +33,15 @@ public class TblTestPlanSasServiceImpl implements TblTestPlanSasService {
         return all;
     }
 
+    // 查询条数
+    @Override
+    public int selectAll() {
+
+        int i = tblTestPlanSasDao.selectAll();
+
+        return i;
+    }
+
     // 删除
     @Override
     public int delData(List ids) {

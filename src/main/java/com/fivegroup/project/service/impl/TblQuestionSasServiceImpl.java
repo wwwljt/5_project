@@ -38,6 +38,14 @@ public class TblQuestionSasServiceImpl implements TblQuestionSasService {
 
     }
 
+    @Override
+    public int selectAll() {
+
+        int i = tblQuestionSasDao.selectAll();
+
+        return i;
+    }
+
 
     // 删除一条数据
     @Override

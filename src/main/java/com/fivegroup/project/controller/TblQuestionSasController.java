@@ -33,10 +33,13 @@ public class TblQuestionSasController {
         System.out.println("String question, String person========="+question + "," + person);
 
 
+        int i = tblQuestionSasService.selectAll();
+
+
         LayuiBean<TblQuestionSas> questionSasBean = new LayuiBean<>();
         questionSasBean.setCode(0);
         questionSasBean.setMsg("");
-        questionSasBean.setCount(50);
+        questionSasBean.setCount(i);
         questionSasBean.setData(questionSasList);
 
         return questionSasBean;

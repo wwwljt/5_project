@@ -20,6 +20,12 @@
     </select>
 
 
+    <!--查询条数-->
+    <select id="selectAll" resultType="java.lang.Integer">
+        select count(*) from tbl_test_plan_sas
+    </select>
+
+
     <!--删除-->
     <delete id="delData" parameterType="int">
         delete

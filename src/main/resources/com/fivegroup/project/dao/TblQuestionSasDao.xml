@@ -19,6 +19,9 @@
         </where>
         limit #{page}, #{limit}
     </select>
+    <select id="selectAll" resultType="java.lang.Integer">
+        select count(*) from tbl_question_sas
+    </select>
 
     <!--删除-->
     <delete id="delTblQuestionSas" parameterType="int">

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>测试者登录</title>
+
+    <link rel="stylesheet" media="all" href="../layui/css/layui.css">
+    <script src="../layui/layui.js"></script>
+    <script src="../js/echarts-5.3.3.js"></script>
+    <script src="../js/html2canvas.js"></script>
+    <script src="../js/jspdf.debug.js"></script>
+    <script src="../js/jq.js"></script>
+
+    <style>
+        html, body { background: rgba(2, 2, 1, 0.93); margin: 0; padding:0;}
+        canvas { width: 100%; height: 100%; position: absolute; }
+
+        /* Demo Buttons Style */
+        .codrops-demos {
+            font-size: 0.8em;
+            text-align:center;
+            position:absolute;
+            z-index:99;
+            width:96%;
+        }
+
+        .codrops-demos a {
+            display: inline-block;
+            margin: 0.35em 0.1em;
+            padding: 0.5em 1.2em;
+            outline: none;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            border-radius: 2px;
+            font-size: 110%;
+            border: 2px solid transparent;
+            color:#fff;
+        }
+
+        .codrops-demos a:hover,
+        .codrops-demos a.current-demo {
+            border-color: #383a3c;
+        }
+
+        /*form表单*/
+        .layui-form{
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+            width: 420px;
+            height: 280px;
+            min-height: 280px;
+            max-height: 320px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            padding: 20px;
+            z-index: 130;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.11);
+            font-size: 16px;
+        }
+        .topic{
+            text-align: center;
+            color: #ffffff;
+            font-size: 25px;
+            font-weight: normal;
+        }
+
+        .my-form-item{
+            margin:25px -50px;
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+        .my-input{
+            border-radius: 45px;
+            width: 300px;
+            height: 40px;
+            font-size: 15px;
+            color: white;
+            background-color: rgba(255, 255, 255, 0);
+            border: rgba(255, 255, 255, 0.2) 2px solid;
+            text-align: center;
+        }
+
+        .layui-btn{
+            border-radius: 45px;
+            width: 300px;
+            height: 40px;
+            font-size: 15px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0);
+            border: rgba(255, 255, 255, 0.2) 2px solid;
+        }
+        /*a:hover{*/
+        /*    text-decoration: underline;*/
+        /*}*/
+        @media screen and (max-device-width: 700px) {
+
+            .container{
+                width: 90%;
+            }
+            .my-form-item{
+                margin:20px -75px;
+                width: 70%;
+                background-color: rgba(0, 0, 0, 0);
+            }
+            /*.topic{
+                width: 70%;
+            }*/
+        }
+    </style>
+</head>
+<body>
+
+<canvas></canvas>
+<form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="container">
+        <p class="topic">AAA测试</p>
+        <div class="layui-form-item my-form-item">
+            <div class="layui-input-block">
+
+                <input class="layui-input my-input " type="text" name="name" value=""   lay-verify="required|myName" placeholder="请输入姓名" autocomplete="off" >
+
+            </div>
+        </div>
+        <div class="layui-form-item my-form-item">
+            <div class="layui-input-block">
+                <input class="layui-input my-input" type="text" name="phone" value="" lay-verify="required|phone|number"   placeholder="请输入手机号" autocomplete="off" >
+            </div>
+        </div>
+        <div class="layui-form-item my-form-item">
+            <div class="layui-input-block">
+                <input class="layui-input my-input" type="text" name="testCode" value="" lay-verify="required|number"   placeholder="请输入邀请码" autocomplete="off" >
+            </div>
+        </div>
+        <div class="layui-form-item my-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="testFormFilter">开始测试</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<script>
+    layui.use(['form','layer','jquery'], function(){
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        //校验姓名
+        form.verify({
+            myName: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!new RegExp("^[\u4E00-\u9FA5]{2,4}$").test(value)){
+                    return '姓名只能是2到4位的汉字';
+                }
+
+            }
+        });
+
+
+        form.on('submit(testFormFilter)', function(data){
+            //发送ajax到后端
+            $.ajax({
+                url:"${pageContext.request.contextPath}/front/checkTest.do",
+                type: "POST",
+                dataType:"JSON",
+                contentType:"application/json;charset=UTF-8",
+                data:JSON.stringify(data.field),
+                success:function (ret) {
+                    console.log(ret);
+                    if(ret.code==0){
+                            //获取测试者信息保存到本地存储中
+                            //localStorage.setItem("tester",JSON.stringify(ret.data))
+                            window.location.href="${pageContext.request.contextPath}/front/findQuestion.do";
+                    }else
+                    {
+                        alert(ret.msg);
+
+                    }
+
+                }
+            })
+            return false; //阻止表单跳转。
+        });
+    });
+
+    $(function(){
+        var canvas = document.querySelector('canvas'),
+            ctx = canvas.getContext('2d')
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.lineWidth = .3;
+        ctx.strokeStyle = (new Color(150)).style;
+
+        var mousePosition = {
+            x: 30 * canvas.width / 100,
+            y: 30 * canvas.height / 100
+        };
+
+        var dots = {
+            nb: 750,
+            distance: 50,
+            d_radius: 100,
+            array: []
+        };
+
+        function colorValue(min) {
+            return Math.floor(Math.random() * 255 + min);
+        }
+
+        function createColorStyle(r,g,b) {
+            return 'rgba(' + r + ',' + g + ',' + b + ', 0.8)';
+        }
+
+        function mixComponents(comp1, weight1, comp2, weight2) {
+            return (comp1 * weight1 + comp2 * weight2) / (weight1 + weight2);
+        }
+
+        function averageColorStyles(dot1, dot2) {
+            var color1 = dot1.color,
+                color2 = dot2.color;
+
+            var r = mixComponents(color1.r, dot1.radius, color2.r, dot2.radius),
+                g = mixComponents(color1.g, dot1.radius, color2.g, dot2.radius),
+                b = mixComponents(color1.b, dot1.radius, color2.b, dot2.radius);
+            return createColorStyle(Math.floor(r), Math.floor(g), Math.floor(b));
+        }
+
+        function Color(min) {
+            min = min || 0;
+            this.r = colorValue(min);
+            this.g = colorValue(min);
+            this.b = colorValue(min);
+            this.style = createColorStyle(this.r, this.g, this.b);
+        }
+
+        function Dot(){
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+
+            this.vx = -.5 + Math.random();
+            this.vy = -.5 + Math.random();
+
+            this.radius = Math.random() * 2;
+
+            this.color = new Color();
+
+        }
+
+        Dot.prototype = {
+            draw: function(){
+                ctx.beginPath();
+                ctx.fillStyle = this.color.style;
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fill();
+            }
+        };
+
+        function createDots(){
+            for(i = 0; i < dots.nb; i++){
+                dots.array.push(new Dot());
+            }
+        }
+
+        function moveDots() {
+            for(i = 0; i < dots.nb; i++){
+
+                var dot = dots.array[i];
+
+                if(dot.y < 0 || dot.y > canvas.height){
+                    dot.vx = dot.vx;
+                    dot.vy = - dot.vy;
+                }
+                else if(dot.x < 0 || dot.x > canvas.width){
+                    dot.vx = - dot.vx;
+                    dot.vy = dot.vy;
+                }
+                dot.x += dot.vx;
+                dot.y += dot.vy;
+            }
+        }
+
+        function connectDots() {
+            for(i = 0; i < dots.nb; i++){
+                for(j = 0; j < dots.nb; j++){
+                    i_dot = dots.array[i];
+                    j_dot = dots.array[j];
+
+                    if((i_dot.x - j_dot.x) < dots.distance && (i_dot.y - j_dot.y) < dots.distance && (i_dot.x - j_dot.x) > - dots.distance && (i_dot.y - j_dot.y) > - dots.distance){
+                        if((i_dot.x - mousePosition.x) < dots.d_radius && (i_dot.y - mousePosition.y) < dots.d_radius && (i_dot.x - mousePosition.x) > - dots.d_radius && (i_dot.y - mousePosition.y) > - dots.d_radius){
+                            ctx.beginPath();
+                            ctx.strokeStyle = averageColorStyles(i_dot, j_dot);
+                            ctx.moveTo(i_dot.x, i_dot.y);
+                            ctx.lineTo(j_dot.x, j_dot.y);
+                            ctx.stroke();
+                            ctx.closePath();
+                        }
+                    }
+                }
+            }
+        }
+
+        function drawDots() {
+            for(i = 0; i < dots.nb; i++){
+                var dot = dots.array[i];
+                dot.draw();
+            }
+        }
+
+        function animateDots() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            moveDots();
+            connectDots();
+            drawDots();
+
+            requestAnimationFrame(animateDots);
+        }
+
+        $('canvas').on('mousemove', function(e){
+            mousePosition.x = e.pageX;
+            mousePosition.y = e.pageY;
+        });
+
+        $('canvas').on('mouseleave', function(e){
+            mousePosition.x = canvas.width / 2;
+            mousePosition.y = canvas.height / 2;
+        });
+
+        createDots();
+        requestAnimationFrame(animateDots);
+    });
+</script>
+</body>
+</html>
