@@ -19,9 +19,14 @@ public interface TblTesterSasDao {
     List<TblTesterSas> findAll(@Param("page") int page, @Param("limit") int limit, @Param("name") String name, @Param("planId") String planId);
 
 
+    // 查询条数
+    int selectAll();
+
+
     // 删除一条数据
     int delData(List ids);
-
+    // 测试结果删除
+    int delTestData(List idt);
 
     // 查看饼图信息，报表统计
     List<TblTesterSas> findPie();

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fivegroup.project.dao.TblTestPlanFpaMapper">
+    <insert id="insertTTp" parameterType="tblTestPlanFpa" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        tbl_test_plan_fpa(test_name,test_code,test_begin,test_end,create_time,create_by,update_time,update_by,remark,type)
+        values
+        (#{testName},#{testCode},#{testBegin},#{testEnd},#{createTime},#{createBy},#{updateTime},#{updateBy},#{remark},#{type})
+        <!--           insert into tbl_test_plan_fpa(id,test_name,option_a,option_b,option_c,option_d,type,status)
+                values (#{id},#{question},#{optionA},#{optionB},#{optionC},#{optionD},#{type},#{status})-->
+    </insert>
+    <update id="updateTTp" parameterType="tblTestPlanFpa">
+        update tbl_test_plan_fpa
+        <set>
+            <if test="testName!=null">
+                test_name=#{testName},
+            </if>
+            <if test="testCode!=null">
+                test_code=#{testCode},
+            </if>
+            <if test="testBegin!=null">
+                test_begin=#{testBegin},
+            </if>
+            <if test="testEnd!=null">
+                test_end=#{testEnd},
+            </if>
+
+            <if test="createTime!=null">
+                create_time=#{createTime},
+            </if>
+            <if test="createBy!=null">
+                create_by=#{createBy},
+            </if>
+            <if test="updateTime!=null">
+                update_time=#{updateTime},
+            </if>
+            <if test="updateBy!=null">
+                update_by=#{updateBy},
+            </if>
+            <if test="remark!=null">
+                remark=#{remark},
+            </if>
+            <if test="type!=null">
+                type=#{tpye},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteTTp" parameterType="tblTestPlanFpa">
+        update tbl_test_plan_fpa
+        set isdelete=1
+        where id = #{id}
+    </delete>
+    <select id="getAllTTp" resultType="tblTestPlanFpa">
+        select * from tbl_test_plan_fpa
+        <where>
+            isdelete=0
+            <if test="testPlanFpa.testName!=null and testPlanFpa.testName!=''">
+                and test_name like concat('%',#{testPlanFpa.testName},'%')
+            </if>
+            <if test="testPlanFpa.createBy!=null and testPlanFpa.createBy!=''">
+                and create_by like concat('%',#{questionFpa.createBy},'%')
+            </if>
+        </where>
+        limit #{begin},#{limit};
+    </select>
+
+    <select id="countTTp" resultType="int">
+        select count(*) from tbl_test_plan_fpa
+        <where>
+            isdelete=0
+            <if test="testName!=null and testName!=''">
+                and test_name like concat('%',#{testName},'%')
+            </if>
+            <if test="createBy!=null and createBy!=''">
+                and create_by like concat('%',#{createBy},'%')
+            </if>
+        </where>
+    </select>
+    <select id="findFpaTesterByPhone" resultType="com.fivegroup.project.entity.TblTesterFpa">
+        select *
+        from w_gl.tbl_tester_fpa
+        where phone = #{phone}
+    </select>
+
+    <!--    <select id="getAll" resultType="question_fpa">-->
+    <!--        select * from tbl_question_fpa-->
+    <!--    </select>-->
+
+</mapper>

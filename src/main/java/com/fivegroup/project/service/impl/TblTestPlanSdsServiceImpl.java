@@ -2,6 +2,8 @@ package com.fivegroup.project.service.impl;
 
 import com.fivegroup.project.dao.TblTestPlanSdsDao;
 import com.fivegroup.project.entity.TblTestPlanSds;
+import com.fivegroup.project.entity.TblTesterSds;
+import com.fivegroup.project.entity.ViewTestPlan;
 import com.fivegroup.project.service.TblTestPlanSdsService;
 import com.fivegroup.project.util.JwtHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,28 @@ import java.util.Random;
 public class TblTestPlanSdsServiceImpl implements TblTestPlanSdsService {
 	@Autowired
 	private TblTestPlanSdsDao tblTestPlanSdsDao;
+	
+	/**
+	 * 根据 手机号查找测试计划
+	 *
+	 * @param phone
+	 * @return
+	 */
+	@Override
+	public List<TblTesterSds> findSdsTesterByPhone(String phone) {
+		return tblTestPlanSdsDao.findSdsTesterByPhone(phone);
+	}
+	
+	/**
+	 * 根据邀请码获取测试计划
+	 *
+	 * @param testCode
+	 * @return
+	 */
+	@Override
+	public ViewTestPlan queryByTestCode(String testCode) {
+		return tblTestPlanSdsDao.queryByTestCode(testCode);
+	}
 	
 	/**
 	 * 获取所有测试计划
@@ -55,6 +79,7 @@ public class TblTestPlanSdsServiceImpl implements TblTestPlanSdsService {
 		Random random = new Random();
 		int num = random.nextInt(899999) + 100000;
 		tblTestPlanSds.setTestCode(num);
+		System.out.println("tblTestPlanSds = ***************" + tblTestPlanSds);
 		return tblTestPlanSdsDao.save(tblTestPlanSds);
 	}
 	

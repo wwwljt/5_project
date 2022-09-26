@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/layui/css/layui.css" charset="utf-8">
     <style>
     </style>
+
 </head>
 <body>
 <form class="layui-form" action="" id="searchFrom" style="margin-top: 8px ;margin-left: 12px">
@@ -181,7 +182,7 @@
         //监听行工具事件
         table.on('tool(test)', function (obj) {
             var data = obj.data;
-            alert(data.id + "  " + data.name + "   " + data.sn);
+            // alert(data.id + "  " + data.name + "   " + data.sn);
             //console.log(obj)
             if (obj.event === 'del') {
                 layer.confirm('真的删除行么', function (index) {
@@ -276,7 +277,6 @@
 
         //批量删除
         $("#removeBatch").click(function (data) {
-            alert("sdfsdf")
             var checkStatus = table.checkStatus('rolesReload'),
                 data = checkStatus.data,
                 ids = []
@@ -346,6 +346,7 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.1.1/dist/echarts.min.js"></script>
+<script src="https://cdn.staticfile.org/echarts/5.3.3/echarts.js"></script>
+<script src="../layui/js/echarts-5.3.3.js"></script>
 </body>
 </html>

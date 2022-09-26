@@ -32,10 +32,12 @@ public class TblTesterSasController {
 
         System.out.println("name+planId===" + name + ","+planId);
 
+        int i = tblTesterSasService.selectAll();
+
         LayuiBean<TblTesterSas> SasBean = new LayuiBean<>();
         SasBean.setCode(0);
         SasBean.setMsg("");
-        SasBean.setCount(50);
+        SasBean.setCount(i);
         SasBean.setData(testerSasServiceAll);
 
 
@@ -59,7 +61,7 @@ public class TblTesterSasController {
 
         int i = tblTesterSasService.delData(idsList);
 
-        return 1;
+        return i;
     }
 
 

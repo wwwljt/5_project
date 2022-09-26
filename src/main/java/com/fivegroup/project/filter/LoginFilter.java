@@ -40,7 +40,7 @@ public class LoginFilter implements Filter {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		//判断访问资源路径是否和登录注册相关
 		//1,在数组中存储登陆和注册相关的资源路径
-		String[] urls = {"/login.html", "/img/", "/css/", "/layui/", "/js/", "/user/login","/exit"};
+		String[] urls = {"/login.html", "/img/", "/css/", "/layui/", "/js/", "/user/login","/exit","/front/","/front/test/*","*.jsp"};
 		// 获取 当前访问的资源路径
 		String url = httpServletRequest.getRequestURL().toString();
 		// 遍历数组， 获取到每一个需要放行的资源路径是否包含，需要放行的资源路径

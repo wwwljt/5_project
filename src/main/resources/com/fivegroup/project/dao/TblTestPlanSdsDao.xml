@@ -79,4 +79,14 @@
         select *
         from w_gl.tbl_test_plan_sds;
     </select>
+    <select id="queryByTestCode" resultType="com.fivegroup.project.entity.ViewTestPlan">
+        select *
+        from w_gl.view_test_plan
+        where test_code = #{testCode}
+    </select>
+    <select id="findSdsTesterByPhone" resultType="com.fivegroup.project.entity.TblTesterSds">
+        select *
+        from w_gl.tbl_tester_sds
+        where phone = #{phone}
+    </select>
 </mapper>

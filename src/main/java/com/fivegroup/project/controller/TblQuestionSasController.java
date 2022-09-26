@@ -33,10 +33,13 @@ public class TblQuestionSasController {
         System.out.println("String question, String person========="+question + "," + person);
 
 
+        int i = tblQuestionSasService.selectAll();
+
+
         LayuiBean<TblQuestionSas> questionSasBean = new LayuiBean<>();
         questionSasBean.setCode(0);
         questionSasBean.setMsg("");
-        questionSasBean.setCount(50);
+        questionSasBean.setCount(i);
         questionSasBean.setData(questionSasList);
 
         return questionSasBean;
@@ -60,7 +63,7 @@ public class TblQuestionSasController {
 
         int i = tblQuestionSasService.delTblQuestionSas(idsList);
 
-        return 1;
+        return i;
     }
 
 
@@ -72,7 +75,7 @@ public class TblQuestionSasController {
 
         int i = tblQuestionSasService.addQuestionSas(tblQuestionSas);
 
-        return 1;
+        return i;
     }
 
 
@@ -83,8 +86,8 @@ public class TblQuestionSasController {
         //System.out.println("==============================="+tblQuestionSas);
 
         int i = tblQuestionSasService.editQuestionSas(tblQuestionSas);
-        System.out.println("i --------------------------------------------------------------------= " + i);
-        return 1;
+
+        return i;
     }
 
 

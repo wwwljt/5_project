@@ -370,7 +370,6 @@
                 });
 
 
-
                 /**
                  * 时间戳转换为日期字符串方法
                  * @param {*} timesStamp   // 时间戳
@@ -381,22 +380,22 @@
                     return (new Date(parseInt(timesStamp)).format(datePattern ? datePattern : 'YYYY-MM-DD hh:mm:ss'))
                 }
 
-                Date.prototype.format = function(fmt) {
+                Date.prototype.format = function (fmt) {
                     var o = {
-                        "M+" : this.getMonth()+1,                 //月份
-                        "D+" : this.getDate(),                    //日
-                        "h+" : this.getHours(),                   //小时
-                        "m+" : this.getMinutes(),                 //分
-                        "s+" : this.getSeconds(),                 //秒
-                        "q+" : Math.floor((this.getMonth()+3)/3), //季度
-                        "S"  : this.getMilliseconds()             //毫秒
+                        "M+": this.getMonth() + 1,                 //月份
+                        "D+": this.getDate(),                    //日
+                        "h+": this.getHours(),                   //小时
+                        "m+": this.getMinutes(),                 //分
+                        "s+": this.getSeconds(),                 //秒
+                        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                        "S": this.getMilliseconds()             //毫秒
                     }
-                    if(/(Y+)/i.test(fmt)) {
-                        fmt = fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+                    if (/(Y+)/i.test(fmt)) {
+                        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
                     }
-                    for(var k in o) {
-                        if(new RegExp("("+ k +")").test(fmt)) {
-                            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                    for (var k in o) {
+                        if (new RegExp("(" + k + ")").test(fmt)) {
+                            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
                         }
                     }
                     return fmt
@@ -406,7 +405,6 @@
                 let testEnd1 = datesFormat(testEnd, 'YYYY年MM月DD日 hh:mm:ss');
                 let createTime1 = datesFormat(createTime, 'YYYY年MM月DD日 hh:mm:ss');
                 let updateTime1 = datesFormat(updateTime, 'YYYY年MM月DD日 hh:mm:ss');
-
 
 
                 let strTest = "http://chenmao.fun:88?id=" + id
@@ -427,7 +425,7 @@
                     render: "canvas",  // 也可以是table
                     width: 200,
                     height: 200,
-                    text: encodeURI(strTest),
+                    text: "http://118.190.104.39:8080/springmvc/views/front/testLogin.jsp",
                 });
 
 

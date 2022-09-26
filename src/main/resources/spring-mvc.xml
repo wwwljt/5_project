@@ -30,7 +30,8 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-    <mvc:resources mapping="/**" location="/WEB-INF/static/"/>
+    <mvc:resources mapping="/**" location="/WEB-INF/static/" />
+
     <!--文件上传解析器-->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

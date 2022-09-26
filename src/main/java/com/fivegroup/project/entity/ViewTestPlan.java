@@ -3,31 +3,30 @@ package com.fivegroup.project.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.io.Serializable;
 
 /**
- * 测试计划fpa(TblTestPlanSds)实体类
+ * (ViewTestPlan)实体类
  *
- * @author makejava
- * @since 2022-09-14 20:14:42
+ * @author Www
+ * @since 2022-09-24 17:36:42
  */
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TblTestPlanSds implements Serializable {
-	private static final long serialVersionUID = -95224344018310875L;
+@Data
+public class ViewTestPlan implements Serializable {
+	private static final long serialVersionUID = 225950356101523400L;
 	
 	private Integer id;
 	
 	private String testName;
 	
 	private Integer testCode;
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	
 	private Date testBegin;
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	
 	private Date testEnd;
 	
 	private Date createTime;
@@ -41,6 +40,7 @@ public class TblTestPlanSds implements Serializable {
 	private String remark;
 	
 	private String type;
+	
 	
 	
 	

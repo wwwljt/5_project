@@ -1,6 +1,8 @@
 package com.fivegroup.project.service;
 
 import com.fivegroup.project.entity.TblTestPlanSds;
+import com.fivegroup.project.entity.TblTesterSds;
+import com.fivegroup.project.entity.ViewTestPlan;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -36,10 +38,12 @@ public interface TblTestPlanSdsService {
 	
 	/**
 	 * 根据 id 批量删除
+	 *
 	 * @param ids
 	 * @return
 	 */
 	Integer deleteTblTestPlanSds(Integer[] ids);
+	
 	/**
 	 * 修改
 	 *
@@ -50,15 +54,31 @@ public interface TblTestPlanSdsService {
 	
 	/**
 	 * 保存
+	 *
 	 * @param tblTestPlanSds
 	 * @param request
 	 * @return
 	 */
 	Integer save(TblTestPlanSds tblTestPlanSds, HttpServletRequest request);
+	
 	/**
 	 * 获取所有测试计划
 	 *
 	 * @return
 	 */
 	List<TblTestPlanSds> getTestPlanSdsAll();
+	
+	/**
+	 * 根据邀请码获取测试计划
+	 *
+	 * @param testCode
+	 * @return
+	 */
+	ViewTestPlan queryByTestCode(String testCode);
+	/**
+	 * 根据 手机号查找测试计划
+	 * @param phone
+	 * @return
+	 */
+	List<TblTesterSds> findSdsTesterByPhone(String phone);
 }

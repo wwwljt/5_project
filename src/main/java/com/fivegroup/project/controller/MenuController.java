@@ -47,6 +47,7 @@ public class MenuController {
 		System.out.println("parentId = " + parentId);
 		System.out.println("roleId = " + roleId);
 		List<TblMenu> tblMenuList = menuService.getTestByParentId(parentId, roleId);
+		System.out.println("tblMenuList = " + tblMenuList);
 		return Result.ok(tblMenuList);
 	}
 	

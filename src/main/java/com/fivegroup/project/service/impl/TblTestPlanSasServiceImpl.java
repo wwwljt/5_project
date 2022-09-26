@@ -2,6 +2,7 @@ package com.fivegroup.project.service.impl;
 
 import com.fivegroup.project.dao.TblTestPlanSasDao;
 import com.fivegroup.project.entity.TblTestPlanSas;
+import com.fivegroup.project.entity.TblTesterSas;
 import com.fivegroup.project.service.TblTestPlanSasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,12 @@ public class TblTestPlanSasServiceImpl implements TblTestPlanSasService {
 
     @Autowired
     private TblTestPlanSasDao tblTestPlanSasDao;
-
-
+    @Override
+    public List<TblTesterSas> findSasTesterByPhone(String phone) {
+        return tblTestPlanSasDao.findSasTesterByPhone(phone);
+    }
+    
+    
     // 查找
     @Override
     public List<TblTestPlanSas> findAll(int page, int limit, String testName, String person) {
@@ -31,6 +36,15 @@ public class TblTestPlanSasServiceImpl implements TblTestPlanSasService {
         List<TblTestPlanSas> all = tblTestPlanSasDao.findAll(page, limit, testName, person);
 
         return all;
+    }
+
+    // 查询条数
+    @Override
+    public int selectAll() {
+
+        int i = tblTestPlanSasDao.selectAll();
+
+        return i;
     }
 
     // 删除

@@ -14,25 +14,7 @@
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo layui-hide-xs layui-bg-black">FiveG 后台管理系统</div>
-        <!-- 头部区域（可配合layui 已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left">
-            <!-- 移动端显示 -->
-            <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
-                <i class="layui-icon layui-icon-spread-left"></i>
-            </li>
 
-            <li class="layui-nav-item layui-hide-xs"><a href="">nav 1</a></li>
-            <li class="layui-nav-item layui-hide-xs"><a href="">nav 2</a></li>
-            <li class="layui-nav-item layui-hide-xs"><a href="">nav 3</a></li>
-            <li class="layui-nav-item">
-                <a href="javascript:;">nav groups</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">menu 11</a></dd>
-                    <dd><a href="">menu 22</a></dd>
-                    <dd><a href="">menu 33</a></dd>
-                </dl>
-            </li>
-        </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item layui-hide layui-show-md-inline-block">
                 <a href="javascript:;">
@@ -113,59 +95,56 @@
             , layer = layui.layer
             , util = layui.util
             , $ = layui.$;
-        $(function () {
+        // 查询用户信息
+        $.get(
+            "/system/user/getUserOne",
+            function (data) {
+                let msg = "欢迎回来 " + data.data.username;
+                $("#span_username").html(msg);
+                $("#imgs")[0].src = data.data.avatar;
 
-            // 查询用户信息
-            $.get(
-                "/system/user/getUserOne",
-                function (data) {
-                    let msg = "欢迎回来 " + data.data.username;
-                    $("#span_username").html(msg);
-                    $("#imgs")[0].src = data.data.avatar;
-
-                    var roleId = data.data.roleId
-                    $.get({
-                        url: '/system/menu/getTreeByParentId/',
-                        data: {"parentId": 0, "roleId": roleId},
-                        type: 'get',
-                        success: function (data) {
-                            $.each(data.data, function (index, val) {
-                                let menu = "";
-                                menu +=
-                                    "<li class='layui-nav-item'>" +
-                                    "<a href='javascript:;'>" +
-                                    "<i class='" + val.icon + "'>  " + val.menuName + "</i>" +
-                                    "</a>";
-                                let menu2 = "";
-                                $.get({
-                                    url: '/system/menu/getTreeByParentId/',
-                                    data: {"parentId": val.menuId, "roleId": roleId},
-                                    type: 'get',
-                                    success: function (data) {
-                                        menu2 += "<dl class='layui-nav-child'>";
-                                        $.each(data.data, function (index, val) {
-                                            menu2 += "<dd>" +
-                                                "<a href='" + val.url + "' target='ifr'>" + val.menuName + "</a>"
-                                                + "</dd>";
-                                        });
-                                        menu2 += "</dl>"
-                                        menu += menu2;
-                                        menu += "</li>";
-                                        $("#nav").append(menu);
-                                        layui.element.init();
-                                    }
-
-                                });
-
+                var roleId = data.data.roleId
+                $.get({
+                    url: '/system/menu/getTreeByParentId/',
+                    data: {"parentId": 0, "roleId": roleId},
+                    type: 'get',
+                    success: function (data) {
+                        $.each(data.data, function (index, val) {
+                            let menu = "";
+                            menu +=
+                                "<li class='layui-nav-item'>" +
+                                "<a href='javascript:;'>" +
+                                "<i class='" + val.icon + "'>  " + val.menuName + "</i>" +
+                                "</a>";
+                            let menu2 = "";
+                            $.get({
+                                url: '/system/menu/getTreeByParentId/',
+                                data: {"parentId": val.menuId, "roleId": roleId},
+                                type: 'get',
+                                success: function (data) {
+                                    menu2 += "<dl class='layui-nav-child'>";
+                                    $.each(data.data, function (index, val) {
+                                        menu2 += "<dd>" +
+                                            "<a href='" + val.url + "' target='ifr'>" + val.menuName + "</a>"
+                                            + "</dd>";
+                                    });
+                                    menu2 += "</dl>"
+                                    menu += menu2;
+                                    menu += "</li>";
+                                    $("#nav").append(menu);
+                                    layui.element.init();
+                                }
 
                             });
 
-                        }
-                    })
-                }
-            );
 
-        });
+                        });
+
+                    }
+                })
+            }
+        );
+
         //头部事件
         util.event('lay-header-event', {
             //左侧菜单事件

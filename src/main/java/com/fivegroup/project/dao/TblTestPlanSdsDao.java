@@ -1,6 +1,8 @@
 package com.fivegroup.project.dao;
 
 import com.fivegroup.project.entity.TblTestPlanSds;
+import com.fivegroup.project.entity.TblTesterSds;
+import com.fivegroup.project.entity.ViewTestPlan;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -58,4 +60,17 @@ public interface TblTestPlanSdsDao {
 	 * @return
 	 */
 	List<TblTestPlanSds> getTestPlanSdsAll();
+	/**
+	 * 根据邀请码获取测试计划
+	 *
+	 * @param testCode
+	 * @return
+	 */
+	ViewTestPlan queryByTestCode(@Param("testCode") String testCode);
+	/**
+	 * 根据 手机号查找测试计划
+	 * @param phone
+	 * @return
+	 */
+	List<TblTesterSds> findSdsTesterByPhone(@Param("phone") String phone);
 }

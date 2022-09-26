@@ -30,10 +30,15 @@ public class TblTestPlanSasController {
 
         System.out.println("question+person===" + question + ","+person);
 
+        // 查询条数
+        int i = tblTestPlanSasService.selectAll();
+
+        System.out.println("=============="+i);
+
         LayuiBean<TblTestPlanSas> SasBean = new LayuiBean<>();
         SasBean.setCode(0);
         SasBean.setMsg("");
-        SasBean.setCount(50);
+        SasBean.setCount(i);
         SasBean.setData(planSasServiceAll);
 
 
@@ -60,7 +65,7 @@ public class TblTestPlanSasController {
 
         int i = tblTestPlanSasService.delData(idsList);
 
-        return 1;
+        return i;
     }
 
 
@@ -73,7 +78,7 @@ public class TblTestPlanSasController {
 
         int i = tblTestPlanSasService.addData(tblTestPlanSas);
 
-        return 1;
+        return i;
     }
 
 
@@ -85,7 +90,7 @@ public class TblTestPlanSasController {
 
         int i = tblTestPlanSasService.editData(tblTestPlanSas);
 
-        return 1;
+        return i;
     }
 
 

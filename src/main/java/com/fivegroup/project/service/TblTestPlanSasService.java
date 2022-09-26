@@ -1,6 +1,7 @@
 package com.fivegroup.project.service;
 
 import com.fivegroup.project.entity.TblTestPlanSas;
+import com.fivegroup.project.entity.TblTesterSas;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,6 +22,10 @@ public interface TblTestPlanSasService {
      */
     List<TblTestPlanSas> findAll(@Param("page") int page, @Param("limit") int limit, @Param("testName") String testName, @Param("person") String person);
 
+
+    // 查询条数
+    int selectAll();
+
     // 删除一条数据
     int delData(List ids);
 
@@ -31,6 +36,7 @@ public interface TblTestPlanSasService {
 
     // 编辑一条数据
     int editData(@Param("tblTestPlanSas") TblTestPlanSas tblTestPlanSas);
-
-
+    
+    
+    List<TblTesterSas> findSasTesterByPhone(String phone);
 }

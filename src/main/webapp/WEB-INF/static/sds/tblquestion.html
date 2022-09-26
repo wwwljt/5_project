@@ -233,7 +233,7 @@
         //监听行工具事件
         table.on('tool(test)', function (obj) {
             var data = obj.data;
-            alert(data.id + "  " + data.name + "   " + data.sn);
+            // alert(data.id + "  " + data.name + "   " + data.sn);
             //console.log(obj)
             if (obj.event === 'del') {
 
@@ -345,7 +345,7 @@
             var checkStatus = table.checkStatus('rolesReload'),
                 data = checkStatus.data;
             var ids = [];
-            alert("sdfasdf")
+            // alert("sdfasdf")
             console.log("长度 ----" + ids.length)
             if (data.length > 0) {
                 for (var i in data) {

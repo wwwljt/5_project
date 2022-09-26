@@ -43,6 +43,7 @@ public class LogAopAspect {
 	 */
 	@Around("execution(* com.fivegroup.project.controller.*.*(..))")
 	public Object myEnhance(ProceedingJoinPoint joinPoint) {
+		// 参数
 		Object[] args = joinPoint.getArgs();
 		Signature signature = joinPoint.getSignature();
 		TblLog log = new TblLog();
@@ -62,18 +63,21 @@ public class LogAopAspect {
 		}
 		
 		log.setIp(ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip);
+		// 获取用户信息
 		String username = JwtHelper.getUsername(request);
+		// 获取类名
 		String className = joinPoint.getTarget().getClass().getName();
 		log.setClassName(className);
 		String[] split = signature.toString().split("\\.");
 		String method = split[split.length - 1];
+		// 设置方法名
 		log.setMethodName(method);
 		String paramString = Arrays.toString(args);
 		log.setParams(paramString);
 		if (paramString.getBytes().length > 8889) {
 			log.setParams("Too Long Params To Save ");
 		}
-		
+		// 日志操作时间
 		log.setCreateTime(new Date());
 		System.out.println("log:" + log.toString());
 		log.setLoginName(username);

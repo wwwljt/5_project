@@ -496,7 +496,7 @@
                     });
                     // 监听添加form的提交事件
                     form.on('submit(addUserSubmit)', function (data) {
-                        alert(adduser + addPassword + addPhone + addEmail)
+                        // alert(adduser + addPassword + addPhone + addEmail)
                         if (adduser && addPassword && addPhone && addEmail) {
                             /*if (data.status == "on") {
                             data.status = '1';
@@ -678,7 +678,7 @@
                 });
                 // 监听表单的修改事件
                 form.on('submit(updateUserSubmit)', function (data) {
-                    alert(updateUser + updateEmail + updatePhone)
+                    // alert(updateUser + updateEmail + updatePhone)
                     if (updateUser && updateEmail && updatePhone) {
                         if (data.field.status == "on") {
                             data.field.status = '1';

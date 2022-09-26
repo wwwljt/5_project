@@ -19,6 +19,10 @@ public interface TblQuestionSasService {
      */
     List<TblQuestionSas> findQuestionSas(@Param("page") int page, @Param("limit") int limit, @Param("question") String question, @Param("person") String person);
 
+    // 查询条数
+    int selectAll();
+
+
     // 删除一条数据
     //int delTblQuestionSas(@Param("id") int id);
     int delTblQuestionSas(@Param("ids") List ids);
