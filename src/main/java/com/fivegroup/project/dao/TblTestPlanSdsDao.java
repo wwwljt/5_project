@@ -37,12 +37,15 @@ public interface TblTestPlanSdsDao {
 	 * @return
 	 */
 	List<TblTestPlanSds> getTbTestPlanSdsPageAll(@Param("tblTestPlanSds") TblTestPlanSds tblTestPlanSds, @Param("page") Integer page, @Param("limit") Integer limit);
+	
 	/**
 	 * 根据 id 批量删除
+	 *
 	 * @param ids
 	 * @return
 	 */
 	Integer deleteTblTestPlanSds(@Param("ids") Integer[] ids);
+	
 	/**
 	 * 修改
 	 *
@@ -50,18 +53,22 @@ public interface TblTestPlanSdsDao {
 	 * @return
 	 */
 	Integer update(@Param("tblTestPlanSds") TblTestPlanSds tblTestPlanSds);
+	
 	/**
 	 * 保存
+	 *
 	 * @param tblTestPlanSds
 	 * @return
 	 */
 	Integer save(@Param("tblTestPlanSds") TblTestPlanSds tblTestPlanSds);
+	
 	/**
 	 * 获取所有测试计划
 	 *
 	 * @return
 	 */
 	List<TblTestPlanSds> getTestPlanSdsAll();
+	
 	/**
 	 * 根据邀请码获取测试计划
 	 *
@@ -69,20 +76,25 @@ public interface TblTestPlanSdsDao {
 	 * @return
 	 */
 	ViewTestPlan queryByTestCode(@Param("testCode") String testCode);
+	
 	/**
 	 * 根据 手机号查找测试计划
+	 *
 	 * @param phone
 	 * @return
 	 */
 	List<TblTesterSds> findSdsTesterByPhone(@Param("phone") String phone);
+	
 	/**
 	 * 查询所偶 sds
+	 *
 	 * @return
 	 */
 	List<TblQuestionSds> findAllQuestion();
 	
 	/**
 	 * 保存测试者
+	 *
 	 * @param tblTesterSds
 	 * @return
 	 */
@@ -90,11 +102,13 @@ public interface TblTestPlanSdsDao {
 	
 	/**
 	 * 批量插入测试答案
+	 *
 	 * @param answerList
 	 * @param testerId
 	 * @return
 	 */
 	int insertBatch(@Param("answerList") List<Map<String, Object>> answerList, @Param("testerId") Integer testerId);
+	
 	/**
 	 * 校验计划名称是否重复
 	 *

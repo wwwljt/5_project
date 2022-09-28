@@ -44,12 +44,14 @@ public interface TblTesterSdsService {
 	
 	/**
 	 * 获取总记录数
+	 *
 	 * @return
 	 */
 	Integer getTblTestCount();
 	
 	/**
 	 * 获取统计数据
+	 *
 	 * @return
 	 */
 	StatisticsVo getTbTestStatistics();

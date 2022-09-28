@@ -24,6 +24,7 @@ public interface TblQuestionSdsDao {
 	 * @return
 	 */
 	Integer getTblQuestionSdsCount(@Param("tblQuestionSds") TblQuestionSds tblQuestionSds);
+	
 	/**
 	 * 根据条件获取分页数据
 	 *
@@ -33,6 +34,7 @@ public interface TblQuestionSdsDao {
 	 * @return
 	 */
 	List<TblQuestionSds> getTblQuestionSdsPageAll(@Param("tblQuestionSds") TblQuestionSds tblQuestionSds, @Param("pageNo") Integer pageNo, @Param("pageSize") Integer pageSize);
+	
 	/**
 	 * 根据 typeId  获取对应的类型
 	 *
@@ -51,6 +53,7 @@ public interface TblQuestionSdsDao {
 	
 	/**
 	 * 修改
+	 *
 	 * @param tblQuestionSds
 	 * @return
 	 */
@@ -58,12 +61,15 @@ public interface TblQuestionSdsDao {
 	
 	/**
 	 * 保存
+	 *
 	 * @param tblQuestionSds
 	 * @return
 	 */
 	Integer save(@Param("tblQuestionSds") TblQuestionSds tblQuestionSds);
+	
 	/**
 	 * 校验题目是否重复
+	 *
 	 * @param question
 	 * @return
 	 */

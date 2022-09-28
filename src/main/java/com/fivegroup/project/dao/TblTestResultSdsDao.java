@@ -15,6 +15,7 @@ import org.apache.ibatis.annotations.Param;
 public interface TblTestResultSdsDao {
 	/**
 	 * 根据 id 批量删除
+	 *
 	 * @param ids
 	 * @return
 	 */

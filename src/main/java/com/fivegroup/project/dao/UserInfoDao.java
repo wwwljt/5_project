@@ -28,12 +28,15 @@ public interface UserInfoDao {
 	
 	/**
 	 * 根据用户名查询
+	 *
 	 * @param userName
 	 * @return
 	 */
 	Userinfo getUserOne(@Param("userName") String userName);
+	
 	/**
 	 * 根据 条件获取分页总记录数
+	 *
 	 * @param userInfo
 	 * @return
 	 */
@@ -51,6 +54,7 @@ public interface UserInfoDao {
 	
 	/**
 	 * 保存用户
+	 *
 	 * @param userinfo
 	 * @return
 	 */
@@ -58,10 +62,12 @@ public interface UserInfoDao {
 	
 	/**
 	 * 修改
+	 *
 	 * @param userinfo
 	 * @return
 	 */
 	Integer update(@Param("userinfo") Userinfo userinfo);
+	
 	/**
 	 * 根据 用户名和 id 判断用户是否存在
 	 *
@@ -69,20 +75,25 @@ public interface UserInfoDao {
 	 * @return
 	 */
 	Userinfo userCheck(@Param("userinfo") Userinfo userinfo);
+	
 	/**
 	 * 批量删除
+	 *
 	 * @param userid
 	 * @return
 	 */
 	Integer deleteBatch(@Param("userid") String userid);
+	
 	/**
 	 * 获取所有用户
+	 *
 	 * @return
 	 */
 	List<Userinfo> getUserAll();
 	
 	/**
 	 * 获取 盐值
+	 *
 	 * @param username
 	 * @return
 	 */

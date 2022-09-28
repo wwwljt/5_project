@@ -23,6 +23,7 @@ public interface TblDeptDao {
 	 * @return
 	 */
 	Integer getDeptPageCount(@Param("tblDept") TblDept tblDept);
+	
 	/**
 	 * 获取分页数据
 	 *
@@ -34,7 +35,8 @@ public interface TblDeptDao {
 	List<TblDept> getDeptPage(@Param("page") Integer page, @Param("limit") Integer limit, @Param("tblDept") TblDept tblDept);
 	
 	/**
-	 *保存
+	 * 保存
+	 *
 	 * @param tblDept
 	 * @return
 	 */
@@ -42,10 +44,12 @@ public interface TblDeptDao {
 	
 	/**
 	 * 修改
+	 *
 	 * @param tblDept
 	 * @return
 	 */
 	Integer update(@Param("tblDept") TblDept tblDept);
+	
 	/**
 	 * 批量删除
 	 *
@@ -56,16 +60,19 @@ public interface TblDeptDao {
 	
 	/**
 	 * 获取所有部门数据
+	 *
 	 * @return
 	 */
 	List<TblDept> getDptAll();
 	
 	/**
 	 * 根据 id 查询
+	 *
 	 * @param id
 	 * @return
 	 */
 	TblDept getTblDeptById(@Param("id") Integer id);
+	
 	/**
 	 * 校验部门名称是否重复
 	 *

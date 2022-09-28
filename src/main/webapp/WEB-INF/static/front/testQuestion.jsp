@@ -122,6 +122,7 @@
 <!--性格色彩框，边距40，透明白色-->
 <div class="top-div">
     <div class="top-div-d">
+
         <h1 class="top-div-h">${testerVo.testName}</h1>
         <p class="top-div-p">完成测试，获得专业的分析报告</p>
     </div>

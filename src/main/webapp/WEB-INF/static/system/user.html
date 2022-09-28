@@ -23,7 +23,7 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <!--搜索框-->
-<form class="layui-form" action="" id="searchFrom"  style="margin-top: 20px ;margin-left: 12px">
+<form class="layui-form" action="" id="searchFrom" style="margin-top: 20px ;margin-left: 12px">
     <div class="layui-inline">
         <label class="layui-form-label">用户编号</label>
         <div class="layui-input-inline">
@@ -102,7 +102,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">密码</label>
         <div class="layui-input-inline">
-            <input type="text" name="password" lay-reqtext="" lay-verify="required" placeholder="密码" value=""
+            <input type="password" name="password" lay-reqtext="" lay-verify="required" placeholder="密码" value=""
                    class="layui-input">
         </div>
         <label></label>
@@ -282,8 +282,6 @@
             }
         })
         var updateUser = true;
-        // 修改的提交按钮
-        var updateSubmitBtn = $("button[lay-filter='updateUserSubmit']");
         // 用户名校验
         $("#updateUserForm input[name='username']").on('blur', function () {
             var username = $("#updateUserForm input[name='username']");
@@ -578,17 +576,26 @@
                     'password': data.password
                 });
                 // 提交重置密码表单
-                form.on('submit(resetPasswordSubmit)', function (data) {
+                form.on('submit(resetPasswordSubmit)', function (data1) {
                     $.ajax({
                         url: '/system/user/saveOrUpdate',
-                        data: data.field,
+                        data: data1.field,
                         dataType: 'JSON',
                         type: 'POST',
                         success: function (redata) {
                             if (redata.code == 0) {
                                 layer.msg("密码修改成功", {icon: 6});
                                 layer.closeAll();//关闭对话框
-                                window.location.href = "../login.html";
+                                // 查询用户信息
+                                $.get(
+                                    "/system/user/getUserOne",
+                                    function (re) {
+                                        if (data.username==re.data.username) {
+                                            window.location.href = "../login.html";
+                                        }
+                                    }
+                                );
+
                             } else {
                                 layer.msg("密码修改失败", {icon: 5});
                             }

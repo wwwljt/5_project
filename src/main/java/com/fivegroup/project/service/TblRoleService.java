@@ -43,7 +43,6 @@ public interface TblRoleService {
 	 */
 	Integer deleteRole(Integer id);
 	
-
 	
 	/**
 	 * 添加或修改
@@ -56,6 +55,7 @@ public interface TblRoleService {
 	
 	/**
 	 * 保存
+	 *
 	 * @param tblRoleVo
 	 * @param request
 	 * @return
@@ -64,11 +64,13 @@ public interface TblRoleService {
 	
 	/**
 	 * 修改
+	 *
 	 * @param tblRoleVo
 	 * @param request
 	 * @return
 	 */
 	Integer update(TblRoleVo tblRoleVo, HttpServletRequest request);
+	
 	/**
 	 * 获取所有角色
 	 *

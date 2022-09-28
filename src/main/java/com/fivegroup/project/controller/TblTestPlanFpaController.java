@@ -1,6 +1,5 @@
 package com.fivegroup.project.controller;
 
-
 import com.fivegroup.project.entity.TblTestPlanFpa;
 import com.fivegroup.project.service.TblTestPlanFpaService;
 import com.fivegroup.project.util.ResultBean;
@@ -22,51 +21,60 @@ import java.util.List;
 @RestController
 @RequestMapping("/TblTestPlanFpa")
 public class TblTestPlanFpaController {
-    @Autowired
-    private TblTestPlanFpaService TTpService;
-    @RequestMapping("/getAll")
-    public ResultBean<TblTestPlanFpa> getAll(@RequestParam("page")int page, @RequestParam("limit")int limit, TblTestPlanFpa TblTestPlanFpa){
-        int bgein=(page-1)*limit;
-        List<TblTestPlanFpa> all = TTpService.getAllTTp(bgein, limit,TblTestPlanFpa);
-        ResultBean<TblTestPlanFpa> rb=new ResultBean<>();
-        rb.setCode(0);
-        rb.setMsg("");
-        rb.setCount(TTpService.countTTp(TblTestPlanFpa));
-        rb.setData(all);
-        System.out.println(rb);
-        return rb;
-    }
-    @RequestMapping("/del")
-    public Boolean del(@RequestParam("id")int id) throws IOException {
-        return TTpService.deleteTTp(id);
-    }
-    @RequestMapping("/update")
-    public Boolean update(TblTestPlanFpa TblTestPlanFpa){
-        System.out.println(TblTestPlanFpa);
-        return  TTpService.updateTTp(TblTestPlanFpa);
-    }
-    @RequestMapping("/insert")
-    public Boolean insert(TblTestPlanFpa tblTestPlanFpa){
-        System.out.println(tblTestPlanFpa);
-        Boolean aBoolean = TTpService.insertTTp(tblTestPlanFpa);
-        System.out.println(aBoolean);
-        return aBoolean;
-    }
-    @RequestMapping("/deleteMore")
-    public Boolean deleteMore(@RequestParam("map")String map){
-        String substring = map.substring(1, map.length() - 1);
-        String[] split = substring.split(",");
-        System.out.println(split);
-        Boolean result=true;
-        for (String s:split
-             ) {
-            int i = Integer.parseInt(s);
-            result = TTpService.deleteTTp(i);
-            System.out.println(result);
-            if (result!=true){
-                return false;
-            }
-        }
-        return result;
-    }
+	@Autowired
+	private TblTestPlanFpaService TTpService;
+	
+	@RequestMapping("/getAll")
+	public ResultBean<TblTestPlanFpa> getAll(@RequestParam("page") int page, @RequestParam("limit") int limit, TblTestPlanFpa TblTestPlanFpa) {
+		int bgein = (page - 1) * limit;
+		List<TblTestPlanFpa> all = TTpService.getAllTTp(bgein, limit, TblTestPlanFpa);
+		ResultBean<TblTestPlanFpa> rb = new ResultBean<>();
+		rb.setCode(0);
+		rb.setMsg("");
+		rb.setCount(TTpService.countTTp(TblTestPlanFpa));
+		rb.setData(all);
+		return rb;
+	}
+	
+	@RequestMapping("/del")
+	public Boolean del(@RequestParam("id") int[] id) throws IOException {
+		
+		return TTpService.deleteTTp(id);
+	}
+	
+	@RequestMapping("/update")
+	public Boolean update(TblTestPlanFpa TblTestPlanFpa) {
+		return TTpService.updateTTp(TblTestPlanFpa);
+	}
+	
+	@RequestMapping("/insert")
+	public Boolean insert(TblTestPlanFpa tblTestPlanFpa) {
+		List<TblTestPlanFpa> search = TTpService.search();
+		
+		int i = (int) ((Math.random() * 9 + 1) * 100000);
+		for (TblTestPlanFpa item : search
+		) {
+			if (item.getTestCode() == i) {
+				i = (int) ((Math.random() * 9 + 1) * 100000);
+			}
+		}
+		tblTestPlanFpa.setTestCode(i);
+		Boolean aBoolean = TTpService.insertTTp(tblTestPlanFpa);
+		
+		return aBoolean;
+	}
+	
+	@RequestMapping("/deleteMore")
+	public Boolean deleteMore(int[] idList) {
+		return TTpService.deleteTTp(idList);
+	}
+	
+	@RequestMapping("/search")
+	public Boolean search(TblTestPlanFpa tblTestPlanFpa) {
+		
+		if (TTpService.searchTTp(tblTestPlanFpa).size() > 0) {
+			return false;
+		}
+		return true;
+	}
 }

@@ -10,11 +10,7 @@ import java.util.List;
  * @description: 取法于上，仅得为中；取法于中，故为其下
  */
 public interface TblTestResultSasDao {
-
-
-
-
-    // 查询测试结果表
-    List<TblTestResultSas> findAnswer();
-
+	// 查询测试结果表
+	List<TblTestResultSas> findAnswer();
+	
 }

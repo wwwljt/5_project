@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,9 +33,7 @@ public class TblDeptController {
 	 */
 	@GetMapping("/checkDeptName/{deptName}")
 	public Result checkDeptName(@PathVariable String deptName) {
-		System.out.println("deptName = " + deptName);
 		TblDept dept = tblDeptService.checkDeptName(deptName);
-		System.out.println("dept = " + dept);
 		return dept == null ? Result.ok("不重复") : Result.fail("重复");
 	}
 	
@@ -70,7 +67,6 @@ public class TblDeptController {
 	 */
 	@DeleteMapping("/deleteBatch/{ids}")
 	public Result deleteBatch(@PathVariable("ids") Integer[] ids) {
-		System.out.println("ids = " + Arrays.toString(ids));
 		Integer result = tblDeptService.deleteBatch(ids);
 		return Result.ok(result);
 	}
@@ -97,9 +93,6 @@ public class TblDeptController {
 	 */
 	@RequestMapping("/getDeptPage")
 	public Result getDeptPage(Integer page, Integer limit, TblDept tblDept) {
-		System.out.println("page = " + page);
-		System.out.println("limit = " + limit);
-		
 		// 根据条件获取分页总条数
 		Integer count = tblDeptService.getDeptPageCount(tblDept);
 		// 获取分页数据

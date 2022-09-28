@@ -42,13 +42,13 @@ public class SystemController {
 		// 清除 token
 		session.removeAttribute("token");
 		session.invalidate();
-		System.out.println("session 清空了");
 		return "forward:login.html";
 		
 	}
 	
 	/**
 	 * 跳转到最终页面
+	 *
 	 * @param jsp
 	 * @param modelAndView
 	 * @param session
@@ -58,7 +58,6 @@ public class SystemController {
 	public ModelAndView jump(@PathVariable String jsp, ModelAndView modelAndView, HttpSession session) {
 		// 清空 session
 		session.removeAttribute("testerVo");
-		System.out.println(jsp);
 		modelAndView.setViewName(jsp);
 		return modelAndView;
 	}

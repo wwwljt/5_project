@@ -103,10 +103,12 @@
     <select id="findAllQuestion" resultType="com.fivegroup.project.entity.TblQuestionSds">
         select *
         from w_gl.tbl_question_sds
-        where status = 0;
+        where status = 0
+          and flag = 0;
     </select>
     <select id="checkPlan" resultType="com.fivegroup.project.entity.TblTestPlanSds">
         select *
-        from w_gl.tbl_test_plan_sds where test_name=#{plan};
+        from w_gl.tbl_test_plan_sds
+        where test_name = #{plan};
     </select>
 </mapper>

@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 注意：项目正式环境请勿引用该地址 -->
     <link rel="stylesheet" href="../layui/css/layui.css" charset="utf-8">
-
+    <!--引入clipboard复制插件-->
+    <script src="../layui/js/clipboard-2.0.11.js"></script>
 </head>
 <body>
 <div class="demoTable" style="margin: 15px;">
@@ -34,6 +35,18 @@
     </div>
 
 </div>
+<!--复制URL模态框-->
+<div class="layui-row" id="open_copyUrl_div" style="display:none;">
+
+    <div id="seeUrl" style="font-size: 20px; width: 100%; color: #B47844; text-align: center; margin-top: 20px; ">
+        http://localhost:8080/front/test/login
+    </div>
+    <button class="js-clipboard layui-btn layui-btn-warm" id="urlBtn" data-clipboard-target="#seeUrl"
+            style="margin-left:45%; margin-top: 30px; background-color: #C7B8B8">
+        <i class="layui-icon layui-icon-list" style="font-size: 30px; color: black;"></i>
+    </button>
+
+</div>
 <!--查看模态框-->
 <div class="layui-row" id="lookUrl" style="display:none;">
     <!--    <img src="../image/WBNH.png" style="margin-left: 50px; margin-top: 25px;" />-->
@@ -50,7 +63,7 @@
 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">查看二维码</a>
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lookUrl">查看Url</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="copyUrl">复制URL</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 
@@ -204,17 +217,32 @@
                     height: 200,
                     text: "http://localhost:8080/front/test/login",
                 })
-            } else if (obj.event === 'lookUrl') {
+            } else if (obj.event === 'copyUrl') {// 如果为复制URL
+
                 // 打开模态框
                 layer.open({
                     type: 1,//类型
-                    area: ['300px', '100px'],  //定义宽和高
-                    title: '查看URL信息',  //题目
+                    area: ['500px', '200px'],  //定义宽和高
+                    title: '复制URL',  //题目
                     shadeClose: true,  //点击遮罩层关闭
-                    content: $('#lookUrl'),  //打开的内容
+                    content: $('#open_copyUrl_div'),  //打开的内容
                 });
-                $("#url").val("http://localhost:8080/front/test/login")
 
+                // clipboard 公用JS
+                let clipboard;
+                $(function () {
+                    clipboard = new ClipboardJS('.js-clipboard');
+                    clipboard.on('success', function (e) {
+                        console.log(e)
+                        layer.msg('复制成功');
+                    });
+
+                    clipboard.on('error', function (e) {
+                        console.log(e)
+                        layer.msg('复制失败');
+                    });
+
+                });
             }
 
         });

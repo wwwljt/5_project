@@ -10,22 +10,22 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;
 
-public interface TblTestPlanFpaService {
-	//查询所有并分页
+public interface TblTestPlanFpaService { //查询所有并分页
 	public List<TblTestPlanFpa> getAllTTp(@Param("begin") int begin, @Param("limit") int limit, TblTestPlanFpa tblTestPlanFpa);
 	
-	//    public List<Question_fpa> getAll();
 	//增加
 	public Boolean insertTTp(TblTestPlanFpa TblTestPlanFpa);
 	
 	// 删除
-	public Boolean deleteTTp(int id);
+	public Boolean deleteTTp(int[] id);
+	
+	public List<TblTestPlanFpa> search();
 	
 	// 修改
 	public Boolean updateTTp(TblTestPlanFpa TblTestPlanFpa);
 	
-	//    // 模糊查询
-	//    public List<Question_fpa> searchTTp(Question_fpa TblTestPlanFpa);
+	public List<TblTestPlanFpa> searchTTp(TblTestPlanFpa tblTestPlanFpa);
+	
 	// 查询总条数
 	public int countTTp(TblTestPlanFpa TblTestPlanFpa);
 	
@@ -52,13 +52,17 @@ public interface TblTestPlanFpaService {
 	 * @return
 	 */
 	String saveTestResult(List<Map<String, Object>> answerList, TesterVo tester);
+	
 	/**
 	 * 批量插入
+	 *
 	 * @return
 	 */
-	int insertBatch(List<Map<String,Object>> answerList,Integer testerId);
+	int insertBatch(List<Map<String, Object>> answerList, Integer testerId);
+	
 	/**
 	 * 查询测试者结果
+	 *
 	 * @return
 	 */
 	String seleResult(Integer testerId);

@@ -12,33 +12,32 @@ import java.util.List;
  */
 
 public interface TblQuestionSasService {
-
-
-    /**
-     * 查找所有数据，并分页
-     */
-    List<TblQuestionSas> findQuestionSas(@Param("page") int page, @Param("limit") int limit, @Param("question") String question, @Param("person") String person);
-
-    // 查询条数
-    int selectAll();
-
-
-    // 删除一条数据
-    //int delTblQuestionSas(@Param("id") int id);
-    int delTblQuestionSas(@Param("ids") List ids);
-
-
-    // 添加一条数据
-    int addQuestionSas(@Param("tblQuestionSas") TblQuestionSas tblQuestionSas);
-
-
-    // 编辑一条数据
-    int editQuestionSas(@Param("tblQuestionSas") TblQuestionSas tblQuestionSas);
-
-
-
-    // 校验问题是否重复
-    String selectComparedQuestion(@Param("question") String question);
-
-
+	
+	
+	/**
+	 * 查找所有数据，并分页
+	 */
+	List<TblQuestionSas> findQuestionSas(@Param("page") int page, @Param("limit") int limit, @Param("question") String question, @Param("person") String person);
+	
+	// 查询条数
+	int selectAll();
+	
+	
+	// 删除一条数据
+	//int delTblQuestionSas(@Param("id") int id);
+	int delTblQuestionSas(@Param("ids") List ids);
+	
+	
+	// 添加一条数据
+	int addQuestionSas(@Param("tblQuestionSas") TblQuestionSas tblQuestionSas);
+	
+	
+	// 编辑一条数据
+	int editQuestionSas(@Param("tblQuestionSas") TblQuestionSas tblQuestionSas);
+	
+	
+	// 校验问题是否重复
+	String selectComparedQuestion(@Param("question") String question);
+	
+	
 }

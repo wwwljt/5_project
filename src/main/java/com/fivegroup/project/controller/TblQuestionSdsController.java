@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,9 +36,7 @@ public class TblQuestionSdsController {
 	 */
 	@GetMapping("/checkQuestion/{question}")
 	public Result checkQuestion(@PathVariable String question) {
-		System.out.println("question = " + question);
 		TblQuestionSds tblQuestionSds = tblQuestionSdsService.checkQuestion(question);
-		System.out.println("tblQuestionSds = " + tblQuestionSds);
 		return tblQuestionSds == null ? Result.ok("不重复") : Result.fail("重复");
 	}
 	
@@ -51,7 +48,6 @@ public class TblQuestionSdsController {
 	 */
 	@PostMapping("/update")
 	public Result update(TblQuestionSds tblQuestionSds, HttpServletRequest request) {
-		System.out.println("tblQuestionSds = " + tblQuestionSds);
 		Integer result = tblQuestionSdsService.update(tblQuestionSds, request);
 		return Result.ok(result);
 	}
@@ -64,7 +60,6 @@ public class TblQuestionSdsController {
 	 */
 	@PostMapping("/save")
 	public Result save(TblQuestionSds tblQuestionSds, HttpServletRequest request) {
-		System.out.println("tblQuestionSds = " + tblQuestionSds);
 		Integer result = tblQuestionSdsService.save(tblQuestionSds, request);
 		return Result.ok(result);
 	}
@@ -77,11 +72,8 @@ public class TblQuestionSdsController {
 	 */
 	@DeleteMapping("/deleteTblQuestionSds/{ids}")
 	public Result deleteTblQuestionSds(@PathVariable("ids") Integer[] ids) {
-		System.out.println("id = " + Arrays.toString(ids));
 		Integer result = tblQuestionSdsService.deleteTblQuestionSds(ids);
-		System.out.println("result = " + result);
 		return Result.ok(ResultCodeEnum.SUCCESS.getCode());
-		
 	}
 	
 	/**
@@ -94,17 +86,12 @@ public class TblQuestionSdsController {
 	 */
 	@GetMapping("/getTblQuestionSdsPageAll/")
 	public Result<List<TblQuestionSds>> getTblQuestionSdsPageAll(Integer page, Integer limit, TblQuestionSds tblQuestionSds) {
-		System.out.println("page = " + page);
-		System.out.println("limit = " + limit);
 		//		TblQuestionSds tblQuestionSds = new TblQuestionSds();
 		//		tblQuestionSds.setId(id);
 		//		tblQuestionSds.setCreateBy(createBy);
-		System.out.println("tblQuestionSds = " + tblQuestionSds);
-		// 根据 条件获取总记录数
 		Integer count = tblQuestionSdsService.getTblQuestionSdsCount(tblQuestionSds);
 		// 获取分页数据
 		List<TblQuestionSds> tblQuestionSdsList = tblQuestionSdsService.getTblQuestionSdsPageAll(tblQuestionSds, page, limit);
-		System.out.println("tblQuestionSdsList = " + tblQuestionSdsList);
 		return Result.ok(tblQuestionSdsList, count);
 	}
 	

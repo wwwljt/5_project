@@ -56,7 +56,7 @@ public class TblTesterSdsServiceImpl implements TblTesterSdsService {
 	 */
 	@Override
 	public Integer deleteTblTestResulSds(Integer[] ids) {
-		Integer result=tblTestResultSdsDao.deleteById(ids);
+		Integer result = tblTestResultSdsDao.deleteById(ids);
 		return tblTesterSdsDao.deleteTblTestResulSds(ids);
 	}
 	

@@ -36,6 +36,7 @@ public interface UserInfoService {
 	
 	/**
 	 * 根据 条件获取分页总记录数
+	 *
 	 * @param userInfo
 	 * @return
 	 */
@@ -67,8 +68,10 @@ public interface UserInfoService {
 	 * @return
 	 */
 	Userinfo userCheck(Userinfo userinfo);
+	
 	/**
 	 * 批量删除
+	 *
 	 * @param userid
 	 * @return
 	 */
@@ -76,6 +79,7 @@ public interface UserInfoService {
 	
 	/**
 	 * 获取所有用户
+	 *
 	 * @return
 	 */
 	List<Userinfo> getUserAll();

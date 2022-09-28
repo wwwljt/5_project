@@ -40,13 +40,13 @@ public interface TblDeptService {
 	 *
 	 * @param tblDept
 	 * @param request
-	 *
 	 * @return
 	 */
 	Integer saveOrUpdate(TblDept tblDept, HttpServletRequest request);
 	
 	/**
 	 * 批量删除
+	 *
 	 * @param ids
 	 * @return
 	 */
@@ -54,15 +54,18 @@ public interface TblDeptService {
 	
 	/**
 	 * 获取所有部门数据
+	 *
 	 * @return
 	 */
 	List<TblDept> getDptAll();
+	
 	/**
 	 * 根据 id查询部门
 	 *
 	 * @return
 	 */
 	TblDept getTblDeptById(Integer id);
+	
 	/**
 	 * 校验部门名称是否重复
 	 *

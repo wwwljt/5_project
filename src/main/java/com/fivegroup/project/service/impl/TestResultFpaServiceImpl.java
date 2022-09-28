@@ -20,55 +20,61 @@ import java.util.Map;
  */
 @Service
 public class TestResultFpaServiceImpl implements TestResultFpaService {
-    @Autowired
-    private TestResultFpaMapper mapper;
-    @Override
-    public List<TestResultFpa> getAllTRF(int begin, int limit, TestResultFpa testResultFpa3) {
-        return mapper.getAllTRF(begin, limit, testResultFpa3);
-    }
-
-    @Override
-    public Boolean deleteTRF(int id) {
-        return mapper.deleteTRF(id);
-    }
-
-    @Override
-    public int countTRF(TestResultFpa testResultFpa) {
-        return mapper.countTRF(testResultFpa);
-    }
-
-    @Override
-    public ResultDiv getById(int id) {
-        return mapper.getById(id);
-    }
-
-    @Override
-    public Map<String,Integer> queryAll() {
-        List<TestResultFpa> test_resultFpas = mapper.queryAll();
-        int red=0,yellow=0,green=0,blue=0,compound=0;
-        for (TestResultFpa item: test_resultFpas){
-            Double blueCount = item.getBlueCount();
-            Double greenCount = item.getGreenCount();
-            Double redCount = item.getRedCount();
-            Double yellowCount = item.getYellowCount();
-            if (blueCount>greenCount&&blueCount>redCount&&blueCount>yellowCount){
-                blue++;
-            }else if(greenCount>blueCount&&greenCount>redCount&&greenCount>yellowCount){
-                green++;
-            }else if(redCount>blueCount&&redCount>greenCount&&redCount>yellowCount){
-                red++;
-            }else if(yellowCount>blueCount&&yellowCount>greenCount&&yellowCount>redCount){
-                yellow++;
-            }else {
-                compound++;
-            }
-        }
-        HashMap<String, Integer> map = new HashMap<>();
-        map.put("red",red);
-        map.put("green",green);
-        map.put("yellow",yellow);
-        map.put("blue",blue);
-        map.put("compound",compound);
-        return map;
-    }
+	@Autowired
+	private TestResultFpaMapper mapper;
+	
+	@Override
+	public List<TestResultFpa> getAllTRF(int begin, int limit, TestResultFpa testResultFpa3) {
+		return mapper.getAllTRF(begin, limit, testResultFpa3);
+	}
+	
+	@Override
+	public Boolean deleteTRF(int[] id) {
+		return mapper.deleteTRF(id);
+	}
+	
+	@Override
+	public Boolean deleteTTf(int[] id) {
+		return mapper.deleteTTf(id);
+	}
+	
+	@Override
+	public int countTRF(TestResultFpa testResultFpa) {
+		return mapper.countTRF(testResultFpa);
+	}
+	
+	@Override
+	public ResultDiv getById(int id) {
+		return mapper.getById(id);
+	}
+	
+	@Override
+	public Map<String, Integer> queryAll() {
+		List<TestResultFpa> test_resultFpas = mapper.queryAll();
+		int red = 0, yellow = 0, green = 0, blue = 0, compound = 0;
+		for (TestResultFpa item : test_resultFpas) {
+			Double blueCount = item.getBlueCount();
+			Double greenCount = item.getGreenCount();
+			Double redCount = item.getRedCount();
+			Double yellowCount = item.getYellowCount();
+			if (blueCount > greenCount && blueCount > redCount && blueCount > yellowCount) {
+				blue++;
+			} else if (greenCount > blueCount && greenCount > redCount && greenCount > yellowCount) {
+				green++;
+			} else if (redCount > blueCount && redCount > greenCount && redCount > yellowCount) {
+				red++;
+			} else if (yellowCount > blueCount && yellowCount > greenCount && yellowCount > redCount) {
+				yellow++;
+			} else {
+				compound++;
+			}
+		}
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("red", red);
+		map.put("green", green);
+		map.put("yellow", yellow);
+		map.put("blue", blue);
+		map.put("command", compound);
+		return map;
+	}
 }

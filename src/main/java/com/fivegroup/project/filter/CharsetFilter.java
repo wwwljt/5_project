@@ -27,7 +27,6 @@ public class CharsetFilter implements Filter {
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        System.out.println("编码过滤器执行了");
         HttpServletRequest httpServletRequest= (HttpServletRequest) request;
         HttpServletResponse httpServletResponse= (HttpServletResponse) response;
         httpServletRequest.setCharacterEncoding("utf-8");

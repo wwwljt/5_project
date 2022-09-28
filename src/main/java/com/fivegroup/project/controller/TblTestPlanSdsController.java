@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,9 +34,7 @@ public class TblTestPlanSdsController {
 	 */
 	@GetMapping("/checkPlan/{plan}")
 	public Result checkPlan(@PathVariable String plan) {
-		System.out.println("plan = " + plan);
 		TblTestPlanSds tblTestPlanSds = tblTestPlanSdsService.checkPlan(plan);
-		System.out.println("tblTestPlanSds = " + tblTestPlanSds);
 		return tblTestPlanSds == null ? Result.ok("不重复") : Result.fail("重复");
 	}
 	
@@ -61,7 +58,6 @@ public class TblTestPlanSdsController {
 	 */
 	@PostMapping("/save")
 	public Result save(TblTestPlanSds tblTestPlanSds, HttpServletRequest request) {
-		System.out.println("tblTestPlanSds = " + tblTestPlanSds);
 		Integer result = tblTestPlanSdsService.save(tblTestPlanSds, request);
 		return Result.ok(result);
 	}
@@ -74,7 +70,6 @@ public class TblTestPlanSdsController {
 	 */
 	@PostMapping("/update")
 	public Result update(TblTestPlanSds tblTestPlanSds, HttpServletRequest request) {
-		System.out.println("tblTestPlanSds = " + tblTestPlanSds);
 		Integer result = tblTestPlanSdsService.update(tblTestPlanSds, request);
 		return Result.ok(result);
 	}
@@ -87,9 +82,7 @@ public class TblTestPlanSdsController {
 	 */
 	@DeleteMapping("/deleteTblTestPlanSds/{ids}")
 	public Result deleteTblQuestionSds(@PathVariable("ids") Integer[] ids) {
-		System.out.println("id = " + Arrays.toString(ids));
 		Integer result = tblTestPlanSdsService.deleteTblTestPlanSds(ids);
-		System.out.println("result = " + result);
 		return Result.ok(ResultCodeEnum.SUCCESS.getCode());
 		
 	}
@@ -104,12 +97,8 @@ public class TblTestPlanSdsController {
 	 */
 	@GetMapping("/getTblTestPlanSdsPageAll/")
 	public Result<List<TblTestPlanSds>> getTblTestPlanSdsPageAll(Integer page, Integer limit, TblTestPlanSds tblTestPlanSds) {
-		System.out.println("page = " + page);
-		System.out.println("limit = " + limit);
-		System.out.println("tblTestPlanSds = " + tblTestPlanSds);
 		// 根据 条件获取总记录数
 		Integer count = tblTestPlanSdsService.getTbTestPlanSdsCount(tblTestPlanSds);
-		
 		// 获取分页数据
 		List<TblTestPlanSds> tblTestPlanSdsList = tblTestPlanSdsService.getTbTestPlanSdsPageAll(tblTestPlanSds, page, limit);
 		return Result.ok(tblTestPlanSdsList, count);

@@ -12,7 +12,7 @@
     <script src="../layui/js/jquery-3.6.0.min.js"></script>
     <script src="../layui/js/html2canvas.js"></script>
     <script src="../layui/js/jspdf.debug.js"></script>
-    <script src="../layui/layui.js"></script>
+
 </head>
 <body style="overflow-x:hidden;overflow-y:hidden;">
 
@@ -71,7 +71,6 @@
         </button>
     </div>
 </div>
-<script src="../layui/layui.js"></script>
 <script type="text/html" id="toolbarDemo">
     <a class="layui-btn layui-btn-danger" lay-event="del" id="delete"><i
             class="layui-icon layui-icon-delete"></i>删除</a>
@@ -85,7 +84,8 @@
 </script>
 
 <!-- 注意：项目正式环境请勿引用该地址 -->
-
+<script src="../layui/js/jquery-3.6.0.min.js"></script>
+<script src="../layui/layui.js"></script>
 <script>
     layui.use(['table', 'dropdown'], function () {
         var table = layui.table;
@@ -102,6 +102,7 @@
                 , layEvent: 'LAYTABLE_TIPS'
                 , icon: 'layui-icon-tips'
             }]
+            , height: 'full-50' // 最大高度减去其他容器已占有的高度差
             , cellMinWidth: 80
             , totalRow: true // 开启合计行
             , page: true
@@ -231,13 +232,14 @@
                     for (let i = 0; i < data.length; i++) {
                         idList[i] = (data[i].testerId);
                     }
-                    var map = JSON.stringify(idList)
+                    //  var map =JSON.stringify(idList)
                     console.log(idList);
                     //删除数据库中的数值
                     $.ajax({
-                        url: 'questionFpa/deleteMore',
+                        url: 'result/deleteMore',
                         type: 'post',
-                        data: {"map": map},
+                        data: {idList: idList},
+                        traditional: true,
                         success: function (data) {
                             if (data === true) {
                                 console.log(data);
@@ -366,19 +368,9 @@
                     var pdf = new jsPDF('', 'pt', [contentWidth, contentHeight]);
                     //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
                     //当内容未超过pdf一页显示的范围，无需分页
-                    // if (leftHeight < pageHeight) {
+
                     pdf.addImage(pageData, 'JPEG', 0, 0, contentWidth, contentHeight);
-                    // } else {    // 分页
-                    //     while(leftHeight > 0) {
-                    //         pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
-                    //         leftHeight -= pageHeight;
-                    //         position -= 841.89;
-                    //         //避免添加空白页
-                    //         if(leftHeight > 0) {
-                    //             pdf.addPage();
-                    //         }
-                    //     }
-                    // }
+
                     pdf.save(pdfName + '.pdf');
                 }
             });

@@ -52,10 +52,8 @@ public class TblTestPlanFpaServiceImpl implements TblTestPlanFpaService {
 		// 保存测试用户
 		Integer count = mapper.insert(tblTesterFpa);
 		Integer id = tblTesterFpa.getId();
-		System.out.println("id = " + id);
 		//保存测试结果
 		int i = this.insertBatch(answerList, id);
-		System.out.println("i = " + i);
 		// 成功 返回测试结果
 		return this.seleResult(id);
 	}
@@ -80,9 +78,7 @@ public class TblTestPlanFpaServiceImpl implements TblTestPlanFpaService {
 	 */
 	@Override
 	public String seleResult(Integer testerId) {
-		System.out.println("testerId = " + testerId);
 		ViewTestResultFpa viewFpa = viewTestResultFpaDao.seleResultFpa(testerId);
-		System.out.println("viewFpa = " + viewFpa);
 		double red = viewFpa.getRedCount();
 		double yellow = viewFpa.getYellowCount();
 		double blue = viewFpa.getBlueCount();
@@ -129,10 +125,6 @@ public class TblTestPlanFpaServiceImpl implements TblTestPlanFpaService {
 		return mapper.getAllTTp(begin, limit, TblTestPlanFpa);
 	}
 	
-	//    @Override
-	//    public List<Question_fpa> getAll() {
-	//        return mapper.getAll();
-	//    }
 	
 	@Override
 	public Boolean insertTTp(TblTestPlanFpa TblTestPlanFpa) {
@@ -140,8 +132,13 @@ public class TblTestPlanFpaServiceImpl implements TblTestPlanFpaService {
 	}
 	
 	@Override
-	public Boolean deleteTTp(int id) {
+	public Boolean deleteTTp(int[] id) {
 		return mapper.deleteTTp(id);
+	}
+	
+	@Override
+	public List<TblTestPlanFpa> search() {
+		return mapper.search();
 	}
 	
 	@Override
@@ -149,10 +146,11 @@ public class TblTestPlanFpaServiceImpl implements TblTestPlanFpaService {
 		return mapper.updateTTp(TblTestPlanFpa);
 	}
 	
-	//    @Override
-	//    public List<Question_fpa> searchTTp(Question_fpa TblTestPlanFpa) {
-	//        return mapper.searchTTp(TblTestPlanFpa);
-	//    }
+	@Override
+	public List<TblTestPlanFpa> searchTTp(TblTestPlanFpa tblTestPlanFpa) {
+		return mapper.searchTTp(tblTestPlanFpa);
+	}
+	
 	
 	@Override
 	public int countTTp(TblTestPlanFpa TblTestPlanFpa) {

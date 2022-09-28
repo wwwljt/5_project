@@ -4,9 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fivegroup.project.dao.TestResultFpaMapper">
     <delete id="deleteTRF">
-       update tbl_testResult_fpa set flag=1 where id=#{id}
+        delete from tbl_test_result_fpa  where
+        <foreach collection="array" item="testerId" open="tester_id in(" close=")" separator=",">
+            #{testerId}
+        </foreach>
+
     </delete>
-    <select id="getAllTRF"  resultType="testResultFpa">
+    <delete id="deleteTTf">
+        delete from tbl_tester_fpa where
+        <foreach collection="array" item="tester_id" open="id in(" close=")" separator=",">
+            #{tester_id}
+        </foreach>
+
+    </delete>
+    <select id="getAllTRF" parameterType="com.fivegroup.project.entity.TestResultFpa" resultType="testResultFpa">
         select * from view_test_result_fpa
         <where>
             <if test="testResult.testerId!=0 and testResult.testerId!=''">

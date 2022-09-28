@@ -8,7 +8,6 @@ import com.fivegroup.project.util.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,9 +34,7 @@ public class TblTestResultSdsController {
 	 */
 	@DeleteMapping("/deleteTblTestPlanSds/{ids}")
 	public Result deleteTblTestResulSds(@PathVariable("ids") Integer[] ids) {
-		System.out.println("id = " + Arrays.toString(ids));
 		Integer result = tblTesterSdsService.deleteTblTestResulSds(ids);
-		System.out.println("result = " + result);
 		return Result.ok(ResultCodeEnum.SUCCESS.getCode());
 		
 	}
@@ -53,9 +50,6 @@ public class TblTestResultSdsController {
 	 */
 	@GetMapping("/getTblTestResultSdsPageAll")
 	public Result<List<TblTestResultVo>> getTblTestResultSdsPageAll(Integer page, Integer limit, TblTestResultVo tblTestResultVo) {
-		System.out.println("page = " + page);
-		System.out.println("limit = " + limit);
-		System.out.println("tblTestResultVo = " + tblTestResultVo);
 		// 根据 条件获取总记录数
 		Integer count = tblTesterSdsService.getTbTestResultSdsCount(tblTestResultVo);
 		
@@ -66,6 +60,7 @@ public class TblTestResultSdsController {
 	
 	/**
 	 * 报表统计
+	 *
 	 * @return
 	 */
 	@GetMapping("/getTblTestStatistics")
@@ -76,7 +71,6 @@ public class TblTestResultSdsController {
 		// 获取统计数据
 		StatisticsVo statisticsVo = tblTesterSdsService.getTbTestStatistics();
 		statisticsVo.setCount(count);
-		System.out.println("statisticsVo = " + statisticsVo);
 		return Result.ok(statisticsVo);
 	}
 	

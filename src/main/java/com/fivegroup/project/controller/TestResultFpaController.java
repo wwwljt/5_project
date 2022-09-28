@@ -1,6 +1,5 @@
 package com.fivegroup.project.controller;
 
-
 import com.fivegroup.project.entity.ResultDiv;
 import com.fivegroup.project.entity.ResultVO;
 import com.fivegroup.project.entity.TestResultFpa;
@@ -38,19 +37,13 @@ public class TestResultFpaController {
         return resultBean;
     }
     @RequestMapping("/deleteMore")
-    public Boolean deleteMore(@RequestParam("map")String map){
-        String substring = map.substring(1, map.length() - 1);
-        String[] split = substring.split(",");
-        Boolean result=true;
-        for (String s:split
-        ) {
-            int i = Integer.parseInt(s);
-            result = TRFService.deleteTRF(i);
-            if (result!=true){
-                return false;
-            }
+    public Boolean deleteMore(int[] idList){
+        Boolean aBoolean = TRFService.deleteTRF(idList);
+        Boolean a=TRFService.deleteTTf(idList);
+        if(aBoolean==a==true){
+            return true;
         }
-        return result;
+        return false;
     }
     @RequestMapping("/getById")
     public ResultVO getById(@RequestParam("id") Integer id){
@@ -69,8 +62,6 @@ public class TestResultFpaController {
         vo.setCode(0);
         vo.setMsg("");
         vo.setData(all);
-        System.out.println(vo);
-
         return vo;
     }
 }

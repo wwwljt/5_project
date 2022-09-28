@@ -58,12 +58,9 @@ public class TblTestPlanSdsServiceImpl implements TblTestPlanSdsService {
 		BeanUtils.copyProperties(tester, tblTesterSds);
 		tblTesterSds.setId(0);
 		Integer count = tblTestPlanSdsDao.insert(tblTesterSds);
-		System.out.println("count = " + count);
 		// 获取自增后的主键
 		Integer id = tblTesterSds.getId();
-		System.out.println("id = " + id);
 		int result = this.insertBatch(answerList, id);
-		System.out.println("result = " + result);
 		return this.seleResult(id);
 	}
 	
@@ -90,11 +87,11 @@ public class TblTestPlanSdsServiceImpl implements TblTestPlanSdsService {
 		ViewTestResultSds viewSds = viewTestResultSdsDao.selectResultSas(testerId);
 		
 		double a = viewSds.getForward() + viewSds.getInversion();
-		if (a <50) {
+		if (a < 50) {
 			return "SdsNormal";
 		} else if (a < 60) {
 			return "SdsMild";
-		} else if (a <=70) {
+		} else if (a <= 70) {
 			return "SdsModerate";
 		} else {
 			return "SdsSevere";
@@ -161,7 +158,6 @@ public class TblTestPlanSdsServiceImpl implements TblTestPlanSdsService {
 		Random random = new Random();
 		int num = random.nextInt(899999) + 100000;
 		tblTestPlanSds.setTestCode(num);
-		System.out.println("tblTestPlanSds = ***************" + tblTestPlanSds);
 		return tblTestPlanSdsDao.save(tblTestPlanSds);
 	}
 	

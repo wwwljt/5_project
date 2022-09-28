@@ -16,6 +16,7 @@ import org.apache.ibatis.annotations.Param;
 public interface ViewTestResultSasDao {
 	/**
 	 * 查询测试结果
+	 *
 	 * @param testerId
 	 * @return
 	 */

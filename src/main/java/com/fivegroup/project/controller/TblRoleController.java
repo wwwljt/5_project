@@ -35,9 +35,7 @@ public class TblRoleController {
 	 */
 	@GetMapping("/findRoleName/{roleName}")
 	public Result findRoleName(@PathVariable String roleName) {
-		System.out.println("roleName = " + roleName);
 		TblRole tblRole = tblRoleService.findRoleName(roleName);
-		System.out.println("tblRole = " + tblRole);
 		return tblRole == null ? Result.ok("不重复") : Result.fail("重复");
 	}
 	
@@ -62,9 +60,6 @@ public class TblRoleController {
 	 */
 	@GetMapping("/getRolePage")
 	public Result getRolePage(Integer page, Integer limit, TblRole tblRole) {
-		System.out.println("page = " + page);
-		System.out.println("limit = " + limit);
-		System.out.println("tblRole = " + tblRole);
 		// 根据条件获取总记录数
 		//		Integer count = tblRoleService.getRoleCount(tblRole);
 		// 获取分页数据
@@ -80,7 +75,6 @@ public class TblRoleController {
 	 */
 	@DeleteMapping("/deleteRole/{id}")
 	public Result deleteRole(@PathVariable Integer id) {
-		System.out.println("id = " + id);
 		Integer count = tblRoleService.deleteRole(id);
 		return Result.ok(count);
 	}
@@ -93,7 +87,6 @@ public class TblRoleController {
 	 */
 	@PostMapping("/saveorupdate")
 	public Result saveOrUpdateRole(TblRoleVo tblRoleVo, HttpServletRequest request) {
-		System.out.println("tblRoleVo = " + tblRoleVo);
 		Integer result = tblRoleService.saveOrUpdate(tblRoleVo, request);
 		return Result.ok(result);
 	}
@@ -106,7 +99,6 @@ public class TblRoleController {
 	 */
 	@PostMapping("/save")
 	public Result save(TblRoleVo tblRoleVo, HttpServletRequest request) {
-		System.out.println("tblRoleVo = " + tblRoleVo);
 		Integer result = tblRoleService.save(tblRoleVo, request);
 		return Result.ok(result);
 	}
@@ -119,7 +111,6 @@ public class TblRoleController {
 	 */
 	@PostMapping("/update")
 	public Result update(TblRoleVo tblRoleVo, HttpServletRequest request) {
-		System.out.println("tblRoleVo = " + tblRoleVo);
 		Integer result = tblRoleService.update(tblRoleVo, request);
 		return Result.ok(result);
 	}

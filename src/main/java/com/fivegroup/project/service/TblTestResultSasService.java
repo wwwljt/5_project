@@ -10,8 +10,5 @@ import java.util.List;
  * @description: 取法于上，仅得为中；取法于中，故为其下
  */
 public interface TblTestResultSasService {
-
-    List<TblTestResultSas> findAnswer();
-
-
+	List<TblTestResultSas> findAnswer();
 }

@@ -42,12 +42,9 @@ public class TblTestPlanSasServiceImpl implements TblTestPlanSasService {
 		TblTesterSas tblTesterSas = new TblTesterSas();
 		BeanUtils.copyProperties(tester, tblTesterSas);
 		Integer count = tblTestPlanSasDao.insert(tblTesterSas);
-		System.out.println("count = " + count);
 		// 获取自增后的主键
 		Integer id = tblTesterSas.getId();
-		System.out.println(id);
 		int i = this.insertBatch(answerList, id);
-		System.out.println("i = " + i);
 		return this.seleResult(id);
 	}
 	
@@ -93,8 +90,10 @@ public class TblTestPlanSasServiceImpl implements TblTestPlanSasService {
 	public List<TblQuestionSas> findAllQuestion() {
 		return tblTestPlanSasDao.findAllQuestion();
 	}
+	
 	/**
 	 * 根据手机号查询sas
+	 *
 	 * @param phone
 	 * @return
 	 */

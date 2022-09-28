@@ -44,7 +44,6 @@ public class UserInfoController {
 	@PostMapping("/uploadFileAvatar")
 	public Result upload(MultipartFile file) {
 		String path = OSSUtil.uploadFileAvatar(file);
-		System.out.println(path);
 		return Result.ok(path);
 	}
 	
@@ -68,7 +67,6 @@ public class UserInfoController {
 	 */
 	@GetMapping("/usercheck")
 	public Result userCheck(Userinfo userinfo) {
-		System.out.println("userinfo = " + userinfo);
 		List<Userinfo> userinfoList = userInfoService.getUserAll();
 		for (Userinfo userinfo1 : userinfoList) {
 			if (userinfo1.getUserid().equals(userinfo.getUserid())
@@ -94,7 +92,6 @@ public class UserInfoController {
 	 */
 	@PostMapping("/saveOrUpdate")
 	public Result saveOrUpdate(Userinfo userinfo, HttpServletRequest request) {
-		System.out.println("userinfo = " + userinfo);
 		Integer result = userInfoService.saveOrUpdate(userinfo, request);
 		return Result.ok();
 	}
@@ -108,17 +105,12 @@ public class UserInfoController {
 	 */
 	@GetMapping("/login")
 	public Result login(String username, String password, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("username = " + username);
-		System.out.println("password = " + password);
-		System.out.println("登陆执行");
 		Userinfo userInfo = userInfoService.login(username, password);
 		if (userInfo == null) {
-			System.out.println("用户名或者密码有误");
 			response.sendRedirect("login.html");
 			return Result.fail();
 		} else {
 			request.getSession().setAttribute("token", JwtHelper.createToken(username));
-			System.out.println("token = " + JwtHelper.createToken(username));
 			return Result.ok("登录成功");
 		}
 	}
@@ -140,7 +132,6 @@ public class UserInfoController {
 		} catch (Exception e) {
 			System.out.println("e.getMessage() = " + e.getMessage());
 		}
-		System.out.println("userInfo = " + userInfo);
 		if (userInfo == null) {
 			throw new RuntimeException("用户不存在");
 		} else {
@@ -162,7 +153,6 @@ public class UserInfoController {
 		Integer count = userInfoService.getUserInfoCount(userInfo);
 		// 获取分页数据
 		List<UserinfoVo> userinfoList = userInfoService.getUserInfoPage(page, limit, userInfo);
-		userinfoList.forEach(System.out::println);
 		return Result.ok(userinfoList, count);
 	}
 	

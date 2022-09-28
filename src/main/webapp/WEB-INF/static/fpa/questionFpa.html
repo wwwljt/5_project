@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 注意：项目正式环境请勿引用该地址 -->
-
     <link rel="stylesheet" href="../layui/css/layui.css">
+
 
 </head>
 <body style="overflow-x:hidden;overflow-y:hidden;">
@@ -92,7 +92,7 @@
                 , {field: 'optionD', title: '选项D', edit: 'textarea', minWidth: 180, style: '-moz-box-align: start;'}
                 , {
                     field: 'type', width: 120, title: '类型', sort: true, templet: function (a) {
-                        if (a.type == 0) {
+                        if (a.type == 2) {
                             return "FPA前15题"
                         } else {
                             return "FPA后15题"
@@ -119,7 +119,6 @@
         //触发单元格工具事件
         table.on('tool(test)', function (obj) { // 双击 toolDouble
             var data = obj.data;
-            //console.log(obj)
             if (obj.event === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     $.ajax({
@@ -128,16 +127,16 @@
                         data: {"id": data.id},
                         dataType: 'json',
                         success: function (data) {
-                            if (data) {
+                            layer.close(index);
+                            layer.msg("删除成功", {icon: 1})
+                           /* if (data) {
                                 // 删除对应的行
                                 console.log(index)
-                                layer.close(index);
-                                layer.msg("删除成功", {icon: 1})
-                                // 刷新
-                                location.reload();
                             } else {
                                 layer.msg("删除失败", {icon: 5})
-                            }
+                            }*/
+                            // 刷新
+                            location.reload();
                         }
                     });
                 });
@@ -155,43 +154,36 @@
                 layer.confirm('真的删除选中的数据吗', function (index) {
                     var idList = [];
                     for (let i = 0; i < data.length; i++) {
-                        idList[i] = (data[i].id);
+                        idList[i] = data[i].id;
                     }
-                    var map = JSON.stringify(idList)
-                    console.log(idList);
+                    // var map =JSON.stringify(idList)
                     //删除数据库中的数值
                     $.ajax({
-                        url: 'questionFpa/deleteMore',
+                        url: '/questionFpa/deleteMore',
                         type: 'post',
-                        data: {"map": map},
+                        data: {idList: idList},
+                        traditional: true,
                         success: function (data) {
-                            if (data === true) {
+                            layer.close(index);
+                            layer.msg("删除成功", {icon: 1});
+                            // 刷新
+                            location.reload();
+                         /*   if (data === true) {
                                 console.log(data);
                                 console.log(index);
-                                layer.close(index);
-                                layer.msg("删除成功", {icon: 1});
-                                // 刷新
-                                location.reload();
+
                             } else {
                                 layer.msg("删除失败", {icon: 5})
-                            }
+                            }*/
                         }
                     });
                 });
             }
         })
-        f('#insert').on('click', function (data) {
+        //添加
+        f('#insert').on('click', function () {
             let form = layui.form;
-            // if (data.status==="0"){
-            //     data.status="ON";
-            // }else {
-            //     data.status="OFF";
-            // }
-            // if (data.type==="0"){
-            //     data.type="FPA前15题";
-            // }else {
-            //     data.type="FPA后15题";
-            // }
+
 
             layer.open({
                 type: 1,
@@ -202,36 +194,10 @@
                 content: f("#openDiv")
             });
 
-            form.val("add", {
-                // "id": data.id,
-                "question": data.question,
-                "optionA": data.optionA,
-                "optionB": data.optionB,
-                "optionC": data.optionC,
-                "optionD": data.optionD,
-                "type": data.type,
-                "status": data.status,
-                // "create_time": data.create_time,
-                // "createBy": data.createBy,
-                // "update_time": data.update_time,
-                // "updateBy": data.updateBy
-
-            });
 
             form.on('submit(update_submit)', function (massage) {
-                console.log("message为：", massage);
-                console.log(massage.field);
                 var data = massage.field;
-                if (data.type === "FPA前15题") {
-                    data.type = "0";
-                } else {
-                    data.type = "1";
-                }
-                if (data.status === "on") {
-                    data.status = "1";
-                } else {
-                    data.status = "0";
-                }
+
                 f.ajax({
                     type: "post",
                     url: "/questionFpa/insert",
@@ -243,14 +209,10 @@
                         "optionC": data.optionC,
                         "optionD": data.optionD,
                         "type": data.type,
-                        "status": data.status
-                        // "create_time": data.create_time,
-                        // "createBy": data.createBy,
-                        // "update_time": data.update_time,
-                        // "updateBy": data.updateBy
+                        "status": data.status == "on" ? 0 : 1
+
                     },
                     success: function (msg) {
-                        console.log(msg);
                         layer.closeAll();//关闭所有的弹出层
                         if (msg == true) {
                             layer.msg("添加成功", {icon: 6});
@@ -266,12 +228,29 @@
             });
 
         })
+        //题目唯一性校验
+        $("#question").blur(function () {
+            $.ajax({
+                url: "/questionFpa/search",
+                data: {question: $("#question").val()},
+                dataType: "json",
+                type: "get",
+                success: function (re) {
+                    if (re) {
+                        $("#question").next().html("未重名");
+                        $('#addQuestion').removeClass("layui-btn-disabled").attr("disabled", false);
+                    } else {
+                        $("#question").next().html("请重新输入");
+                        $('#addQuestion').addClass("layui-btn-disabled").attr("disabled", true);
+                    }
+                }
+            })
+        })
         f("#sea").click(//绑定点击事件
             function search_roles() {
 
                 var qques = f('#ques');//获取问题输入框的值
                 var create = f('#create');//获取创建人输入框的值
-                console.log(search_roles)
                 //执行重载
                 table.reload('testReload', {
                     page: {
@@ -286,8 +265,6 @@
         )
         f("#myButton").click(
             function search_roles() {
-
-                console.log(search_roles)
                 //执行重载
                 table.reload('testReload', {
                     page: {
@@ -300,35 +277,10 @@
                 });
             }
         )
-        // var $ = layui.$,
-        //     active = {
-        //     reload: function () {
-        //         var ques = $('#ques');
-        //         var create=$('#create')
-        //         //执行重载
-        //         table.reload('testReload', {
-        //
-        //             page: {
-        //                 curr: 1 //重新从第 1 页开始
-        //             }
-        //             , where: {
-        //                 question: ques.val(),
-        //                 createBy:create.val(),
-        //             }
-        //
-        //         });
-        //     }
-        // };
-
-        // $('.layui-inline .layui-btn').on('click', function () {
-        //     var type = $(this).data('type');
-        //     active[type] ? active[type].call(this) : '';
-        // });
 
 
         function updateuser(obj, data) {
             let form = layui.form;
-            alert(data.status)
             form.val("add", {
                 "id": data.id,
                 "question": data.question,
@@ -338,11 +290,6 @@
                 "optionD": data.optionD,
                 "type": data.type,
                 "status": !data.status,
-                // "create_time": data.create_time,
-                // "createBy": data.createBy,
-                // "update_time": data.update_time,
-                // "updateBy": data.updateBy
-
             });
             layer.open({
                 async: false,
@@ -350,14 +297,11 @@
                 type: 1,
                 title: "修改题目信息",
                 skin: 'layui-layer-molv',
-                area: ['500px', '300px'],
+                area: ['500px', '500px'],
                 content: $("#openDiv")//引用的弹出层的页面层的方式加载修改界面表单
             });
             form.on('submit(update_submit)', function (massage) {
-                console.log("message为：", massage);
-                console.log(massage.field);
                 var data = massage.field;
-                alert(data.status)
                 $.ajax({
                     type: "post",
                     url: "/questionFpa/update",
@@ -370,13 +314,9 @@
                         "optionD": data.optionD,
                         "type": data.type,
                         "status": data.status == "on" ? 0 : 1,
-                        // "create_time": data.create_time,
-                        // "createBy": data.createBy,
-                        // "update_time": data.update_time,
-                        // "updateBy": data.updateBy
+
                     },
                     success: function (msg) {
-                        console.log(msg);
                         layer.closeAll();//关闭所有的弹出层
                         if (msg) {
                             layer.msg("修改成功", {icon: 6});
@@ -440,7 +380,7 @@
             <div class="layui-input-inline" style="width: 45%">
                 <input id="question" type="text" name="question"
                        placeholder="题目"
-                       autocomplete="off" class="layui-input">
+                       autocomplete="off" class="layui-input"><span style="color: red"></span>
             </div>
         </div>
         <div class="layui-form-item">
@@ -478,7 +418,7 @@
             <label class="layui-form-label">类型</label>
             <div class="layui-input-block" style="width: 45%">
                 <select name="type" id="type" lay-filter="aihao">
-                    <option value="0">前15题</option>
+                    <option value="2">前15题</option>
                     <option value="1">后15题</option>
                 </select>
             </div>
@@ -491,7 +431,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="update_submit">立即提交</button>
+                <button class="layui-btn" id="addQuestion" lay-submit lay-filter="update_submit">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>

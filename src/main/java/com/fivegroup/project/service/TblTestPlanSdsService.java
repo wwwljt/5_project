@@ -79,8 +79,10 @@ public interface TblTestPlanSdsService {
 	 * @return
 	 */
 	ViewTestPlan queryByTestCode(String testCode);
+	
 	/**
 	 * 根据 手机号查找测试计划
+	 *
 	 * @param phone
 	 * @return
 	 */
@@ -88,12 +90,14 @@ public interface TblTestPlanSdsService {
 	
 	/**
 	 * 查询所偶 sds
+	 *
 	 * @return
 	 */
 	List<TblQuestionSds> findAllQuestion();
 	
 	/**
 	 * 保存sds 测试结果
+	 *
 	 * @param answerList
 	 * @param tester
 	 * @return
@@ -102,18 +106,21 @@ public interface TblTestPlanSdsService {
 	
 	/**
 	 * 批量插入
+	 *
 	 * @param answerList
 	 * @param testerId
 	 * @return
 	 */
-	int insertBatch(List<Map<String,Object>> answerList,Integer testerId);
+	int insertBatch(List<Map<String, Object>> answerList, Integer testerId);
 	
 	/**
 	 * 查询测试结果
+	 *
 	 * @param testerId
 	 * @return
 	 */
 	String seleResult(Integer testerId);
+	
 	/**
 	 * 校验计划名称是否重复
 	 *

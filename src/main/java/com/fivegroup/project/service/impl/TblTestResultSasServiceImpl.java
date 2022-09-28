@@ -16,16 +16,16 @@ import java.util.List;
 
 @Service
 public class TblTestResultSasServiceImpl implements TblTestResultSasService {
-
-    @Autowired
-    private TblTestResultSasDao tblTestResultSasDao;
-
-
-    @Override
-    public List<TblTestResultSas> findAnswer() {
-
-        List<TblTestResultSas> all = tblTestResultSasDao.findAnswer();
-
-        return all;
-    }
+	
+	@Autowired
+	private TblTestResultSasDao tblTestResultSasDao;
+	
+	
+	@Override
+	public List<TblTestResultSas> findAnswer() {
+		
+		List<TblTestResultSas> all = tblTestResultSasDao.findAnswer();
+		
+		return all;
+	}
 }

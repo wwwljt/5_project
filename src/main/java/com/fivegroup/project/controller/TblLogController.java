@@ -28,9 +28,6 @@ public class TblLogController {
 	
 	@GetMapping("/getLogPage")
 	public Result getLogPage(Integer page, Integer limit) {
-		System.out.println("page = " + page);
-		System.out.println("limit = " + limit);
-		
 		// 根据条件获取分页总条数
 		Integer count = tblLogService.getLogCount();
 		// 获取分页数据

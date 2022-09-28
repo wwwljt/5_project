@@ -46,7 +46,7 @@ public class MenuServiceImpl implements MenuService {
 	 */
 	@Override
 	public List<TblMenu> getTestByParentId(Integer parentId, Integer roleId) {
-		return menuDao.getTestByParentId(parentId,roleId);
+		return menuDao.getTestByParentId(parentId, roleId);
 	}
 	
 	/**
@@ -94,7 +94,6 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public TblMenu getParentNameById(Integer id) {
 		TblMenu tblMenu = menuDao.getMenuByMenuId(id);
-		System.out.println("tblMenu-----------------dao = " + tblMenu);
 		if (tblMenu.getParentId() == 0) {
 			TblMenu tblMenu1 = new TblMenu();
 			tblMenu1.setMenuName("没有上级目录");

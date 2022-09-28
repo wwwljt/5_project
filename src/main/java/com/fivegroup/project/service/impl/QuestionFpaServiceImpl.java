@@ -3,7 +3,6 @@ package com.fivegroup.project.service.impl;
 
 import com.fivegroup.project.dao.QuestionFpaMapper;
 import com.fivegroup.project.entity.QuestionFpa;
-import com.fivegroup.project.entity.QuestionFpa1;
 import com.fivegroup.project.service.QuestionFpaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,18 +25,14 @@ public class QuestionFpaServiceImpl implements QuestionFpaService {
         return mapper.getAllQF(begin, limit,questionFpa);
     }
 
-//    @Override
-//    public List<Question_fpa> getAll() {
-//        return mapper.getAll();
-//    }
 
     @Override
-    public Boolean insertQF(QuestionFpa1 questionFpa) {
+    public Boolean insertQF(QuestionFpa questionFpa) {
         return mapper.insertQF(questionFpa);
     }
 
     @Override
-    public Boolean deleteQF(int id) {
+    public Boolean deleteQF(int[] id) {
         return mapper.deleteQF(id);
     }
 
@@ -46,10 +41,11 @@ public class QuestionFpaServiceImpl implements QuestionFpaService {
         return mapper.updateQF(questionFpa);
     }
 
-//    @Override
-//    public List<Question_fpa> searchQF(Question_fpa questionFpa) {
-//        return mapper.searchQF(questionFpa);
-//    }
+    @Override
+    public List<QuestionFpa> searchQF(QuestionFpa questionFpa) {
+        return mapper.searchQF(questionFpa);
+    }
+
 
     @Override
     public int countQF(QuestionFpa questionFpa) {

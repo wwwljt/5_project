@@ -9,12 +9,18 @@ import java.util.List;
 import java.util.Map;
 
 public interface TestResultFpaService {
-    //查询所有并分页
-    public List<TestResultFpa> getAllTRF(@Param("begin")int begin, @Param("limit")int limit, TestResultFpa testResultFpa);
-    // 删除
-    public Boolean deleteTRF(int id);
-    // 查询总条数
-    public int countTRF(TestResultFpa testResultFpa);
-    public ResultDiv getById(int id);
-    public Map<String,Integer> queryAll();
+	//查询所有并分页
+	public List<TestResultFpa> getAllTRF(@Param("begin") int begin, @Param("limit") int limit, TestResultFpa testResultFpa);
+	
+	// 删除
+	public Boolean deleteTRF(int[] tester_id);
+	
+	public Boolean deleteTTf(int[] id);
+	
+	// 查询总条数
+	public int countTRF(TestResultFpa testResultFpa);
+	
+	public ResultDiv getById(int id);
+	
+	public Map<String, Integer> queryAll();
 }

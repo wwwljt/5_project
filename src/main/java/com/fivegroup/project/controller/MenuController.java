@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,6 +28,7 @@ public class MenuController {
 	
 	/**
 	 * 根据 roleid 获取Menu
+	 *
 	 * @param roleId
 	 * @return
 	 */
@@ -44,10 +44,7 @@ public class MenuController {
 	 */
 	@GetMapping("/getTreeByParentId")
 	public Result getTreeByParentId(Integer parentId, Integer roleId) {
-		System.out.println("parentId = " + parentId);
-		System.out.println("roleId = " + roleId);
 		List<TblMenu> tblMenuList = menuService.getTestByParentId(parentId, roleId);
-		System.out.println("tblMenuList = " + tblMenuList);
 		return Result.ok(tblMenuList);
 	}
 	
@@ -72,7 +69,6 @@ public class MenuController {
 	@PostMapping("/saveOrUpdate")
 	
 	public Result saveOrUpdate(TblMenu tbMenu, HttpServletRequest request) {
-		System.out.println("tbMenu = " + tbMenu);
 		Integer result = menuService.saveOrUpdate(tbMenu, request);
 		return Result.ok(result);
 	}
@@ -86,9 +82,7 @@ public class MenuController {
 	 */
 	@GetMapping("/getParentNameById")
 	public Result getParentNameById(Integer menuId) {
-		System.out.println("id = " + menuId);
 		TblMenu tblMenu = menuService.getParentNameById(menuId);
-		System.out.println("tblMenu = " + tblMenu);
 		return Result.ok(tblMenu);
 	}
 	
@@ -112,7 +106,6 @@ public class MenuController {
 	@GetMapping("/getTree")
 	public Result getTree() {
 		List<Menu> menuList = menuService.getTree();
-		System.out.println("menuList = " + menuList);
 		return Result.ok(menuList);
 	}
 	
@@ -125,7 +118,6 @@ public class MenuController {
 	@GetMapping("/getTree/{roleId}")
 	public Result getMenuId(@PathVariable("roleId") Integer roleId) {
 		Integer[] menuId = menuService.getMenuId(roleId);
-		System.out.println("menuId = " + Arrays.toString(menuId));
 		return Result.ok(menuId);
 	}
 }

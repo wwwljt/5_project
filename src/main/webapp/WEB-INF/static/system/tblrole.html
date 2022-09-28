@@ -209,6 +209,8 @@
                         //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
                         content: $("#addRoleForm")
                     });
+                    $("#roleName").next().html("");
+                    document.getElementById("addRoleForm").reset();
                     break;
             }
         });
@@ -219,7 +221,8 @@
             roleNameOld = data.roleName;
             switch (obj.event) {
                 case 'edit':
-                    console.log(data.status)
+                    $("#editRoleName").next().html("");
+                    $('#updateRoleBtn').removeClass("layui-btn-disabled").attr("disabled", false);
                     if (data.status == 0) {
                         document.getElementById("updateStatus").checked = true
                     } else {
@@ -346,11 +349,9 @@
 
         //鼠标离开修改角色输入框判断是否重名
         $("#editRoleName").blur(function () {
-            alert(roleNameOld)
             $("#editRoleName").next().html("");
             let roleNameNew = $("#editRoleName").val();
             $('#updateRoleBtn').removeClass("layui-btn-disabled").attr("disabled", false);
-            alert(roleNameNew);
             if (roleNameNew !== null && roleNameNew !== "" && roleNameNew != roleNameOld) {
                 $.ajax({
                     url: "/system/role/findRoleName/" + roleNameNew,
@@ -402,7 +403,7 @@
 
         //addUserForm表单的提交
         form.on('submit(addRoleFilter)', function (data) {
-            $("#addRoleButton").attr("class", "layui-btn layui-btn-disabled")
+            $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
             console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
             let checkData = tree.getChecked('addFormMenu');
             let list = getChecked_list(checkData)

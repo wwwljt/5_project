@@ -16,50 +16,50 @@ import java.util.List;
 
 @Service
 public class TblTesterSasServiceImpl implements TblTesterSasService {
-
-    @Autowired
-    private TblTesterSasDao tblTesterSasDao;
-
-    @Override
-    public List<TblTesterSas> findAll(int page, int limit, String name, String planId) {
-
-        page = (page - 1) * limit;
-
-        List<TblTesterSas> all = tblTesterSasDao.findAll(page, limit, name, planId);
-
-        return all;
-    }
-
-    @Override
-    public int selectAll() {
-        return tblTesterSasDao.selectAll();
-    }
-
-    @Override
-    public int delData(List ids) {
-
-        // 调用一下删除做题方法
-        delTestData(ids);
-
-        int i = tblTesterSasDao.delData(ids);
-
-        return i;
-    }
-
-    @Override
-    public int delTestData(List idt) {
-
-        int i = tblTesterSasDao.delTestData(idt);
-
-        return i;
-    }
-
-
-    @Override
-    public List<TblTesterSas> findPie() {
-
-        List<TblTesterSas> pie = tblTesterSasDao.findPie();
-
-        return pie;
-    }
+	
+	@Autowired
+	private TblTesterSasDao tblTesterSasDao;
+	
+	@Override
+	public List<TblTesterSas> findAll(int page, int limit, String name, String planId) {
+		
+		page = (page - 1) * limit;
+		
+		List<TblTesterSas> all = tblTesterSasDao.findAll(page, limit, name, planId);
+		
+		return all;
+	}
+	
+	@Override
+	public int selectAll() {
+		return tblTesterSasDao.selectAll();
+	}
+	
+	@Override
+	public int delData(List ids) {
+		
+		// 调用一下删除做题方法
+		delTestData(ids);
+		
+		int i = tblTesterSasDao.delData(ids);
+		
+		return i;
+	}
+	
+	@Override
+	public int delTestData(List idt) {
+		
+		int i = tblTesterSasDao.delTestData(idt);
+		
+		return i;
+	}
+	
+	
+	@Override
+	public List<TblTesterSas> findPie() {
+		
+		List<TblTesterSas> pie = tblTesterSasDao.findPie();
+		
+		return pie;
+	}
 }

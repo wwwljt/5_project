@@ -42,6 +42,7 @@ public class FrontController {
 	
 	/**
 	 * 前端登录页面
+	 *
 	 * @param modelAndView
 	 * @return
 	 */
@@ -50,6 +51,7 @@ public class FrontController {
 		modelAndView.setViewName("login");
 		return modelAndView;
 	}
+	
 	/**
 	 * 前端登录校验
 	 *
@@ -58,10 +60,8 @@ public class FrontController {
 	 */
 	@PostMapping("/checkTest")
 	public Result checkTest(@RequestBody TesterVo testVo, HttpSession session) {
-		System.out.println("testVo = " + testVo);
 		// 根据 邀请码查询测试计划
 		ViewTestPlan viewTestPlan = tblTestPlanSdsService.queryByTestCode(testVo.getTestCode().toString());
-		System.out.println("viewTestPlan = " + viewTestPlan);
 		if (ObjectUtil.isNotEmpty(viewTestPlan)) {
 			// 邀请码可用
 			Date date = new Date();
@@ -84,9 +84,7 @@ public class FrontController {
 						break;
 					case "sds":
 						List<TblTesterSds> byPhone2 = tblTestPlanSdsService.findSdsTesterByPhone(testVo.getPhone());
-						System.out.println("byPhone2 = " + byPhone2);
 						if (ObjectUtil.isNotEmpty(byPhone2) && byPhone2.size() > 0) {
-							System.out.println("成功");
 							flag = true;
 						}
 						break;
@@ -102,6 +100,7 @@ public class FrontController {
 					testVo.setTestPlanId(viewTestPlan.getId());
 					testVo.setType(viewTestPlan.getType());
 					testVo.setName(testVo.getName());
+					testVo.setTestName(viewTestPlan.getTestName());
 					session.setAttribute("testerVo", testVo);
 					return Result.ok();
 				}
@@ -124,10 +123,10 @@ public class FrontController {
 	 */
 	@GetMapping("/findQuestion")
 	public ModelAndView findQuestion(HttpSession httpSession, ModelAndView modelAndView) {
-		System.out.println("find    执行");
 		//获取session中保存的测试者信息
 		TesterVo tester = (TesterVo) httpSession.getAttribute("testerVo");
-		if(tester!=null){
+		
+		if (tester != null) {
 			switch (tester.getType()) {
 				case Constants.FPA:
 					//查询所有可以测试的fpa测试题
@@ -148,25 +147,25 @@ public class FrontController {
 					break;
 				
 			}
+			modelAndView.addObject("testerVo", tester);
 			modelAndView.setViewName("testQuestion");
-		}else {
+		} else {
 			modelAndView.setViewName("login");
 		}
-
+		
 		return modelAndView;
 	}
 	
 	/**
 	 * 批量保存测试结果
+	 *
 	 * @param answerList
 	 * @return MyReturn
 	 */
 	@PostMapping("/saveBatchTestResult")
 	public Result saveBatchTestResult(@RequestBody List<Map<String, Object>> answerList, HttpSession httpSession) {
-		System.out.println("answerList = " + answerList);
 		//获取session中保存的测试者信息
 		TesterVo tester = (TesterVo) httpSession.getAttribute("testerVo");
-		System.out.println("tester = " + tester);
 		
 		switch (tester.getType()) {
 			case Constants.FPA: {

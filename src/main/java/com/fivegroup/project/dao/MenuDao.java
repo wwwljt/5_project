@@ -32,8 +32,8 @@ public interface MenuDao {
 	 * @return
 	 */
 	Integer[] getMenuId(@Param("roleId") Integer roleId);
-
-//	Integer updateMenu(@Param("roleId") Integer roleId, @Param("menus") Integer[] menus);
+	
+	//	Integer updateMenu(@Param("roleId") Integer roleId, @Param("menus") Integer[] menus);
 	
 	/**
 	 * 根据 roleId 删除
@@ -58,17 +58,18 @@ public interface MenuDao {
 	 * @return
 	 */
 	List<TblMenu> getMenuAll();
-
 	
 	
 	/**
 	 * 根据 id 获取 menu
+	 *
 	 * @param id
 	 * @return
 	 */
-
+	
 	
 	TblMenu getMenuByMenuId(@Param("id") Integer id);
+	
 	/**
 	 * 根据 id 获取 父类名称
 	 *
@@ -79,6 +80,7 @@ public interface MenuDao {
 	
 	/**
 	 * 保存
+	 *
 	 * @param tbMenu
 	 * @return
 	 */
@@ -86,25 +88,32 @@ public interface MenuDao {
 	
 	/**
 	 * 修改
+	 *
 	 * @param tbMenu
 	 * @return
 	 */
 	Integer update(@Param("tbMenu") TblMenu tbMenu);
+	
 	/**
 	 * 删除
+	 *
 	 * @param menuId
 	 * @return
 	 */
 	Integer delete(@Param("menuId") Integer menuId);
+	
 	/**
 	 * 根据父级 id 获取 菜单
+	 *
 	 * @param parentId
 	 * @param roleId
 	 * @return
 	 */
 	List<TblMenu> getTestByParentId(@Param("parentId") Integer parentId, @Param("roleId") Integer roleId);
+	
 	/**
 	 * 根据 roleid 获取Menu
+	 *
 	 * @param roleId
 	 * @return
 	 */

@@ -181,10 +181,8 @@
         });
         //修改或添加式判断问题是否存在
         $("#deptName").blur(function () {
-            alert(deptNameValueOld)
             $("#deptName").next().html("");
             var deptNameValueNew = $("#deptName").val();
-            alert(deptNameValueNew)
             if (deptNameValueOld == undefined) {
                 if (deptNameValueOld !== null && deptNameValueOld !== "") {
                     $.ajax({

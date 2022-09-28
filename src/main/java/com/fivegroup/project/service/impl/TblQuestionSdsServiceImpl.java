@@ -63,9 +63,7 @@ public class TblQuestionSdsServiceImpl implements TblQuestionSdsService {
 	@Override
 	public Integer update(TblQuestionSds tblQuestionSds, HttpServletRequest request) {
 		tblQuestionSds.setUpdateTime(new Date());
-		System.out.println("JwtHelper.getUsername(request) = " + JwtHelper.getUsername(request));
 		tblQuestionSds.setUpdateBy(JwtHelper.getUsername(request));
-		System.out.println("tblQuestionSds = " + tblQuestionSds);
 		return tblQuestionSdsDao.update(tblQuestionSds);
 	}
 	

@@ -3,7 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fivegroup.project.dao.TblTestPlanFpaMapper">
-    <insert id="insertTTp" parameterType="tblTestPlanFpa" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertTTp" parameterType="com.fivegroup.project.entity.TblTestPlanFpa" useGeneratedKeys="true"
+            keyProperty="id">
         insert into
         tbl_test_plan_fpa(test_name,test_code,test_begin,test_end,create_time,create_by,update_time,update_by,remark,type)
         values
@@ -11,22 +12,7 @@
         <!--           insert into tbl_test_plan_fpa(id,test_name,option_a,option_b,option_c,option_d,type,status)
                 values (#{id},#{question},#{optionA},#{optionB},#{optionC},#{optionD},#{type},#{status})-->
     </insert>
-    <insert id="insert"  keyProperty="tblTesterFpa.id" useGeneratedKeys="true">
-        insert into w_gl.tbl_tester_fpa(`name`, phone, create_time, test_plan_id)
-        values (#{tblTesterFpa.name}, #{tblTesterFpa.phone}, now(), #{tblTesterFpa.testPlanId})
-    </insert>
-    <insert id="insertBatch">
-        insert into tbl_test_result_fpa(tester_id, question_id, answer)
-        values
-        <foreach collection="answerList" item="entity" separator=",">
-            (#{testerId}, #{entity.questionId}, #{entity.answer})
-        </foreach>
-        on duplicate key update
-        tester_id = values(tester_id),
-        question_id = values(question_id),
-        answer = values(answer)
-    </insert>
-    <update id="updateTTp" parameterType="tblTestPlanFpa">
+    <update id="updateTTp" parameterType="com.fivegroup.project.entity.TblTestPlanFpa">
         update tbl_test_plan_fpa
         <set>
             <if test="testName!=null">
@@ -63,12 +49,13 @@
         </set>
         where id=#{id}
     </update>
-    <delete id="deleteTTp" parameterType="tblTestPlanFpa">
-        update tbl_test_plan_fpa
-        set isdelete=1
-        where id = #{id}
+    <delete id="deleteTTp" parameterType="com.fivegroup.project.entity.TblTestPlanFpa">
+        update tbl_test_plan_fpa set isdelete=1 where
+        <foreach collection="array" item="id" open="id in(" close=")" separator=",">
+            #{id}
+        </foreach>
     </delete>
-    <select id="getAllTTp" resultType="tblTestPlanFpa">
+    <select id="getAllTTp" resultType="com.fivegroup.project.entity.TblTestPlanFpa">
         select * from tbl_test_plan_fpa
         <where>
             isdelete=0
@@ -76,7 +63,7 @@
                 and test_name like concat('%',#{testPlanFpa.testName},'%')
             </if>
             <if test="testPlanFpa.createBy!=null and testPlanFpa.createBy!=''">
-                and create_by like concat('%',#{questionFpa.createBy},'%')
+                and create_by like concat('%',#{testPlanFpa.createBy},'%')
             </if>
         </where>
         limit #{begin},#{limit};
@@ -94,19 +81,46 @@
             </if>
         </where>
     </select>
+    <select id="searchTTp" resultType="tblTestPlanFpa">
+        select * from tbl_test_plan_fpa
+        <where>
+            <if test="testName!null">
+                test_name=#{testName}
+            </if>
+        </where>
+    </select>
+    <select id="search" resultType="com.fivegroup.project.entity.TblTestPlanFpa">
+        select *
+        from tbl_test_plan_fpa
+    </select>
+    <insert id="insert" keyProperty="tblTesterFpa.id" useGeneratedKeys="true">
+        insert into w_gl.tbl_tester_fpa(`name`, phone, create_time, test_plan_id)
+        values (#{tblTesterFpa.name}, #{tblTesterFpa.phone}, now(), #{tblTesterFpa.testPlanId})
+    </insert>
+    <insert id="insertBatch">
+        insert into w_gl.tbl_test_result_fpa(tester_id, question_id, answer)
+        values
+        <foreach collection="answerList" item="entity" separator=",">
+            (#{testerId}, #{entity.questionId}, #{entity.answer})
+        </foreach>
+        on duplicate key update
+        tester_id = values(tester_id),
+        question_id = values(question_id),
+        answer = values(answer)
+    </insert>
+
     <select id="findFpaTesterByPhone" resultType="com.fivegroup.project.entity.TblTesterFpa">
         select *
         from w_gl.tbl_tester_fpa
         where phone = #{phone}
+
     </select>
     <select id="findAllQuestion" resultType="com.fivegroup.project.entity.QuestionFpa">
         select *
-        from tbl_question_fpa
-        where status = 0;
+        from w_gl.tbl_question_fpa
+        where status = 0
+          and flag = 0;
     </select>
 
-    <!--    <select id="getAll" resultType="question_fpa">-->
-    <!--        select * from tbl_question_fpa-->
-    <!--    </select>-->
 
 </mapper>

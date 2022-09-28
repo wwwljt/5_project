@@ -16,6 +16,7 @@ import org.apache.ibatis.annotations.Param;
 public interface ViewTestResultFpaDao {
 	/**
 	 * 查找测试结果
+	 *
 	 * @param testerId
 	 * @return
 	 */

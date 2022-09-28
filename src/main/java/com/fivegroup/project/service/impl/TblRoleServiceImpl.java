@@ -95,10 +95,7 @@ public class TblRoleServiceImpl implements TblRoleService {
 		result = tblRoleDao.saveRole(tblRoleVo);
 		// 获取 role
 		TblRoleVo tblRoleVo1 = tblRoleDao.getRoleId(tblRoleVo);
-		System.out.println("tblRoleVo1 = " + tblRoleVo1);
 		Integer roleId = tblRoleVo1.getRoleId();
-		System.out.println("roleId = " + roleId);
-		System.out.println("tblRoleVo = " + tblRoleVo);
 		menuDao.insertMenu(tblRoleVo1.getRoleId(), tblRoleVo.getMenus());
 		return result;
 	}

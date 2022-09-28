@@ -9,56 +9,55 @@
     <!-- 注意：项目正式环境请勿引用该地址 -->
     <link rel="stylesheet" href="../layui/css/layui.css">
 
-
 </head>
 <body style="overflow-x:hidden;overflow-y:hidden;">
 
-<div class="layui-inline">
-    <label class="layui-form-label">问题</label>
-    <div class="layui-input-inline">
-        <input type="text" id="ques" name="question" placeholder="请输入问题" autocomplete="off" class="layui-input">
+    <div class="layui-inline">
+        <label class="layui-form-label">问题</label>
+        <div class="layui-input-inline">
+            <input type="text" id="ques" name="question" placeholder="请输入问题" autocomplete="off" class="layui-input">
+        </div>
     </div>
-</div>
-<div class="layui-inline">
-    <label class="layui-form-label">创建人</label>
-    <div class="layui-input-inline">
-        <input type="text" id="create" name="createBy" placeholder="请输入创建人" autocomplete="off"
-               class="layui-input">
+    <div class="layui-inline">
+        <label class="layui-form-label">创建人</label>
+        <div class="layui-input-inline">
+            <input type="text" id="create" name="createBy" placeholder="请输入创建人" autocomplete="off" class="layui-input">
+        </div>
     </div>
-</div>
-<div class="layui-inline">
-    <div class="layui-input-inline">
-        <button class="layui-btn" id="sea" data-type="reload">查询</button>
-        <button type="reset" class="layui-btn layui-btn-primary" id="myButton">重置</button>
+    <div class="layui-inline">
+        <div class="layui-input-inline">
+            <button class="layui-btn" id="sea" data-type="reload">查询</button>
+            <button type="reset" class="layui-btn layui-btn-primary" id="myButton">重置</button>
+        </div>
     </div>
-</div>
 
-<table id="test" lay-filter="test"></table>
-
+<table  id="test" lay-filter="test"></table>
+    <div id="qrcode" style="width:150px; height:150px; display: none; margin-left: 50px;margin-top: 20px"></div>
 <script type="text/html" id="toolbarDemo">
     <button type="button" class="layui-btn" id="insert">添加</button>
-    <a class="layui-btn layui-btn-danger" lay-event="del" id="delete"><i
-            class="layui-icon layui-icon-delete"></i>删除</a>
+    <a class="layui-btn layui-btn-danger" lay-event="del" id="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
     <div class="layui-btn-container">
     </div>
 </script>
 
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="detail">查看二维码</a>
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-xs" lay-event="detail">查看二维码</a>
+        <a class="layui-btn layui-btn-xs" lay-event="internet">查看网址</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
 <!-- 注意：项目正式环境请勿引用该地址 -->
 <!--<script src="jquery-3.6.0.min.js"></script>-->
-<script src="../layui/layui.js"></script>
+    <script src="../layui/layui.js"></script>
 <script>
-    layui.use(['table', 'dropdown'], function () {
+    layui.use(['table', 'dropdown','laydate'], function () {
         var table = layui.table;
         var f = layui.jquery;
-        var $ = layui.jquery;
+        var $=layui.jquery;
         var laypage = layui.laypage, layer = layui.layer;
+        var laydate=layui.laydate;
         // 创建渲染实例
         table.render({
             elem: '#test'
@@ -74,7 +73,7 @@
             , page: true
             , id: 'testReload'
             , cols: [[
-                {type: 'checkbox', fixed: 'left'}
+                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'id', fixed: 'left', width: 46, title: 'ID',}
                 , {field: 'testName', width: 120, title: '测试名称'}
                 , {
@@ -95,10 +94,10 @@
                 , {field: 'updateTime', title: '修改时间', width: 125,}
                 , {field: 'updateBy', title: '修改人', width: 125,},
                 {field: 'remark', title: '备注', width: 120}
-                , {
+               , {
                     field: 'type', width: 120, title: '类型', sort: true,
                 }
-                , {fixed: 'right', width: 205, minWidth: 205, toolbar: '#barDemo'}
+                ,{fixed: 'right', width: 300, minWidth: 300, toolbar: '#barDemo'}
             ]]
         });
         //触发单元格工具事件
@@ -119,7 +118,7 @@
                                 layer.close(index);
                                 layer.msg("删除成功", {icon: 1})
                                 // 刷新
-                                location.reload();
+                                 location.reload();
                             } else {
                                 layer.msg("删除失败", {icon: 5})
                             }
@@ -128,10 +127,20 @@
                 });
             } else if (obj.event === 'edit') {
                 updateuser(obj, data);
+            }else if (obj.event === 'internet') {
+                    look();
+            }else if (obj.event === 'detail') {
+                layer.open({
+                    title: '查看二维码',
+                    skin: "layui-layer-molv",//弹出层=皮肤样式
+                    type: 1,
+                    content: $("#qrcode"),
+                    area: ['300px', '300px']
+                })
             }
         });
         //头工具栏事件
-        table.on('toolbar(test)', function (obj) {
+        table.on('toolbar(test)', function(obj) {
             var checkStatus = table.checkStatus(obj.config.id),
                 data = checkStatus.data;
             if (data.length === 0) {
@@ -142,13 +151,14 @@
                     for (let i = 0; i < data.length; i++) {
                         idList[i] = (data[i].id);
                     }
-                    var map = JSON.stringify(idList)
+                    // var map =JSON.stringify(idList)
                     console.log(idList);
                     //删除数据库中的数值
                     $.ajax({
                         url: 'TblTestPlanFpa/deleteMore',
                         type: 'post',
-                        data: {"map": map},
+                        data: {idList:idList},
+                        traditional:true,
                         success: function (data) {
                             if (data === true) {
                                 console.log(data);
@@ -165,18 +175,25 @@
                 });
             }
         })
+        $("#question").blur(function () {
+            $.ajax({
+                url: "/TblTestPlanFpa/search",
+                data: {question: $("#question").val()},
+                dataType: "json",
+                type: "get",
+                success: function (re) {
+                    if (re) {
+                        $("#question").next().html("未重名");
+                        $('#addQuestion').removeClass("layui-btn-disabled").attr("disabled", false);
+                    } else {
+                        $("#question").next().html("请重新输入");
+                        $('#addQuestion').addClass("layui-btn-disabled").attr("disabled", true);
+                    }
+                }
+            })
+        })
         f('#insert').on('click', function (data) {
             let form = layui.form;
-            // if (data.status==="0"){
-            //     data.status="ON";
-            // }else {
-            //     data.status="OFF";
-            // }
-            // if (data.type==="0"){
-            //     data.type="FPA前15题";
-            // }else {
-            //     data.type="FPA后15题";
-            // }
 
             layer.open({
                 type: 1,
@@ -186,16 +203,20 @@
                 shadeClose: false, //点击遮罩关闭
                 content: f("#openDiv")
             });
-
-            form.val("add", {
-                // "id": data.id,
-                "testName": data.testName,
-                "testBegin": data.testBegin,
-                "testEnd": data.testEnd,
-                "remark": data.remark,
-
-
+            laydate.render({
+                elem: '#testBegin'
+                , type: 'datetime'
+                , value: new Date()
+                , isInitValue: true
             });
+            var now = new Date().getTime();
+            laydate.render({
+                elem: '#testEnd'
+                , type: 'datetime'
+                , value: new Date(now + 2 * 86400 * 1000)
+                , isInitValue: true
+            });
+
 
             form.on('submit(update_submit)', function (massage) {
                 console.log("message为：", massage);
@@ -207,7 +228,7 @@
                     url: "/TblTestPlanFpa/insert",
                     dataType: 'json',
                     data: {
-                        "id": data.id,
+                        "id":data.id,
                         "testName": data.testName,
                         "testBegin": data.testBegin,
                         "testEnd": data.testEnd,
@@ -221,33 +242,34 @@
                             layer.msg("添加成功", {icon: 6});
                             $(".layui-laypage-btn").click();
                             //刷新数据
-                            location.reload();
+                             location.reload();
                         } else {
                             layer.msg("添加失败", {icon: 5});
-                            location.reload()
+                             location.reload()
                         }
                     }
                 });
             });
 
-        })
-        f("#sea").click(//绑定点击事件
-            function search_roles() {
+         })
 
-                var qques = f('#ques');//获取问题输入框的值
-                var create = f('#create');//获取创建人输入框的值
-                console.log(search_roles)
-                //执行重载
-                table.reload('testReload', {
-                    page: {
-                        curr: 1 //重新从第 1 页开始
-                    }
-                    , where: {
-                        testName: qques.val(),
-                        createBy: create.val(),
-                    }
-                });
-            }
+        f("#sea").click(//绑定点击事件
+        function search_roles() {
+
+            var qques = f('#ques');//获取问题输入框的值
+            var create=f('#create');//获取创建人输入框的值
+            console.log(search_roles)
+            //执行重载
+            table.reload('testReload', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: {
+                    testName:qques.val(),
+                    createBy:create.val(),
+                }
+            });
+        }
         )
         f("#myButton").click(
             function search_roles() {
@@ -260,16 +282,31 @@
                     }
                     , where: {
                         testName: "",
-                        createBy: ""
+                        createBy:""
                     }
                 });
             }
         )
-
+        function look() {
+            let form=layui.form;
+            var input="http://localhost:8080/front/test/login"
+            form.val("add", {
+                "net":input
+            });
+            layer.open({
+                async: false,
+                //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                type: 1,
+                title: "网址信息",
+                skin: 'layui-layer-molv',
+                area: ['500px', '200px'],
+                content: $("#openLook")//引用的弹出层的页面层的方式加载修改界面表单
+            });
+        }
         function updateuser(obj, data) {
             let form = layui.form;
             form.val("add", {
-                "id": data.id,
+                "id":data.id,
                 "testName": data.testName,
                 "testBegin": data.testBegin,
                 "testEnd": data.testEnd,
@@ -288,20 +325,15 @@
                 console.log("message为：", massage);
                 console.log(massage.field);
                 var data = massage.field;
-                alert(data.status)
                 $.ajax({
                     type: "post",
                     url: "/TblTestPlanFpa/update",
                     data: {
-                        "id": data.id,
+                        "id":data.id,
                         "testName": data.testName,
                         "testBegin": data.testBegin,
                         "testEnd": data.testEnd,
                         "remark": data.remark,
-                        // "create_time": data.create_time,
-                        // "createBy": data.createBy,
-                        // "update_time": data.update_time,
-                        // "updateBy": data.updateBy
                     },
                     success: function (msg) {
                         console.log(msg);
@@ -352,13 +384,53 @@
 
         }
     })
+
+    //二维码渲染
+    layui.config({                  //配置layui插件
+        base: '/js/' //配置 layui 第三方扩展组件存放的  目录（不包含文件名）
+    }).extend({
+        qrcode: 'qrcode'        //前边是方法名，后边是文件名
+    }).use(['qrcode'], function () {   //使用插件
+        var $ = layui.$;
+        $('#qrcode').qrcode({           //调用方法
+                                        //这两个属性必须写
+            render: "canvas",  //table or canvas     二维码生成的两种方式 canvas是生成图片 table是黑白格子组成的二维码
+            text: "http://localhost:8080/front/test/login",  //二维码的内容
+
+            //宽高和颜色可以不设置
+            width: 200,
+            height: 200,
+            foreground: "#000000",  //二维码上层颜色
+            background: "#FFF"      //背景颜色
+        });
+    });
+    function copyText() {
+        var input = document.getElementById( "net" );
+        input.select(); // 选中文本
+        document.execCommand( "copy" ); // 执行浏览器复制命令
+        alert( "复制成功" );
+    }
 </script>
+    <div class="layui-row" id="openLook" style="display:none;">
+        <div  class="layui-form" lay-filter="add" action="" style="margin-top: 20px;align:center;">
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="margin-top: 20px">网址</label>
+                <div class="layui-input-inline" style="margin-top: 20px">
+                    <input id="net" type="text" class="layui-input" name="net" style="width: 50%">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn"  onclick="copyText()">复制网址</button>
+            </div>
+        </div>
+    </div>
+
 <div class="layui-row" id="openDiv" style="display:none;">
     <div id="add_form" class="layui-form" lay-filter="add" action="" style="margin-top: 20px;align:center;">
-        <!--        <div class="layui-form-item">-->
-        <!--            <label class="layui-form-label">ID</label>-->
-        <!--            <div class="layui-input-inline" style="width: 45%">-->
-        <input id="id" readonly="readonly" type="hidden" name="id"
+
+        <input id="id"  readonly="readonly" type="hidden" name="id"
                placeholder="id"
                autocomplete="off" class="layui-input">
         <!--            </div>-->

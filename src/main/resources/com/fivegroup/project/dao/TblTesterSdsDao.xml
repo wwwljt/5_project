@@ -62,11 +62,11 @@
         ttrs.tester_id as tester_id,
         ttrs.answer as answer,
         count(ttrs.id) as result_count
-        from tbl_test_result_sds ttrs
-        left join tbl_question_sds tqs on ttrs.question_id = tqs.id
+        from w_gl.tbl_test_result_sds ttrs
+        left join w_gl.tbl_question_sds tqs on ttrs.question_id = tqs.id
         group by tqs.type, ttrs.tester_id, ttrs.answer) temp_count
         group by temp_count.tester_id) rs
-        group by rs.tester_id) as rest left join tbl_tester_sds tts
+        group by rs.tester_id) as rest left join w_gl.tbl_tester_sds tts
         on ((rest.tester_id = tts.id))
         <where>
             <if test="tblTestResultVo.name!=null and tblTestResultVo.name!=''">
@@ -125,11 +125,11 @@
         ttrs.tester_id as tester_id,
         ttrs.answer as answer,
         count(ttrs.id) as result_count
-        from tbl_test_result_sds ttrs
-        left join tbl_question_sds tqs on ttrs.question_id = tqs.id
+        from w_gl.tbl_test_result_sds ttrs
+        left join w_gl.tbl_question_sds tqs on ttrs.question_id = tqs.id
         group by tqs.type, ttrs.tester_id, ttrs.answer) temp_count
         group by temp_count.tester_id) rs
-        group by rs.tester_id) as rest left join tbl_tester_sds tts
+        group by rs.tester_id) as rest left join w_gl.tbl_tester_sds tts
         on ((rest.tester_id = tts.id))
         <where>
             <if test="tblTestResultVo.name!=null and tblTestResultVo.name!=''">
@@ -192,11 +192,11 @@
                                    ttrs.tester_id as tester_id,
                                    ttrs.answer as answer,
                                    count(ttrs.id) as result_count
-                            from tbl_test_result_sds ttrs
-                                     left join tbl_question_sds tqs on ttrs.question_id = tqs.id
+                            from w_gl.tbl_test_result_sds ttrs
+                                     left join w_gl.tbl_question_sds tqs on ttrs.question_id = tqs.id
                             group by tqs.type, ttrs.tester_id, ttrs.answer) temp_count
                       group by temp_count.tester_id) rs
-             group by rs.tester_id) as rest left join tbl_tester_sds tts
+             group by rs.tester_id) as rest left join w_gl.tbl_tester_sds tts
                                                       on ((rest.tester_id = tts.id))
     </select>
 </mapper>

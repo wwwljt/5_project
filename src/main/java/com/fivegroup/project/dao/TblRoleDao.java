@@ -53,6 +53,7 @@ public interface TblRoleDao {
 	
 	/**
 	 * 保存用户
+	 *
 	 * @param tblRoleVo
 	 * @return
 	 */
@@ -60,16 +61,19 @@ public interface TblRoleDao {
 	
 	/**
 	 * 根据 id 查询 role
+	 *
 	 * @param id
 	 * @return
 	 */
 	TblRole getRolePageById(@Param("id") Integer id);
+	
 	/**
 	 * 获取所有角色
 	 *
 	 * @return
 	 */
 	List<TblRole> getRoleAll();
+	
 	/**
 	 * 校验角色名称是否重复
 	 *
@@ -80,6 +84,7 @@ public interface TblRoleDao {
 	
 	/**
 	 * 获取 role id
+	 *
 	 * @param tblRoleVo
 	 * @return
 	 */

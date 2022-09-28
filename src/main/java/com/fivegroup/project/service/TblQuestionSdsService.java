@@ -33,6 +33,7 @@ public interface TblQuestionSdsService {
 	 * @return
 	 */
 	List<TblQuestionSds> getTblQuestionSdsPageAll(TblQuestionSds tblQuestionSds, Integer pageNo, Integer pageSize);
+	
 	/**
 	 * 根据 typeId  获取对应的类型
 	 *
@@ -52,14 +53,16 @@ public interface TblQuestionSdsService {
 	
 	/**
 	 * 修改
+	 *
 	 * @param tblQuestionSds
 	 * @param request
 	 * @return
 	 */
-	Integer update(TblQuestionSds tblQuestionSds,HttpServletRequest request);
+	Integer update(TblQuestionSds tblQuestionSds, HttpServletRequest request);
 	
 	/**
 	 * 保存
+	 *
 	 * @param tblQuestionSds
 	 * @param request
 	 * @return
@@ -68,6 +71,7 @@ public interface TblQuestionSdsService {
 	
 	/**
 	 * 校验题目是否重复
+	 *
 	 * @param question
 	 * @return
 	 */

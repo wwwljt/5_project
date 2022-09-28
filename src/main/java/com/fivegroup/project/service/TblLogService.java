@@ -17,6 +17,7 @@ import java.util.List;
 public interface TblLogService {
 	/**
 	 * 添加日志
+	 *
 	 * @param tblLog
 	 * @return
 	 */
@@ -24,12 +25,12 @@ public interface TblLogService {
 	
 	/**
 	 * 获取总记录数
+	 *
 	 * @return
 	 */
 	Integer getLogCount();
 	
 	/**
-	 *
 	 * @param page
 	 * @param limit
 	 * @return
