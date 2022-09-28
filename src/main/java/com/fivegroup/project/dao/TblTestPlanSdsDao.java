@@ -1,11 +1,13 @@
 package com.fivegroup.project.dao;
 
+import com.fivegroup.project.entity.TblQuestionSds;
 import com.fivegroup.project.entity.TblTestPlanSds;
 import com.fivegroup.project.entity.TblTesterSds;
 import com.fivegroup.project.entity.ViewTestPlan;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -73,4 +75,31 @@ public interface TblTestPlanSdsDao {
 	 * @return
 	 */
 	List<TblTesterSds> findSdsTesterByPhone(@Param("phone") String phone);
+	/**
+	 * 查询所偶 sds
+	 * @return
+	 */
+	List<TblQuestionSds> findAllQuestion();
+	
+	/**
+	 * 保存测试者
+	 * @param tblTesterSds
+	 * @return
+	 */
+	Integer insert(@Param("tblTesterSds") TblTesterSds tblTesterSds);
+	
+	/**
+	 * 批量插入测试答案
+	 * @param answerList
+	 * @param testerId
+	 * @return
+	 */
+	int insertBatch(@Param("answerList") List<Map<String, Object>> answerList, @Param("testerId") Integer testerId);
+	/**
+	 * 校验计划名称是否重复
+	 *
+	 * @param plan
+	 * @return
+	 */
+	TblTestPlanSds checkPlan(@Param("plan") String plan);
 }

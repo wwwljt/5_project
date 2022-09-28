@@ -66,4 +66,11 @@ public interface TblDeptDao {
 	 * @return
 	 */
 	TblDept getTblDeptById(@Param("id") Integer id);
+	/**
+	 * 校验部门名称是否重复
+	 *
+	 * @param deptName
+	 * @return
+	 */
+	TblDept checkDeptName(@Param("deptName") String deptName);
 }

@@ -28,6 +28,20 @@ public class TblTestPlanSdsController {
 	private TblTestPlanSdsService tblTestPlanSdsService;
 	
 	/**
+	 * 校验计划名称是否重复
+	 *
+	 * @param plan
+	 * @return
+	 */
+	@GetMapping("/checkPlan/{plan}")
+	public Result checkPlan(@PathVariable String plan) {
+		System.out.println("plan = " + plan);
+		TblTestPlanSds tblTestPlanSds = tblTestPlanSdsService.checkPlan(plan);
+		System.out.println("tblTestPlanSds = " + tblTestPlanSds);
+		return tblTestPlanSds == null ? Result.ok("不重复") : Result.fail("重复");
+	}
+	
+	/**
 	 * 获取所有测试计划
 	 *
 	 * @return

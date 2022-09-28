@@ -27,6 +27,20 @@ public class TblDeptController {
 	private TblDeptService tblDeptService;
 	
 	/**
+	 * 校验部门名称是否重复
+	 *
+	 * @param deptName
+	 * @return
+	 */
+	@GetMapping("/checkDeptName/{deptName}")
+	public Result checkDeptName(@PathVariable String deptName) {
+		System.out.println("deptName = " + deptName);
+		TblDept dept = tblDeptService.checkDeptName(deptName);
+		System.out.println("dept = " + dept);
+		return dept == null ? Result.ok("不重复") : Result.fail("重复");
+	}
+	
+	/**
 	 * 根据 id查询部门
 	 *
 	 * @return

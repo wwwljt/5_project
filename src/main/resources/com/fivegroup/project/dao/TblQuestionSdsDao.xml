@@ -55,7 +55,7 @@
         update w_gl.tbl_question_sds
         set flag=1
         where id in
-        <foreach collection="ids" item="ids" open="(" separator="," close=")" >
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
             #{ids}
         </foreach>
     </update>
@@ -108,5 +108,10 @@
         where type_id = #{typeId}
 
 
+    </select>
+    <select id="checkQuestion" resultType="com.fivegroup.project.entity.TblQuestionSds">
+        select *
+        from w_gl.tbl_question_sds
+        where question = #{question} and  flag=0
     </select>
 </mapper>

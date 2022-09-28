@@ -30,8 +30,6 @@ public class TblQuestionSasController {
 
         List<TblQuestionSas> questionSasList = tblQuestionSasService.findQuestionSas(page, limit, question, person);
 
-        System.out.println("String question, String person========="+question + "," + person);
-
 
         int i = tblQuestionSasService.selectAll();
 
@@ -49,7 +47,6 @@ public class TblQuestionSasController {
     // 删除数据
     @RequestMapping(value = "/delTblQuestionSas")
     public int deleteQuestionSas(String ids) {
-        System.out.println("controller==="+ids);
 
         List<Integer> idsList = new ArrayList<>();
 
@@ -59,11 +56,9 @@ public class TblQuestionSasController {
             idsList.add(Integer.valueOf(strIds[i]));  // 遍历数字添加到数组 idsList
         }
 
-        System.out.println("idsList==="+idsList);
-
         int i = tblQuestionSasService.delTblQuestionSas(idsList);
 
-        return i;
+        return 1;
     }
 
 
@@ -71,11 +66,9 @@ public class TblQuestionSasController {
     @RequestMapping(value = "/addTblQuestionSas")
     public Integer addTblQuestionSas(TblQuestionSas tblQuestionSas){
 
-        //System.out.println("------------------------------------------"+tblQuestionSas);
-
         int i = tblQuestionSasService.addQuestionSas(tblQuestionSas);
 
-        return i;
+        return 1;
     }
 
 
@@ -83,14 +76,26 @@ public class TblQuestionSasController {
     @RequestMapping(value = "/editQuestionSas")
     public Integer editQuestionSas(TblQuestionSas tblQuestionSas){
 
-        //System.out.println("==============================="+tblQuestionSas);
-
         int i = tblQuestionSasService.editQuestionSas(tblQuestionSas);
 
-        return i;
+        return 1;
     }
 
 
+
+    // 校验问题是否重复
+    @RequestMapping(value = "/comparedQuestion")
+    public Integer compareQuestion(String question){
+
+        String questioning = tblQuestionSasService.selectComparedQuestion(question);
+
+        // 判断是否为空
+        if (questioning == null || questioning.length() == 0){
+            return 0;
+        }else {
+            return 1;  // 已经存在返回 1
+        }
+    }
 
 
 }

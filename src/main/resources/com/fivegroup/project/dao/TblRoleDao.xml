@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fivegroup.project.dao.TblRoleDao">
 
-    <insert id="saveRole" useGeneratedKeys="true" keyProperty="tblRoleVo.roleId">
+    <insert id="saveRole" useGeneratedKeys="true" keyProperty="roleId" keyColumn="role_id">
         insert into w_gl.tbl_role(role_name,
                                   role_key,
                                   role_sort,
@@ -12,16 +12,16 @@
                                   update_by,
                                   update_time,
                                   remark)
-        values (#{tblRoleVo.roleName},
-                #{tblRoleVo.roleKey},
-                #{tblRoleVo.roleSort},
-                #{tblRoleVo.status},
-                #{tblRoleVo.createBy},
-                #{tblRoleVo.createTime},
-                #{tblRoleVo.updateBy},
-                #{tblRoleVo.updateTime},
-                #{tblRoleVo.remark})
-        ;
+        values (#{roleName},
+                #{roleKey},
+                #{roleSort},
+                #{status},
+                #{createBy},
+                #{createTime},
+                #{updateBy},
+                #{updateTime},
+                #{remark})
+
     </insert>
     <update id="updateRole">
         update w_gl.tbl_role
@@ -72,5 +72,18 @@
     <select id="getRoleAll" resultType="com.fivegroup.project.entity.TblRole">
         select *
         from w_gl.tbl_role;
+    </select>
+    <select id="findRoleName" resultType="com.fivegroup.project.entity.TblRole">
+        select *
+        from w_gl.tbl_role
+        where role_name = #{roleName}
+          and flag = 0;
+    </select>
+    <select id="getRoleId" resultType="com.fivegroup.project.entity.vo.TblRoleVo">
+        select *
+        from w_gl.tbl_role
+        where role_name = #{tblRoleVo.roleName}
+          and role_key = #{tblRoleVo.roleKey}
+          and remark = #{tblRoleVo.remark};
     </select>
 </mapper>

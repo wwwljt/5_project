@@ -22,11 +22,18 @@
 
     <!--查询条数-->
     <select id="selectAll" resultType="java.lang.Integer">
-        select count(*) from tbl_test_plan_sas
+        select count(*)
+        from tbl_test_plan_sas
     </select>
     <select id="findSasTesterByPhone" resultType="com.fivegroup.project.entity.TblTesterSas">
         select *
-        from w_gl.tbl_tester_sas where phone=#{phone};
+        from w_gl.tbl_tester_sas
+        where phone = #{phone};
+    </select>
+    <select id="findAllQuestion" resultType="com.fivegroup.project.entity.TblQuestionSas">
+        select *
+        from w_gl.tbl_question_sas
+        where status = 1;
     </select>
 
 
@@ -52,6 +59,17 @@
                 #{tblTestPlanSas.createBy},
                 #{tblTestPlanSas.remark})
     </insert>
+    <insert id="insert" keyProperty="tblTesterSas.id" useGeneratedKeys="true">
+        insert into w_gl.tbl_tester_sas(`name`, phone, create_time, test_plan_id)
+        values (#{tblTesterSas.name}, #{tblTesterSas.phone}, now(), #{tblTesterSas.testPlanId})
+    </insert>
+    <insert id="insertBatch">
+        insert into w_gl.tbl_test_result_sas(tester_id, question_id, answer)
+        values
+        <foreach collection="answerList" item="entity" separator=",">
+            (#{testerId}, #{entity.questionId}, #{entity.answer})
+        </foreach>
+    </insert>
 
 
     <!--编辑-->
@@ -66,5 +84,8 @@
         where id = #{tblTestPlanSas.id}
     </update>
 
-
+    <!--校验计划是否重复-->
+    <select id="selectComparedPlan" resultType="java.lang.String">
+        select test_name from tbl_test_plan_sas where test_name = #{plan}
+    </select>
 </mapper>

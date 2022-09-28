@@ -27,6 +27,17 @@ public class TblQuestionSdsServiceImpl implements TblQuestionSdsService {
 	private TblQuestionSdsDao tblQuestionSdsDao;
 	
 	/**
+	 * 校验题目是否重复
+	 *
+	 * @param question
+	 * @return
+	 */
+	@Override
+	public TblQuestionSds checkQuestion(String question) {
+		return tblQuestionSdsDao.checkQuestion(question);
+	}
+	
+	/**
 	 * 保存
 	 *
 	 * @param tblQuestionSds

@@ -11,6 +11,21 @@
         <!--           insert into tbl_test_plan_fpa(id,test_name,option_a,option_b,option_c,option_d,type,status)
                 values (#{id},#{question},#{optionA},#{optionB},#{optionC},#{optionD},#{type},#{status})-->
     </insert>
+    <insert id="insert"  keyProperty="tblTesterFpa.id" useGeneratedKeys="true">
+        insert into w_gl.tbl_tester_fpa(`name`, phone, create_time, test_plan_id)
+        values (#{tblTesterFpa.name}, #{tblTesterFpa.phone}, now(), #{tblTesterFpa.testPlanId})
+    </insert>
+    <insert id="insertBatch">
+        insert into tbl_test_result_fpa(tester_id, question_id, answer)
+        values
+        <foreach collection="answerList" item="entity" separator=",">
+            (#{testerId}, #{entity.questionId}, #{entity.answer})
+        </foreach>
+        on duplicate key update
+        tester_id = values(tester_id),
+        question_id = values(question_id),
+        answer = values(answer)
+    </insert>
     <update id="updateTTp" parameterType="tblTestPlanFpa">
         update tbl_test_plan_fpa
         <set>
@@ -83,6 +98,11 @@
         select *
         from w_gl.tbl_tester_fpa
         where phone = #{phone}
+    </select>
+    <select id="findAllQuestion" resultType="com.fivegroup.project.entity.QuestionFpa">
+        select *
+        from tbl_question_fpa
+        where status = 0;
     </select>
 
     <!--    <select id="getAll" resultType="question_fpa">-->

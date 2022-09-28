@@ -30,7 +30,11 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-    <mvc:resources mapping="/**" location="/WEB-INF/static/" />
+    <mvc:resources mapping="/**" location="/WEB-INF/static/"/>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> <!--前缀-->
+        <property name="prefix" value="/WEB-INF/static/front/"/> <!--后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
 
     <!--文件上传解析器-->
     <bean id="multipartResolver"
@@ -41,5 +45,5 @@
         <!-- 设定文件上传时写入内存的最大值，如果小于这个参数不会生成临时文件，默认为10240 -->
         <property name="maxInMemorySize" value="40960"/>
     </bean>
-    <aop:aspectj-autoproxy />
+    <aop:aspectj-autoproxy/>
 </beans>

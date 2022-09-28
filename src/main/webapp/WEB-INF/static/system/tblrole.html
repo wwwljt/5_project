@@ -142,6 +142,7 @@
         </div>
     </div>
 </form>
+
 <!--状态按钮-->
 <script type="text/html" id="roleStatus">
     {{# if (d.status === '0'){}}
@@ -156,12 +157,12 @@
         let layer = layui.layer;
         let $ = layui.jquery;
         let form = layui.form;
-        let tree = layui.tree
+        let tree = layui.tree;
         let util = layui.util
+        var roleNameOld;
         //第一个实例
         let roleTable = table.render({
             elem: '#role'
-            , height: 300
             , url: '/system/role/getRolePage' //数据接口
             , toolbar: '#roleToolbar' //开启头部工具栏，并为其绑定左侧模板
             , page: false //开启分页
@@ -215,6 +216,7 @@
         //行工具栏事件
         table.on('tool(roleTableFilter)', function (obj) {
             let data = obj.data
+            roleNameOld = data.roleName;
             switch (obj.event) {
                 case 'edit':
                     console.log(data.status)
@@ -293,110 +295,109 @@
             return id;
         }
 
-        /*
-                //添加时鼠标离开添加角色输入框判断是否重名
-                $("#roleName").blur(function () {
-                    $("#roleName").next().html("");
-                    $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
-                    if ($("#roleName").val()!==null&&$("#roleName").val()!==""){
-                        $.ajax({
-                            url: "/springmvc/role/findRoleName.do",
-                            data: {roleName: $("#roleName").val()},
-                            dataType: "json",
-                            type: "get",
-                            success: function (re) {
-                                console.log($("#roleName").val())
-                                if (re.code == 0) {
-                                    $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
-                                    // return re.msg
-                                    // $("#addSub").prop("class","layui-btn")
-                                } else {
-                                    $("#roleName").next().html(re.msg);
-                                    $('#addRoleButton').addClass("layui-btn-disabled").attr("disabled", true);
-                                }
-                            }
-                        })
+        //添加时鼠标离开添加角色输入框判断是否重名
+        $("#roleName").blur(function () {
+            $("#roleName").next().html("");
+            $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
+            if ($("#roleName").val() !== null && $("#roleName").val() !== "") {
+                $.ajax({
+                    url: "/system/role/findRoleName/" + $("#roleName").val(),
+                    dataType: "json",
+                    type: "get",
+                    success: function (re) {
+                        console.log($("#roleName").val())
+                        if (re.code == 0) {
+                            $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
+                            // return re.msg
+                            // $("#addSub").prop("class","layui-btn")
+                        } else {
+                            $("#roleName").next().html(re.data);
+                            $('#addRoleButton').addClass("layui-btn-disabled").attr("disabled", true);
+                        }
                     }
                 })
+            }
+        })
 
-                //添加时鼠标离开添加角色关键字输入框判断是否重名
-                $("#roleKey").blur(function () {
-                    $("#roleKey").next().html("");
-                    $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
-                    if ($("#roleKey").val()!==null&&$("#roleKey").val()!==""){
-                        $.ajax({
-                            url: "/springmvc/role/findRoleKey.do",
-                            data: {roleKey: $("#roleKey").val()},
-                            dataType: "json",
-                            type: "get",
-                            success: function (re) {
-                                console.log($("#roleKey").val())
-                                if (re.code == 0) {
-                                    $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
-                                    // return re.msg
-                                    // $("#addSub").prop("class","layui-btn")
-                                } else {
-                                    $("#roleKey").next().html(re.msg);
-                                    $('#addRoleButton').addClass("layui-btn-disabled").attr("disabled", true);
-                                }
-                            }
-                        })
+        //添加时鼠标离开添加角色关键字输入框判断是否重名
+        /*$("#roleKey").blur(function () {
+            $("#roleKey").next().html("");
+            $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
+            if ($("#roleKey").val() !== null && $("#roleKey").val() !== "") {
+                $.ajax({
+                    url: "/system/role/findRoleName/"+$("#roleName").val(),
+                    data: {roleKey: $("#roleKey").val()},
+                    dataType: "json",
+                    type: "get",
+                    success: function (re) {
+                        console.log($("#roleKey").val())
+                        if (re.code == 0) {
+                            $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
+                            // return re.msg
+                            // $("#addSub").prop("class","layui-btn")
+                        } else {
+                            $("#roleKey").next().html(re.msg);
+                            $('#addRoleButton').addClass("layui-btn-disabled").attr("disabled", true);
+                        }
                     }
                 })
+            }
+        })*/
 
-                //鼠标离开修改角色输入框判断是否重名
-                $("#editRoleName").blur(function () {
-                    $("#editRoleName").next().html("");
-                    $('#updateRoleBtn').removeClass("layui-btn-disabled").attr("disabled", false);
-                    if ($("#editRoleName").val()!==null&&$("#editRoleName").val()!==""){
-                        $.ajax({
-                            url: "/springmvc/role/findRoleName.do",
-                            data: {roleName: $("#editRoleName").val(),
-                                roleId:$("#editRoleId").val()
-                            },
-                            dataType: "json",
-                            type: "get",
-                            success: function (re) {
-                                console.log($("#editRoleName").val())
-                                if (re.code == 0) {
-                                    $('#updateRoleBtn').removeClass("layui-btn-disabled").attr("disabled", false);
-                                    // return re.msg
-                                    // $("#addSub").prop("class","layui-btn")
-                                } else {
-                                    $("#editRoleName").next().html(re.msg);
-                                    $('#updateRoleBtn').addClass("layui-btn-disabled").attr("disabled", true);
-                                }
-                            }
-                        })
+        //鼠标离开修改角色输入框判断是否重名
+        $("#editRoleName").blur(function () {
+            alert(roleNameOld)
+            $("#editRoleName").next().html("");
+            let roleNameNew = $("#editRoleName").val();
+            $('#updateRoleBtn').removeClass("layui-btn-disabled").attr("disabled", false);
+            alert(roleNameNew);
+            if (roleNameNew !== null && roleNameNew !== "" && roleNameNew != roleNameOld) {
+                $.ajax({
+                    url: "/system/role/findRoleName/" + roleNameNew,
+                    dataType: "json",
+                    type: "get",
+                    success: function (re) {
+                        console.log($("#editRoleName").val())
+                        if (re.code == 0) {
+                            $('#updateRoleBtn').removeClass("layui-btn-disabled").attr("disabled", false);
+                            // return re.msg
+                            // $("#addSub").prop("class","layui-btn")
+                        } else {
+                            $("#editRoleName").next().html(re.data);
+                            $('#updateRoleBtn').addClass("layui-btn-disabled").attr("disabled", true);
+                        }
                     }
                 })
+            }
+        })
 
-                //修改时鼠标离开修改角色关键字输入框判断是否重名
-                $("#editRoleKey").blur(function () {
-                    $("#editRoleKey").next().html("");
-                    $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
-                    if ($("#editRoleKey").val()!==null&&$("#editRoleKey").val()!==""){
-                        $.ajax({
-                            url: "/springmvc/role/findRoleKey.do",
-                            data: {roleKey: $("#editRoleKey").val(),
-                                roleId:$("#editRoleId").val()
-                            },
-                            dataType: "json",
-                            type: "get",
-                            success: function (re) {
-                                console.log($("#editRoleKey").val())
-                                if (re.code == 0) {
-                                    $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
-                                    // return re.msg
-                                    // $("#addSub").prop("class","layui-btn")
-                                } else {
-                                    $("#editRoleKey").next().html(re.msg);
-                                    $('#addRoleButton').addClass("layui-btn-disabled").attr("disabled", true);
-                                }
-                            }
-                        })
-                    }
-                })*/
+        //修改时鼠标离开修改角色关键字输入框判断是否重名
+        /* $("#editRoleKey").blur(function () {
+             $("#editRoleKey").next().html("");
+             $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
+             if ($("#editRoleKey").val() !== null && $("#editRoleKey").val() !== "") {
+                 $.ajax({
+                     url: "/springmvc/role/findRoleKey.do",
+                     data: {
+                         roleKey: $("#editRoleKey").val(),
+                         roleId: $("#editRoleId").val()
+                     },
+                     dataType: "json",
+                     type: "get",
+                     success: function (re) {
+                         console.log($("#editRoleKey").val())
+                         if (re.code == 0) {
+                             $('#addRoleButton').removeClass("layui-btn-disabled").attr("disabled", false);
+                             // return re.msg
+                             // $("#addSub").prop("class","layui-btn")
+                         } else {
+                             $("#editRoleKey").next().html(re.msg);
+                             $('#addRoleButton').addClass("layui-btn-disabled").attr("disabled", true);
+                         }
+                     }
+                 })
+             }
+         })*/
 
 
         //addUserForm表单的提交
@@ -423,11 +424,7 @@
                         //关闭对话框
                         layer.closeAll();
                         //刷新表格数据
-                        roleTable.reload({
-                            page: {
-                                curr: 1 //重新从第 1 页开始
-                            }
-                        });
+                        roleTable.reload({});
                         layer.msg('添加成功', {icon: 6});
                     } else {
                         layer.msg('添加失败', {icon: 5});
@@ -438,7 +435,7 @@
                     layer.closeAll();
                     //刷新表格数据
                     roleTable.reload({});
-                    layer.msg("修改失败", {icon: 5});
+                    layer.msg("添加失败", {icon: 5});
                 }
             })
             //将表单清空

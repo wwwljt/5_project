@@ -65,4 +65,11 @@ public interface TblQuestionSdsService {
 	 * @return
 	 */
 	Integer save(TblQuestionSds tblQuestionSds, HttpServletRequest request);
+	
+	/**
+	 * 校验题目是否重复
+	 * @param question
+	 * @return
+	 */
+	TblQuestionSds checkQuestion(String question);
 }

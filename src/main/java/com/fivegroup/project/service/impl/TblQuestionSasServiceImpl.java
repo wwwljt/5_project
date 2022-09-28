@@ -79,4 +79,14 @@ public class TblQuestionSasServiceImpl implements TblQuestionSasService {
         return i;
     }
 
+
+    // 校验问题是否重复
+    @Override
+    public String selectComparedQuestion(String question) {
+
+        String i = tblQuestionSasDao.selectComparedQuestion(question);
+
+        return i;
+    }
+
 }

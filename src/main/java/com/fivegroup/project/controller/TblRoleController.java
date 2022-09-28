@@ -27,6 +27,19 @@ public class TblRoleController {
 	@Autowired
 	private TblRoleService tblRoleService;
 	
+	/**
+	 * 校验角色名称是否重复
+	 *
+	 * @param roleName
+	 * @return
+	 */
+	@GetMapping("/findRoleName/{roleName}")
+	public Result findRoleName(@PathVariable String roleName) {
+		System.out.println("roleName = " + roleName);
+		TblRole tblRole = tblRoleService.findRoleName(roleName);
+		System.out.println("tblRole = " + tblRole);
+		return tblRole == null ? Result.ok("不重复") : Result.fail("重复");
+	}
 	
 	/**
 	 * 获取所有角色
@@ -53,10 +66,10 @@ public class TblRoleController {
 		System.out.println("limit = " + limit);
 		System.out.println("tblRole = " + tblRole);
 		// 根据条件获取总记录数
-		Integer count = tblRoleService.getRoleCount(tblRole);
+		//		Integer count = tblRoleService.getRoleCount(tblRole);
 		// 获取分页数据
 		List<TblRole> tblRoleList = tblRoleService.getRolePage(page, limit, tblRole);
-		return Result.ok(tblRoleList, count);
+		return Result.ok(tblRoleList);
 	}
 	
 	/**

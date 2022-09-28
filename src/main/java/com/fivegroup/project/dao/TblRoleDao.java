@@ -56,7 +56,7 @@ public interface TblRoleDao {
 	 * @param tblRoleVo
 	 * @return
 	 */
-	Integer saveRole(@Param("tblRoleVo") TblRoleVo tblRoleVo);
+	Integer saveRole(TblRoleVo tblRoleVo);
 	
 	/**
 	 * 根据 id 查询 role
@@ -70,4 +70,18 @@ public interface TblRoleDao {
 	 * @return
 	 */
 	List<TblRole> getRoleAll();
+	/**
+	 * 校验角色名称是否重复
+	 *
+	 * @param roleName
+	 * @return
+	 */
+	TblRole findRoleName(@Param("roleName") String roleName);
+	
+	/**
+	 * 获取 role id
+	 * @param tblRoleVo
+	 * @return
+	 */
+	TblRoleVo getRoleId(@Param("tblRoleVo") TblRoleVo tblRoleVo);
 }

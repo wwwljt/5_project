@@ -1,6 +1,7 @@
 package com.fivegroup.project.dao;
 
 
+import com.fivegroup.project.entity.QuestionFpa;
 import com.fivegroup.project.entity.TblTestPlanFpa;
 import com.fivegroup.project.entity.TblTesterFpa;
 import org.apache.ibatis.annotations.Param;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @ComponentScan
@@ -32,4 +34,25 @@ public interface TblTestPlanFpaMapper {
      * @return
      */
 	List<TblTesterFpa> findFpaTesterByPhone(@Param("phone") String phone);
+    /**
+     * 查询所有fpa
+     *
+     * @return
+     */
+	List<QuestionFpa> findAllQuestion();
+    
+    /**
+     * fpa保存测试
+     * @param tblTesterFpa
+     * @return
+     */
+    Integer insert(@Param("tblTesterFpa") TblTesterFpa tblTesterFpa);
+    
+    /**
+     * 批量插入
+     * @param answerList
+     * @param testerId
+     * @return
+     */
+    int insertBatch(@Param("answerList") List<Map<String, Object>> answerList, @Param("testerId") Integer testerId);
 }

@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="common.jsp"%>
+<%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -109,11 +112,11 @@
             }*/
         }
     </style>
-    <script src="../layui/layui.js"></script>
+<%--    <script src="../layui/layui.js"></script>
     <link rel="stylesheet" href="../layui/css/layui.css">
     <script src="../layui/js/html2canvas.js"></script>
     <script src="../layui/js/jspdf.debug.js"></script>
-    <script src="../layui/js/jq.js"></script>
+    <script src="../layui/js/jq.js"></script>--%>
     <style>
         html, body { background: rgba(2, 2, 1, 0.93); margin: 0; padding:0;}
         canvas { width: 100%; height: 100%; position: absolute; }
@@ -278,7 +281,7 @@
                     if(ret.code==0){
                         //获取测试者信息保存到本地存储中
                         //localStorage.setItem("tester",JSON.stringify(ret.data))
-                        window.location.href="testQuestion.jsp";
+                        window.location.href="/front/test/findQuestion";
                     }else
                     {
                         alert("失败");

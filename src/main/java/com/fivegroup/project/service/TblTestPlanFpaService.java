@@ -1,11 +1,14 @@
 package com.fivegroup.project.service;
 
 
+import com.fivegroup.project.entity.QuestionFpa;
 import com.fivegroup.project.entity.TblTestPlanFpa;
 import com.fivegroup.project.entity.TblTesterFpa;
+import com.fivegroup.project.entity.vo.TesterVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TblTestPlanFpaService {
 	//查询所有并分页
@@ -33,4 +36,30 @@ public interface TblTestPlanFpaService {
 	 * @return
 	 */
 	List<TblTesterFpa> findFpaTesterByPhone(String phone);
+	
+	/**
+	 * 查询所有fpa
+	 *
+	 * @return
+	 */
+	List<QuestionFpa> findAllQuestion();
+	
+	/**
+	 * 保存fpa 测试结果
+	 *
+	 * @param answerList
+	 * @param tester
+	 * @return
+	 */
+	String saveTestResult(List<Map<String, Object>> answerList, TesterVo tester);
+	/**
+	 * 批量插入
+	 * @return
+	 */
+	int insertBatch(List<Map<String,Object>> answerList,Integer testerId);
+	/**
+	 * 查询测试者结果
+	 * @return
+	 */
+	String seleResult(Integer testerId);
 }

@@ -75,4 +75,12 @@ public interface TblRoleService {
 	 * @return
 	 */
 	List<TblRole> getRoleAll();
+	
+	/**
+	 * 校验角色名称是否重复
+	 *
+	 * @param roleName
+	 * @return
+	 */
+	TblRole findRoleName(String roleName);
 }

@@ -23,7 +23,6 @@ public class QuestionFpa {
     private int status;
     @DateTimeFormat (pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-//    @JsonFormat(pattern = )
     private Date createTime;
     private String createBy;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")

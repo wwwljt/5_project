@@ -63,4 +63,11 @@ public interface TblDeptService {
 	 * @return
 	 */
 	TblDept getTblDeptById(Integer id);
+	/**
+	 * 校验部门名称是否重复
+	 *
+	 * @param deptName
+	 * @return
+	 */
+	TblDept checkDeptName(String deptName);
 }

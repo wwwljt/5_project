@@ -59,8 +59,13 @@ public interface TblQuestionSdsDao {
 	/**
 	 * 保存
 	 * @param tblQuestionSds
-	 * @param request
 	 * @return
 	 */
 	Integer save(@Param("tblQuestionSds") TblQuestionSds tblQuestionSds);
+	/**
+	 * 校验题目是否重复
+	 * @param question
+	 * @return
+	 */
+	TblQuestionSds checkQuestion(@Param("question") String question);
 }

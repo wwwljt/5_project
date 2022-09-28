@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * <p>
  *
@@ -18,9 +20,38 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TesterVo {
+	/**
+	 * 主键
+	 */
 	private Integer id;
+	/**
+	 * 测试者姓名
+	 */
 	private String name;
+	/**
+	 * 手机号
+	 */
 	private String phone;
-	private String type;
-	private String testCode;
+	/**
+	 * 测试时间
+	 */
+	private Date createTime;
+	/**
+	 * 测试计划id
+	 */
+	private Integer testPlanId;
+	/**
+	 * 测试计划名称
+	 */
+	private String testName;
+	
+	/**
+	 * 测试code
+	 */
+	private  Integer testCode;
+	
+	/**
+	 * 测试类型
+	 */
+	private  String type;
 }

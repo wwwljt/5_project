@@ -2,6 +2,8 @@ package com.fivegroup.project.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -45,5 +47,20 @@ public class SystemController {
 		
 	}
 	
-
+	/**
+	 * 跳转到最终页面
+	 * @param jsp
+	 * @param modelAndView
+	 * @param session
+	 * @return
+	 */
+	@GetMapping("/jump/{jsp}")
+	public ModelAndView jump(@PathVariable String jsp, ModelAndView modelAndView, HttpSession session) {
+		// 清空 session
+		session.removeAttribute("testerVo");
+		System.out.println(jsp);
+		modelAndView.setViewName(jsp);
+		return modelAndView;
+	}
+	
 }

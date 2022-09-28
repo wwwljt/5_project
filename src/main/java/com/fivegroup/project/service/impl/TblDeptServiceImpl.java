@@ -27,6 +27,17 @@ public class TblDeptServiceImpl implements TblDeptService {
 	private TblDeptDao tblDeptDao;
 	
 	/**
+	 * 校验部门名称是否重复
+	 *
+	 * @param deptName
+	 * @return
+	 */
+	@Override
+	public TblDept checkDeptName(String deptName) {
+		return tblDeptDao.checkDeptName(deptName);
+	}
+	
+	/**
 	 * 根据 id查询部门
 	 *
 	 * @param id

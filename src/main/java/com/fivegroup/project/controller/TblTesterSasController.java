@@ -30,8 +30,6 @@ public class TblTesterSasController {
 
         List<TblTesterSas> testerSasServiceAll = tblTesterSasService.findAll(page, limit, name, planId);
 
-        System.out.println("name+planId===" + name + ","+planId);
-
         int i = tblTesterSasService.selectAll();
 
         LayuiBean<TblTesterSas> SasBean = new LayuiBean<>();
@@ -57,11 +55,9 @@ public class TblTesterSasController {
             idsList.add(Integer.valueOf(strIds[i]));  // 遍历数字添加到数组 idsList
         }
 
-        System.out.println("idsList==="+idsList);
-
         int i = tblTesterSasService.delData(idsList);
 
-        return i;
+        return 1;
     }
 
 
@@ -72,8 +68,6 @@ public class TblTesterSasController {
         List<TblTesterSas> pie = tblTesterSasService.findPie();
 
         List<Integer> peopleNums = new ArrayList<>();
-
-        //System.out.println("SIZE:::::"+pie.size());
 
         BigDecimal score, bInt;
         int a1;
@@ -115,8 +109,6 @@ public class TblTesterSasController {
         backNum.add(b);
         backNum.add(c);
         backNum.add(d);
-
-        System.out.println("======"+backNum);
 
         return backNum;
     }

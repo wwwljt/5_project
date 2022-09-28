@@ -8,7 +8,6 @@ import com.fivegroup.project.service.TblRoleService;
 import com.fivegroup.project.util.JwtHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +29,17 @@ import java.util.List;
 public class TblRoleServiceImpl implements TblRoleService {
 	@Autowired
 	private TblRoleDao tblRoleDao;
+	
+	/**
+	 * 校验角色名称是否重复
+	 *
+	 * @param roleName
+	 * @return
+	 */
+	@Override
+	public TblRole findRoleName(String roleName) {
+		return tblRoleDao.findRoleName(roleName);
+	}
 	
 	/**
 	 * 获取所有角色
@@ -83,7 +93,13 @@ public class TblRoleServiceImpl implements TblRoleService {
 		tblRoleVo.setUpdateTime(new Date());
 		// 保存
 		result = tblRoleDao.saveRole(tblRoleVo);
-		menuDao.insertMenu(tblRoleVo.getRoleId(), tblRoleVo.getMenus());
+		// 获取 role
+		TblRoleVo tblRoleVo1 = tblRoleDao.getRoleId(tblRoleVo);
+		System.out.println("tblRoleVo1 = " + tblRoleVo1);
+		Integer roleId = tblRoleVo1.getRoleId();
+		System.out.println("roleId = " + roleId);
+		System.out.println("tblRoleVo = " + tblRoleVo);
+		menuDao.insertMenu(tblRoleVo1.getRoleId(), tblRoleVo.getMenus());
 		return result;
 	}
 	
@@ -140,7 +156,6 @@ public class TblRoleServiceImpl implements TblRoleService {
 	 * @return
 	 */
 	@Override
-	@Transactional(propagation = Propagation.SUPPORTS)
 	public Integer getRoleCount(TblRole tblRole) {
 		return tblRoleDao.getRoleCount(tblRole);
 	}
@@ -154,7 +169,6 @@ public class TblRoleServiceImpl implements TblRoleService {
 	 * @return
 	 */
 	@Override
-	@Transactional(propagation = Propagation.SUPPORTS)
 	public List<TblRole> getRolePage(Integer page, Integer limit, TblRole tblRole) {
 		if (page != null && limit != null) {
 			page = (page - 1) * limit;

@@ -31,6 +31,17 @@
                 #{tblTestPlanSds.updateBy},
                 #{tblTestPlanSds.remark});
     </insert>
+    <insert id="insert" keyProperty="tblTesterSds.id" useGeneratedKeys="true">
+        insert into w_gl.tbl_tester_sds(`name`, phone, create_time, test_plan_id)
+        values (#{tblTesterSds.name}, #{tblTesterSds.phone}, now(), #{tblTesterSds.testPlanId})
+    </insert>
+    <insert id="insertBatch">
+        insert into w_gl.tbl_test_result_sds(tester_id, question_id, answer)
+        values
+        <foreach collection="answerList" item="entity" separator=",">
+            (#{testerId}, #{entity.questionId}, #{entity.answer})
+        </foreach>
+    </insert>
     <update id="update">
         update w_gl.tbl_test_plan_sds
         <set>
@@ -88,5 +99,14 @@
         select *
         from w_gl.tbl_tester_sds
         where phone = #{phone}
+    </select>
+    <select id="findAllQuestion" resultType="com.fivegroup.project.entity.TblQuestionSds">
+        select *
+        from w_gl.tbl_question_sds
+        where status = 0;
+    </select>
+    <select id="checkPlan" resultType="com.fivegroup.project.entity.TblTestPlanSds">
+        select *
+        from w_gl.tbl_test_plan_sds where test_name=#{plan};
     </select>
 </mapper>

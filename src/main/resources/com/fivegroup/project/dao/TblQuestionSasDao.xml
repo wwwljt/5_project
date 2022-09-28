@@ -65,4 +65,10 @@
     </update>
 
 
+    <!--校验问题是否重复-->
+    <select id="selectComparedQuestion" resultType="java.lang.String">
+        select question from tbl_question_sas where question = #{question}
+    </select>
+
+
 </mapper>

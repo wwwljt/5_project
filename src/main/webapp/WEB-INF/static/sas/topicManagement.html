@@ -67,6 +67,7 @@
                 <input required lay-verify="required" id="question" type="text" name="question"
                        placeholder="请输入问题"  autofocus
                        autocomplete="off" class="layui-input">
+                <p id="edit_p" style="color:red; "></p>
             </div>
         </div>
 
@@ -135,7 +136,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block" style="margin-left: 150px;">
-                <button class="layui-btn" lay-submit lay-filter="update_submit" style="width: 200px;" >立即提交</button>
+                <button class="layui-btn" lay-submit lay-filter="update_submit" id="changeBtn" style="width: 200px;" >立即提交</button>
             </div>
         </div>
     </div>
@@ -153,6 +154,7 @@
                 <input required lay-verify="required" id="question1" type="text" name="question1"
                        placeholder="请输入问题"  autofocus
                        autocomplete="off" class="layui-input">
+                <p id="add_p" style="color:red; "></p>
             </div>
         </div>
 
@@ -215,7 +217,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block" style="margin-left: 150px;">
-                <button class="layui-btn" lay-submit lay-filter="update_submit1" style="width: 200px;" >立即提交</button>
+                <button class="layui-btn" id="changeBtn1" lay-submit lay-filter="update_submit1" style="width: 200px;" >立即提交</button>
             </div>
         </div>
     </div>
@@ -319,7 +321,6 @@
         // 监听工具条，实现删除功能
         table.on('tool(TopicManagementDemo)', function (obj) {    // genshinDemo 表示工具列所在表格的 lay-filter 的值
             let data = obj.data;
-            console.log("删除DATA==="+data);
 
             if (obj.event === 'del') {  //  绑定事件的名称
 
@@ -386,6 +387,39 @@
                 });
 
 
+                // 校验添加题目是否重复
+                $("#question").blur(function () {   // input输入框失焦事件
+                    let question = $(this).val();  // 拿取当前输入框的值
+
+                    $.ajax({  // 发请求去后台查找数据库，对比plan是否存在
+                        type: "get",
+                        url: "/comparedQuestion",
+                        data: {
+                            question: question,
+                        },
+                        success: function (backQuestion){  // 回调函数，返回后端查询值
+
+                            if (question.onchange){
+                                layer.msg("未更改")
+                            }else {
+                                console.log("question========"+question)
+                                if (backQuestion == 0){
+
+                                    $("#edit_p").html("该问题可以编辑！");
+                                    $("#changeBtn").removeClass("layui-btn-disabled").attr("disabled", false);  // 若不重复，使按钮可用
+
+                                }else if (backQuestion == 1) {
+
+                                    $("#edit_p").html("该问题已经重复！");
+                                    $("#changeBtn").addClass("layui-btn-disabled").attr("disabled", true);  // 若重复，使按钮禁用
+                                }
+                            }
+
+                        },
+                    });
+
+                });
+
                 // 拿到修改后的数据，传给后端
                 form.on('submit(update_submit)', function (massage) {
                     console.log("message为：", massage);
@@ -413,7 +447,7 @@
                             if (msg == 1) {
                                 layer.msg("修改成功", {icon: 6}, {time: 2000});
 
-                                $(".layui-laypage-btn").click();  // CSH自创
+                                $(".layui-laypage-btn").click();  // 刷新
 
                             } else {
                                 layer.msg("修改失败", {icon: 5}, {time: 2000});
@@ -422,6 +456,7 @@
                     })
                     return false
                 });
+
 
             }
 
@@ -453,44 +488,69 @@
                 // btn: ['确定', '取消']
             });
 
+            // 校验添加题目是否重复
+            $("#question1").blur(function () {   // input输入框失焦事件
+                let question = $(this).val();  // 拿取当前输入框的值
 
-            // 拿到修改后的数据，传给后端
-            form1.on('submit(update_submit1)', function (massage) {
-                console.log("message为：", massage);
-                console.log(massage.field);
-                let data1 = massage.field;
-                $.ajax({
-                    type: "post",
-                    url: "/addTblQuestionSas",
-                    // data: JSON.stringify(massage.field),
+                $.ajax({  // 发请求去后台查找数据库，对比plan是否存在
+                    type: "get",
+                    url: "/comparedQuestion",
                     data: {
-                        "question": data1.question1,
-                        "optionA": data1.opa1,
-                        "optionB": data1.opb1,
-                        "optionC": data1.opc1,
-                        "optionD": data1.opd1,
-                        "type": data1.type1,
-                        "status": data1.status1,
-
-                        "createBy": "CSH",
+                        question: question,
                     },
+                    success: function (backQuestion){  // 回调函数，返回后端查询值
+                        if (backQuestion == 0){
 
-                    success: function (msg) {
-                        console.log(msg);
-                        layer.closeAll();//关闭所有的弹出层
-                        if (msg == 1) {
-                            layer.msg("添加成功！", {icon: 6}, {time: 2000});
+                            $("#add_p").html("该问题可以添加！");
+                            $("#changeBtn1").removeClass("layui-btn-disabled").attr("disabled", false);  // 若不重复，使按钮可用
 
-                            $(".layui-laypage-btn").click();  //刷新数据
+                            // 拿到修改后的数据，传给后端
+                            form1.on('submit(update_submit1)', function (massage) {
+                                console.log("message为：", massage);
 
-                        } else {
-                            layer.msg("添加失败！", {icon: 5}, {time: 2000});
+                                let data1 = massage.field;
+                                $.ajax({
+                                    type: "post",
+                                    url: "/addTblQuestionSas",
+                                    // data: JSON.stringify(massage.field),
+                                    data: {
+                                        "question": data1.question1,
+                                        "optionA": data1.opa1,
+                                        "optionB": data1.opb1,
+                                        "optionC": data1.opc1,
+                                        "optionD": data1.opd1,
+                                        "type": data1.type1,
+                                        "status": data1.status1,
+
+                                        "createBy": "CSH",
+                                    },
+
+                                    success: function (msg) {
+                                        console.log(msg);
+                                        layer.closeAll();//关闭所有的弹出层
+                                        if (msg == 1) {
+                                            layer.msg("添加成功！", {icon: 6}, {time: 2000});
+
+                                            $(".layui-laypage-btn").click();  //刷新数据
+
+                                        } else {
+                                            layer.msg("添加失败！", {icon: 5}, {time: 2000});
+                                        }
+                                    }
+                                })
+
+
+                                return false
+
+                            })
+
+                        }else if (backQuestion == 1) {
+
+                            $("#add_p").html("该问题已经重复！");
+                            $("#changeBtn1").addClass("layui-btn-disabled").attr("disabled", true);  // 若重复，使按钮禁用
                         }
-                    }
-                })
-
-
-                return false
+                    },
+                });
 
             })
 

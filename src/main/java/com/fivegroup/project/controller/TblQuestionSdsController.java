@@ -30,6 +30,20 @@ public class TblQuestionSdsController {
 	private TblQuestionSdsService tblQuestionSdsService;
 	
 	/**
+	 * 校验题目是否重复
+	 *
+	 * @param question
+	 * @return
+	 */
+	@GetMapping("/checkQuestion/{question}")
+	public Result checkQuestion(@PathVariable String question) {
+		System.out.println("question = " + question);
+		TblQuestionSds tblQuestionSds = tblQuestionSdsService.checkQuestion(question);
+		System.out.println("tblQuestionSds = " + tblQuestionSds);
+		return tblQuestionSds == null ? Result.ok("不重复") : Result.fail("重复");
+	}
+	
+	/**
 	 * 修改
 	 *
 	 * @param tblQuestionSds
@@ -82,9 +96,9 @@ public class TblQuestionSdsController {
 	public Result<List<TblQuestionSds>> getTblQuestionSdsPageAll(Integer page, Integer limit, TblQuestionSds tblQuestionSds) {
 		System.out.println("page = " + page);
 		System.out.println("limit = " + limit);
-//		TblQuestionSds tblQuestionSds = new TblQuestionSds();
-//		tblQuestionSds.setId(id);
-//		tblQuestionSds.setCreateBy(createBy);
+		//		TblQuestionSds tblQuestionSds = new TblQuestionSds();
+		//		tblQuestionSds.setId(id);
+		//		tblQuestionSds.setCreateBy(createBy);
 		System.out.println("tblQuestionSds = " + tblQuestionSds);
 		// 根据 条件获取总记录数
 		Integer count = tblQuestionSdsService.getTblQuestionSdsCount(tblQuestionSds);

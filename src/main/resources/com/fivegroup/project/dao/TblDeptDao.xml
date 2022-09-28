@@ -51,7 +51,7 @@
                 update_time= #{tblDept.updateTime},
             </if>
         </set>
-        where dept_id=#{tblDept.deptId};
+        where dept_id=#{tblDept.deptId} ;
     </update>
     <delete id="deleteBatch">
         update w_gl.tbl_dept
@@ -76,9 +76,16 @@
     </select>
     <select id="getDptAll" resultType="com.fivegroup.project.entity.TblDept">
         select *
-        from w_gl.tbl_dept;
+        from w_gl.tbl_dept where del_flag=0 and status=0;
     </select>
     <select id="getTblDeptById" resultType="com.fivegroup.project.entity.TblDept">
-        select * from w_gl.tbl_dept where dept_id =#{id}
+        select *
+        from w_gl.tbl_dept
+        where dept_id = #{id} and del_flag=0 ;
+    </select>
+    <select id="checkDeptName" resultType="com.fivegroup.project.entity.TblDept">
+        select *
+        from w_gl.tbl_dept
+        where dept_name = #{deptName} and del_flag=0;
     </select>
 </mapper>
