@@ -38,4 +38,8 @@ public interface TblQuestionSasDao {
     int editQuestionSas(@Param("tblQuestionSas") TblQuestionSas tblQuestionSas);
 
 
+
+    // 校验问题是否重复
+    String selectComparedQuestion(@Param("question") String question);
+
 }

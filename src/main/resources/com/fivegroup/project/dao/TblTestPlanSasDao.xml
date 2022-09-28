@@ -62,5 +62,10 @@
         where id = #{tblTestPlanSas.id}
     </update>
 
+    <!--校验计划是否重复-->
+    <select id="selectComparedPlan" resultType="java.lang.String">
+        select test_name from tbl_test_plan_sas where test_name = #{plan}
+    </select>
+
 
 </mapper>

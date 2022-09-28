@@ -37,4 +37,7 @@ public interface TblTestPlanSasService {
     int editData(@Param("tblTestPlanSas") TblTestPlanSas tblTestPlanSas);
 
 
+    // 校验计划是否重复
+    String selectComparedPlan(@Param("plan") String plan);
+
 }

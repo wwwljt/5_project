@@ -28,19 +28,14 @@ public class TblTestPlanSasController {
 
         List<TblTestPlanSas> planSasServiceAll = tblTestPlanSasService.findAll(page, limit, question, person);
 
-        System.out.println("question+person===" + question + ","+person);
-
         // 查询条数
         int i = tblTestPlanSasService.selectAll();
-
-        System.out.println("=============="+i);
 
         LayuiBean<TblTestPlanSas> SasBean = new LayuiBean<>();
         SasBean.setCode(0);
         SasBean.setMsg("");
         SasBean.setCount(i);
         SasBean.setData(planSasServiceAll);
-
 
         return SasBean;
     }
@@ -51,7 +46,6 @@ public class TblTestPlanSasController {
     @RequestMapping(value = "/delDataPlanSas")
     public int deleteData(String ids) {
 
-        System.out.println("controller==="+ids);
 
         List<Integer> idsList = new ArrayList<>();
 
@@ -60,8 +54,6 @@ public class TblTestPlanSasController {
         for (int i = 0; i < strIds.length; i++){
             idsList.add(Integer.valueOf(strIds[i]));  // 遍历数字添加到数组 idsList
         }
-
-        System.out.println("idsList==="+idsList);
 
         int i = tblTestPlanSasService.delData(idsList);
 
@@ -74,8 +66,6 @@ public class TblTestPlanSasController {
     @RequestMapping(value = "/addDataPlanSas", method = RequestMethod.POST)
     public Integer addData(TblTestPlanSas tblTestPlanSas){
 
-        System.out.println("------------------------------"+tblTestPlanSas);
-
         int i = tblTestPlanSasService.addData(tblTestPlanSas);
 
         return i;
@@ -86,13 +76,26 @@ public class TblTestPlanSasController {
     @RequestMapping(value = "/editDataPlanSas", method = RequestMethod.POST)
     public Integer editData(TblTestPlanSas tblTestPlanSas){
 
-        System.out.println("==============================="+tblTestPlanSas);
-
         int i = tblTestPlanSasService.editData(tblTestPlanSas);
 
         return i;
     }
 
 
+
+    //校验计划是否重复
+    @RequestMapping(value = "/comparedPlan")
+    public Integer comparedPlan(String plan){
+
+        String plan1 = tblTestPlanSasService.selectComparedPlan(plan);
+
+        // 判断是否为空
+        if (plan1 == null || plan1.length() == 0){
+            return 0;
+        }else {
+            return 1;  // 已经存在返回 1
+        }
+
+    }
 
 }

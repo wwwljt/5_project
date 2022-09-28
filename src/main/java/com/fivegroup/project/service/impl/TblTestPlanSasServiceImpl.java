@@ -76,4 +76,12 @@ public class TblTestPlanSasServiceImpl implements TblTestPlanSasService {
 
         return i;
     }
+
+    @Override
+    public String selectComparedPlan(String plan) {
+
+        String comparedPlan = tblTestPlanSasDao.selectComparedPlan(plan);
+
+        return comparedPlan;
+    }
 }

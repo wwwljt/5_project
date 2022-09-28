@@ -32,4 +32,9 @@ public interface TblTestPlanSasDao {
     // 编辑一条数据
     int editData(@Param("tblTestPlanSas") TblTestPlanSas tblTestPlanSas);
 
+
+
+    // 校验计划是否重复
+    String selectComparedPlan(@Param("plan") String plan);
+
 }

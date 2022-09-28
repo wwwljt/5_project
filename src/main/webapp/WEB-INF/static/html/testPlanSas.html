@@ -59,6 +59,7 @@
                 <input required lay-verify="required" id="tName" type="text" name="test_name"
                        placeholder="请输入测试名称" autofocus
                        class="layui-input" autocomplete="off">
+                <p id="edit_p" style="color:red; "></p>
             </div>
         </div>
 
@@ -91,7 +92,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block" style="margin-left: 150px;">
-                <button class="layui-btn" lay-submit lay-filter="update_submit" style="width: 200px;">立即提交</button>
+                <button class="layui-btn" id="changeBtn" lay-submit lay-filter="update_submit" style="width: 200px;">立即提交</button>
             </div>
         </div>
     </div>
@@ -109,6 +110,7 @@
                 <input required lay-verify="required" id="tName1" type="text" name="test_name1"
                        placeholder="请输入测试名称" autofocus
                        class="layui-input" autocomplete="off">
+                <p id="add_p" style="color:red; "></p>
             </div>
         </div>
 
@@ -141,7 +143,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block" style="margin-left: 150px;">
-                <button class="layui-btn" lay-submit lay-filter="update_submit1" style="width: 200px;">立即提交</button>
+                <button class="layui-btn" id="changeBtn1" lay-submit lay-filter="update_submit1" style="width: 200px;">立即提交</button>
             </div>
         </div>
     </div>
@@ -158,9 +160,23 @@
 
 </div>
 
+<!--复制URL模态框-->
+<div class="layui-row" id="open_copyUrl_div" style="display:none;">
+
+    <div id="seeUrl" style="font-size: 20px; width: 100%; color: #B47844; text-align: center; margin-top: 20px; ">
+        http://192.168.0.104:8081/html/testLogin.html
+    </div>
+    <button class="js-clipboard layui-btn layui-btn-warm" id="urlBtn" data-clipboard-target="#seeUrl"
+            style="margin-left:45%; margin-top: 30px; background-color: #C7B8B8">
+        <i class="layui-icon layui-icon-list" style="font-size: 30px; color: black;"></i>
+    </button>
+
+</div>
+
 <!--右侧工具栏-->
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">查看二维码</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="copyUrl">复制URL</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -172,6 +188,8 @@
 <script src="../layui/layui.js" charset="utf-8"></script>
 <!--引入layui二维码工具-->
 <script src="../js/layui-qrcode.js" charset="utf-8"></script>
+<!--引入clipboard复制插件-->
+<script src="../js/clipboard-2.0.11.js"></script>
 
 <script>
 
@@ -233,7 +251,7 @@
                 }
                 , {field: 'updateBy', width: 80, title: '修改人'}
                 , {field: 'remark', width: 150, title: '备注'}
-                , {fixed: 'right', title: '操作', width: 205, minWidth: 205, toolbar: '#barDemo'}
+                , {fixed: 'right', title: '操作', width: 280, minWidth: 205, toolbar: '#barDemo'}
 
             ]]
 
@@ -308,6 +326,38 @@
                 });
 
 
+                // 校验添加计划是否重复
+                $("#tName").blur(function () {   // input输入框失焦事件
+                    let plan = $(this).val();  // 拿取当前输入框的值
+
+                    $.ajax({  // 发请求去后台查找数据库，对比plan是否存在
+                        type: "get",
+                        url: "/comparedPlan",
+                        data: {
+                            plan: plan,
+                        },
+                        success: function (backQuestion){  // 回调函数，返回后端查询值
+                            if (plan.onchange){
+                                layer.msg("未更改")
+                            }else {
+                                if (backQuestion == 0){
+
+                                    $("#edit_p").html("该计划可以编辑！");
+                                    $("#changeBtn").removeClass("layui-btn-disabled").attr("disabled", false);  // 若添加不重复，使按钮可用
+
+                                }else if (backQuestion == 1) {
+
+                                    $("#edit_p").html("该计划已经重复！");
+
+                                    $("#changeBtn").addClass("layui-btn-disabled").attr("disabled", true);  // 若添加重复，使按钮禁用
+                                }
+                            }
+
+                        },
+                    });
+
+                });
+
                 // 拿到修改后的数据，传给后端
                 form.on('submit(update_submit)', function (massage) {
                     console.log("message为：", massage);
@@ -342,6 +392,7 @@
                     })
                     return false
                 });
+
 
             }
 
@@ -427,10 +478,39 @@
                     render: "canvas",  // 也可以是table
                     width: 200,
                     height: 200,
-                    text: "http://118.190.104.39:8080/springmvc/views/front/testLogin.jsp",
+                    text: "http://192.168.0.104:8081/html/testLogin.html",
                 });
 
 
+            }
+
+            // 如果为复制URL
+            else if (obj.event === 'copyUrl'){
+
+                // 打开模态框
+                layer.open({
+                    type: 1,//类型
+                    area: ['500px', '200px'],  //定义宽和高
+                    title: '复制URL',  //题目
+                    shadeClose: true,  //点击遮罩层关闭
+                    content: $('#open_copyUrl_div'),  //打开的内容
+                });
+
+                // clipboard 公用JS
+                let clipboard;
+                $(function(){
+                    clipboard = new ClipboardJS('.js-clipboard');
+                    clipboard.on('success', function(e) {
+                        console.log(e)
+                        layer.msg('复制成功');
+                    });
+
+                    clipboard.on('error', function(e) {
+                        console.log(e)
+                        layer.msg('复制失败');
+                    });
+
+                });
             }
 
         });
@@ -459,42 +539,69 @@
             });
 
 
-            // 拿到修改后的数据，传给后端
-            form1.on('submit(update_submit1)', function (massage) {
-                console.log("message为：", massage);
-                console.log(massage.field);
-                let data1 = massage.field;
-                $.ajax({
-                    type: "post",
-                    url: "/addDataPlanSas",
-                    // data: JSON.stringify(massage.field),
+            // 校验添加计划是否重复
+            $("#tName1").blur(function () {   // input输入框失焦事件
+                let plan = $(this).val();  // 拿取当前输入框的值
+
+                $.ajax({  // 发请求去后台查找数据库，对比plan是否存在
+                    type: "get",
+                    url: "/comparedPlan",
                     data: {
-                        "testName": data1.test_name1,
-                        "testBegin": data1.test_begin1,
-                        "testEnd": data1.test_end1,
-                        "remark": data1.remark1,
-
-                        "createBy": "CSH",
+                        plan: plan,
                     },
+                    success: function (backQuestion){  // 回调函数，返回后端查询值
+                        if (backQuestion == 0){
 
-                    success: function (msg) {
-                        console.log(msg);
-                        layer.closeAll();//关闭所有的弹出层
-                        if (msg == 1) {
-                            layer.msg("添加成功！", {icon: 6}, {time: 2000});
+                            $("#add_p").html("该计划可以添加！");
+                            $("#changeBtn1").removeClass("layui-btn-disabled").attr("disabled", false);  // 若添加不重复，使按钮可用
 
-                            $(".layui-laypage-btn").click();  //刷新数据
+                            // 拿到修改后的数据，传给后端
+                            form1.on('submit(update_submit1)', function (massage) {
+                                console.log("message为：", massage);
+                                console.log(massage.field);
+                                let data1 = massage.field;
+                                $.ajax({
+                                    type: "post",
+                                    url: "/addDataPlanSas",
+                                    // data: JSON.stringify(massage.field),
+                                    data: {
+                                        "testName": data1.test_name1,
+                                        "testBegin": data1.test_begin1,
+                                        "testEnd": data1.test_end1,
+                                        "remark": data1.remark1,
 
-                        } else {
-                            layer.msg("添加失败！", {icon: 5}, {time: 2000});
+                                        "createBy": "CSH",
+                                    },
+
+                                    success: function (msg) {
+                                        console.log(msg);
+                                        layer.closeAll();//关闭所有的弹出层
+                                        if (msg == 1) {
+                                            layer.msg("添加成功！", {icon: 6}, {time: 2000});
+
+                                            $(".layui-laypage-btn").click();  //刷新数据
+
+                                        } else {
+                                            layer.msg("添加失败！", {icon: 5}, {time: 2000});
+                                        }
+                                    }
+                                })
+
+
+                                return false
+
+                            })
+
+                        }else if (backQuestion == 1) {
+
+                            $("#add_p").html("该计划已经重复！");
+
+                            $("#changeBtn1").addClass("layui-btn-disabled").attr("disabled", true);  // 若添加重复，使按钮禁用
                         }
-                    }
-                })
+                    },
+                });
 
-
-                return false
-
-            })
+            });
 
         });
 
